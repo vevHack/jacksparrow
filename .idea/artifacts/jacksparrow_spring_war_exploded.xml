@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="jacksparrow-spring:war exploded">
+    <output-path>$PROJECT_DIR$/target/jacksparrow-spring</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="jacksparrow-spring/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="jacksparrow-spring" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>
