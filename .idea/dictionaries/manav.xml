@@ -1,3 +1,17 @@
 <component name="ProjectDictionaryState">
-  <dictionary name="manav" />
+  <dictionary name="manav">
+    <words>
+      <w>cglib</w>
+      <w>dbcp</w>
+      <w>directi</w>
+      <w>jacksparrow</w>
+      <w>jdbc</w>
+      <w>junit</w>
+      <w>mortbay</w>
+      <w>postgresql</w>
+      <w>springframework</w>
+      <w>springsource</w>
+      <w>webmvc</w>
+    </words>
+  </dictionary>
 </component>

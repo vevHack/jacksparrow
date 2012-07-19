@@ -19,6 +19,13 @@
           <element id="library" level="project" name="Maven: org.springframework:spring-expression:3.1.2.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-context-support:3.1.2.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-web:3.1.2.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-jdbc:3.1.2.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-tx:3.1.2.RELEASE" />
+          <element id="library" level="project" name="Maven: commons-dbcp:commons-dbcp:1.4" />
+          <element id="library" level="project" name="Maven: commons-pool:commons-pool:1.5.4" />
+          <element id="library" level="project" name="Maven: cglib:cglib:2.2.2" />
+          <element id="library" level="project" name="Maven: asm:asm:3.3.1" />
+          <element id="library" level="project" name="Maven: postgresql:postgresql:9.1-901-1.jdbc4" />
         </element>
       </element>
     </root>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?><component name="dataSourceStorage">
+  <data-source source="LOCAL" name="org.apache.commons.dbcp.BasicDataSource" product="PostgreSQL" version="9.1.4" jdbc-version="4.0" driver-name="PostgreSQL Native Driver" driver-version="PostgreSQL 9.1 JDBC4 (build 901)" uuid="bf6061c2-8ba0-4caf-b4a5-ae2e238a8d9b">
+    <identifier-quote-string>"</identifier-quote-string>
+    <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+    <jdbc-url>jdbc:postgresql://localhost/jacksparrow</jdbc-url>
+    <user-name>postgres</user-name>
+    <user-password>dfdadfc5dfd9dfdedfcddfd8dfcfdfd9</user-password>
+    <libraries>
+      <library>
+        <url>jar://$MAVEN_REPOSITORY$/postgresql/postgresql/9.1-901-1.jdbc4/postgresql-9.1-901-1.jdbc4.jar!/</url>
+      </library>
+    </libraries>
+  </data-source>
+</component>
