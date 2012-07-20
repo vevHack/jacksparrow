@@ -3,9 +3,9 @@
       on new installation.
 * API Design
 * java.security.principal OAuth/OpenID
-* ejs only?
-    - MOUSTACHE!!
-    - `#!`
+* web client
+    - `#!` ??
+    - no jsp??
 * HTTPS.
 * sharding
 * feed options: promiscuous, introvert(?), outgoing, voyueur.

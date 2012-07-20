@@ -10,7 +10,7 @@
     <packaging>war</packaging>
     <version>0.1</version>
     <name>Jack Sparrow</name>
-    <url>http://mx4492.in</url>
+    <url>http://github.com/mx4492/jacksparrow-spring</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
