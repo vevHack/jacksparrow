@@ -6,7 +6,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-@Controller("/user")
+import java.util.List;
+import java.util.Map;
+
+@Controller
+@RequestMapping("/user")
 public class UserController {
     private JdbcTemplate jdbcTemplate;
 
@@ -15,9 +19,15 @@ public class UserController {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @RequestMapping
+    @RequestMapping(produces = "application/json")
     @ResponseBody
     public String onUser() {
         return jdbcTemplate.queryForList("SHOW ALL").toString();
+    }
+
+    @RequestMapping("list")
+    @ResponseBody
+    public List<Map<String, Object>> listUsers() {
+        return jdbcTemplate.queryForList("SELECT * FROM \"user\"");
     }
 }
