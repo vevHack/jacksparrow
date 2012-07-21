@@ -7,3 +7,7 @@ This is a mini twitter clone, being created as an exercise.
 
 Some of the steps are documented in the `doc/` directory. Eventually there should be a makefile.
 
+## Etymology ##
+
+Because we couldn't find a ninja name.
+
