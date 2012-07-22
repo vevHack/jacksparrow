@@ -1,6 +1,19 @@
+var jacksparrow; /* our application namespace */
+$(function(){
+    jacksparrow = $.extend(jacksparrow || {}, {
+        jsUrl: function(js) {
+            return ["static/js/", js, ".js"].join("");
+        },
+        templateUrl: function(template) {
+            return ["static/template/", template, ".mustache"].join("");
+        }
+    });
+}());
 $(function() {
+    /*XXX: this block has dependency on above block*/
     var template;
     /*
+
     $.rloader([
         {src: "lib/mustache.js"},
         {src: "template/index.js", callback: function() {
@@ -21,11 +34,13 @@ $(function() {
         });
     });
     */
-    loader("static/js/lib/mustache.js", function() {
+
+    $.mxLoad(jacksparrow.jsUrl("lib/mustache"), function() {
         console.log("mustache loaded: " + Mustache);
-        loader("static/template/index.mustache", function(template) {
+        $.mxLoad(jacksparrow.templateUrl("index"), function(template) {
             console.log("template loaded: " + template);
-            $("body").html(Mustache.render(template));
+            //$("body").html(Mustache.render(template));
         }, 'text');
     });
+    console.log('test');
 });
