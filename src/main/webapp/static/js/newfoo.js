@@ -35,12 +35,12 @@ $(function() {
     });
     */
 
-    $.mxLoad(jacksparrow.jsUrl("lib/mustache"), function() {
-        console.log("mustache loaded: " + Mustache);
-        $.mxLoad(jacksparrow.templateUrl("index"), function(template) {
-            console.log("template loaded: " + template);
-            //$("body").html(Mustache.render(template));
-        }, 'text');
+    $.when(
+        $.mxLoad(jacksparrow.jsUrl("lib/mustache")),
+        $.mxLoad(jacksparrow.templateUrl("index"),  "text")
+    ).done(function() {
+        var template = arguments[1][0];
+        $("body").html(Mustache.render(template));
     });
     console.log('test');
 });
