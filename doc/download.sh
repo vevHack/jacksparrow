@@ -4,8 +4,6 @@
 libs=( \
     https://raw.github.com/janl/mustache.js/master/mustache.js \
     http://code.jquery.com/jquery-1.7.2.js \
-    https://raw.github.com/jrburke/requirejs/master/require.js \
-    https://raw.github.com/requirejs/text/master/text.js \
 )
 
 
