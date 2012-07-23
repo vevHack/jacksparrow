@@ -29,24 +29,14 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: test; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
---
-
-CREATE TABLE test (
-    id integer
-);
-
-
-ALTER TABLE public.test OWNER TO postgres;
-
---
 -- Name: user; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE "user" (
     id integer NOT NULL,
-    username character varying(128) NOT NULL,
-    password character varying(128) NOT NULL
+    email character varying(128) NOT NULL,
+    password character varying(128) NOT NULL,
+    name character varying(128)
 );
 
 
