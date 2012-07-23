@@ -24,8 +24,8 @@
     }
 
     $(function() {
-        $.fetch.template("index")
-            .done(function(template) {
+        $.fetch.template("index").done(function(template) {
+                preload();
                 $("body").html(Mustache.render(template));
                 $("#register").on("click", ".trigger", onRegisterClick);
                 $("#users").on("click", ".trigger", onUsersClick);
