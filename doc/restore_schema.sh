@@ -1,3 +1,4 @@
 #!/bin/sh -e
-dropdb `cat pgparams` --interactive jacksparrow
-psql `cat pgparams` -f db-schema.sql
+mydir=`dirname $0`
+dropdb `cat $mydir/pgparams` --interactive jacksparrow
+psql `cat $mydir/pgparams` -f $mydir/db-schema.sql

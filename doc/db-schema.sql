@@ -133,6 +133,13 @@ ALTER TABLE ONLY "user"
 
 
 --
+-- Name: feed_user_index; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX feed_user_index ON feed USING btree ("user");
+
+
+--
 -- Name: public; Type: ACL; Schema: -; Owner: postgres
 --
 
