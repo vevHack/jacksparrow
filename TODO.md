@@ -6,11 +6,8 @@
     - and combine it?
     - cache/etags
 * nginx - static, compress and SSL
-* API Design
+* Authentication
 * java.security.principal OAuth/OpenID
-* web client
-    - `#!` ??
-    - no jsp??
 * HTTPS.
 * sharding
 * feed options: promiscuous, introvert(?), outgoing, voyueur.

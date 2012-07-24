@@ -5,14 +5,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/hello")
-public class HelloController extends ControllerWithJdbcWiring {
+@RequestMapping("/")
+public class IndexController extends ControllerWithJdbcWiring {
 
     @RequestMapping()
-    public ModelAndView onHello() {
-        return new ModelAndView("hello") {{
-            addObject("quality", "shorty");
-            addObject("at", new java.util.Date());
+    public ModelAndView onIndex() {
+        return new ModelAndView("base") {{
+            addObject("title", "Jack Sparrow");
+            addObject("loader", "index");
         }};
     }
 

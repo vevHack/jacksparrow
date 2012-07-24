@@ -40,6 +40,7 @@
                 });
         }
 
+        action = firstTime;
         return function () {
             action();
             return false;
