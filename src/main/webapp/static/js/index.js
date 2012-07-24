@@ -14,6 +14,7 @@
                 show();
                 action = hide;
             });
+            action = pending;
         }
 
         function hide() {
@@ -28,7 +29,17 @@
             });
         }
 
-        action = firstTime;
+        function pending() {
+            $("#info").hide()
+                .html(
+                    $("<span>The goodies are on their way..., Please wait.<span>"))
+                .show("slow", function() {
+                    setTimeout($.proxy(function() {
+                        this.hide("slow");
+                    }, $(this)), 2000)
+                });
+        }
+
         return function () {
             action();
             return false;
