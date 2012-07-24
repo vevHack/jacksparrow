@@ -14,16 +14,16 @@
     ...
     $ psql -U postgres -h localhost
 
-### Restore Schema ###
+### Create/Restore Schema ###
 
-    $ createdb -U postgres -h localhost jacksparrow
-    $ psql -U postgres -h localhost jacksparrow -f db-schema.sql
+    $ doc/backup_schema.sh
+    $ doc/restore_schema.sh
 
 ### Hack Away! ###
 
     $ psql -U postgres -h localhost jacksparrow
+or
 
-### Backup Schema ###
+    $ psql `cat doc/pgparams` jacksparrow
 
-    $ pg_dump -U postgres -h localhost --schema-only jacksparrow >db-schema.sql
 

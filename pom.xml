@@ -14,16 +14,31 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <version.java>1.7</version.java>
         <version.springframework>3.1.2.RELEASE</version.springframework>
         <version.jackson>2.0.4</version.jackson>
     </properties>
 
     <repositories>
+
         <repository>
             <id>repository.springsource.release</id>
             <name>SpringSource GA Repository</name>
             <url>http://repo.springsource.org/release</url>
+            <releases><enabled>true</enabled></releases>
+            <snapshots><enabled>false</enabled></snapshots>
         </repository>
+
+        <repository>
+            <id>repository.sonatype.snapshots</id>
+            <name>Sonatype Snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+        </repository>
+
     </repositories>
 
     <dependencies>
@@ -78,6 +93,17 @@
             <version>9.1-901-1.jdbc4</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.github.spullara.mustache.java</groupId>
+            <artifactId>compiler</artifactId>
+            <version>0.8.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ericdwhite</groupId>
+            <artifactId>mustache.java-spring-webmvc</artifactId>
+            <version>0.9.2-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -89,8 +115,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.3.2</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>${version.java}</source>
+                    <target>${version.java}</target>
                 </configuration>
             </plugin>
 
