@@ -10,7 +10,8 @@
 
         function firstTime() {
             $.fetch.template("register").done(function(template) {
-                $("#register").append(Mustache.render(template));
+                $("#register").append($(Mustache.render(template)).hide())
+                show();
                 action = hide;
             });
         }
@@ -42,8 +43,9 @@
                 $.fetch.template("users"),
                 $.get("/users")
             ).done(function () {
-                    $("#users").append(Mustache.render(arguments[0][0],
-                        { users:arguments[1][0] }));
+                    $("#users").append($(Mustache.render(arguments[0][0],
+                        { users:arguments[1][0] })).hide());
+                    show();
                     action = hide;
                 });
         }
