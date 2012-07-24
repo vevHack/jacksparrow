@@ -92,7 +92,7 @@ ALTER TABLE public.unique_sequence OWNER TO postgres;
 
 CREATE TABLE post (
     id integer DEFAULT nextval('unique_sequence'::regclass) NOT NULL,
-    user_id integer NOT NULL,
+    "user" integer NOT NULL,
     created_on timestamp without time zone DEFAULT ('now'::text)::timestamp without time zone,
     content text
 );
