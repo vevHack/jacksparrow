@@ -41,14 +41,15 @@ public class ApiAuthInterceptor extends HandlerInterceptorAdapter {
     }
 
     private boolean unauthorizedAccess(HttpServletResponse response,
-            final String message) throws IOException {
+                                       final String message)
+            throws IOException {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         writeJson(response, new HashMap<String, Object>() {{
-                    put("error", new HashMap<String, Object>() {{
-                        put("code", HttpServletResponse.SC_UNAUTHORIZED);
-                        put("message", message);
-                    }});
+            put("error", new HashMap<String, Object>() {{
+                put("code", HttpServletResponse.SC_UNAUTHORIZED);
+                put("message", message);
             }});
+        }});
         return false;
     }
 
