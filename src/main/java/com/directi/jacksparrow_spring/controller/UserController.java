@@ -10,7 +10,6 @@ public class UserController extends ControllerWithJdbcWiring {
 
     @RequestMapping("/{username}")
     public ModelAndView onUser(@PathVariable String username) {
-        System.out.println("Request For" + username);//XXX LOG
         return new ModelAndView("base") {{
             addObject("title", "username -- XXX show name instead");
             addObject("loader", "user");
@@ -21,8 +20,6 @@ public class UserController extends ControllerWithJdbcWiring {
     public ModelAndView onUserPost(@PathVariable String username,
                                    @PathVariable int postId) {
         //XXX ERROR CHECKING
-        System.out.println("Request For" + username + "'s post " + postId);//XXX LOG
-
         return new ModelAndView("base") {{
             addObject("title", "username -- XXX show name instead");
             addObject("loader", "post");

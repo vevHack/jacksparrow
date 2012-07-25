@@ -1,0 +1,9 @@
+XXX: 
+ - Automate and integrate with build
+ - put node_modules in git?
+
+npm install mocha
+npm install request
+mkdir test
+vi test/foo.js
+mocha
