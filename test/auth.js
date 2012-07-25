@@ -31,7 +31,7 @@ describe("Authorization", function() {
         function shouldRespondWithErrorFactory(code, msg, done) {
             return function(error, response, body) {
                 should.not.exist(error);
-                response.should.have.status(401);
+                response.should.have.status(code);
                 response.should.be.json;
                 JSON.parse(body).should.eql({
                     error: {
