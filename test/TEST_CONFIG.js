@@ -6,7 +6,7 @@ module.exports = {
     },
 
     testUser: {
-        id: 2,
+        id: 5,
         password: "test"
     },
     invalidUser: {
