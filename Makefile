@@ -1,7 +1,12 @@
 test:
-	@./node_modules/.bin/mocha
+	@./node_modules/.bin/mocha --growl
 
 npm-restore-links:
-	@ln -f -s node_modules/mocha/bin/mocha node_modules/.bin/mocha 
+	@for f in mocha _mocha ; \
+	do \
+		ln -f -s -t node_modules/.bin/ \
+			`readlink --canonicalize node_modules/mocha/bin/$f` ; \
+	done
+
 
 .PHONY: test npm-link
