@@ -1,5 +1,5 @@
 test:
-	@./node_modules/.bin/mocha
+	@./node_modules/.bin/mocha --growl
 
 npm-restore-links:
 	@for f in mocha _mocha ; \

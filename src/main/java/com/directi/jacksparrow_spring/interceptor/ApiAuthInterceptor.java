@@ -64,9 +64,14 @@ public class ApiAuthInterceptor extends HandlerInterceptorAdapter {
         }
 
         String[] authTokens = authHeader.split("[ :]");
+        if (authTokens.length != 3) {
+            return unauthorizedAccess(response,
+                    "Malformed 'Authorization' header");
+        }
+
         if (!authTokens[0].trim().equals(AUTH_TYPE)) {
             return unauthorizedAccess(response,
-                    "Expect Authorization type " + AUTH_TYPE);
+                    "Expect Authorization type '" + AUTH_TYPE + "'");
         }
 
         int userId = Integer.parseInt(authTokens[1]);
