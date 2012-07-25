@@ -50,5 +50,4 @@ public class AuthorizedApiController extends ControllerWithJdbcWiring {
         query.createPost(user, content);
         return ImmutableMap.of("status", "success");
     }
-
 }
