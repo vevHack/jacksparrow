@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 @Controller
@@ -28,7 +28,7 @@ public class AuthorizedApiController extends ControllerWithJdbcWiring {
         return (Integer)request.getAttribute("authorizedUser");
     }
 
-    int authorizedUser=1;
+    int authorizedUser=5;
     Queries query;
 
     @Autowired
@@ -38,21 +38,33 @@ public class AuthorizedApiController extends ControllerWithJdbcWiring {
 
     @RequestMapping("/feed")
     @ResponseBody
-    public List <Map<String, Object>> getFeed(@RequestParam int user) {
-        return query.queryFeed(user);
+    public Map<String, Object> getFeed(@RequestParam final int user)
+        throws ApiException {
+        log.info("Request for feed of user "+user);
+        if(user!=getAuthorizedUser()) {
+            throw new ApiException(HttpStatus.PRECONDITION_FAILED,
+                    "Authorized user and callee are different");
+        }
+        return new HashMap<String, Object>() {{
+            put("feed", query.queryFeed(user));
+        }};
     }
 
     @RequestMapping(value="/follow", method=RequestMethod.POST)
     @ResponseBody
-    public ImmutableMap follow(@RequestParam int user) {
-        query.updateFollow(authorizedUser, user);
-        return ImmutableMap.of("status", "success");
+    public HashMap<String, Object> follow(@RequestParam int user, HttpServletRequest request) {
+        query.updateFollow((Integer)request.getAttribute("authorizedUser"), user);
+        HashMap map =  new HashMap<String,Object>();
+        map.put("status", "success");
+        return map;
     }
 
     @RequestMapping(value="/unfollow", method=RequestMethod.POST)
     @ResponseBody
-    public ImmutableMap unfollow(@RequestParam int user) {
-        query.updateUnfollow(authorizedUser, user);
+    public ImmutableMap unfollow(@RequestParam int user, HttpServletRequest request) {
+
+        log.info("Unfollow request from user "+getAuthorizedUser()+" to unfollow user "+user);
+        query.updateUnfollow((Integer)request.getAttribute("authorizedUser"), user);
         return ImmutableMap.of("status", "success");
     }
 
