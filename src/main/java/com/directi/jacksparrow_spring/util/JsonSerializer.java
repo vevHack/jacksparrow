@@ -7,6 +7,7 @@ import org.springframework.http.server.ServletServerHttpResponse;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/*XXX Not Needed? */
 public class JsonSerializer {
 
     public void write(HttpServletResponse response, Object object)

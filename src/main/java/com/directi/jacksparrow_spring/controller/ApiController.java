@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
@@ -17,6 +18,12 @@ import java.util.Map;
 public class ApiController {
 
     private @Autowired JdbcTemplate jdbcTemplate;
+
+    @RequestMapping("/**")
+    public void captureApiUrls(HttpServletRequest request)
+        throws NoSuchRequestHandlingMethodException {
+        throw new NoSuchRequestHandlingMethodException(request);
+    }
 
     @RequestMapping("/ping")
     @ResponseBody

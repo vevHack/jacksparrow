@@ -1,6 +1,6 @@
 package com.directi.jacksparrow_spring.controller;
 
-import com.directi.jacksparrow_spring.util.ErrorResponse;
+import com.directi.jacksparrow_spring.exception.ApiException;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -59,16 +58,13 @@ public class AuthorizedApiController extends ControllerWithJdbcWiring {
 
     @RequestMapping(value="/create", method=RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> create(
-            @RequestParam int user,
-            @RequestParam String content,
-            HttpServletResponse response) {
+    public void create(@RequestParam int user, @RequestParam String content)
+            throws ApiException{
         log.info("create request from " + getAuthorizedUser());
         if (content.isEmpty()) {
-            return new ErrorResponse(HttpStatus.PRECONDITION_FAILED,
-                    "Content cannot be empty", response).respond();
+            throw new ApiException(HttpStatus.PRECONDITION_FAILED,
+                    "Content cannot be empty");
         }
         query.createPost(user, content);
-        return null;
     }
 }

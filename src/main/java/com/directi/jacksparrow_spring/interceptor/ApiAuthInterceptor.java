@@ -1,7 +1,6 @@
 package com.directi.jacksparrow_spring.interceptor;
 
-import com.directi.jacksparrow_spring.util.Error;
-import com.directi.jacksparrow_spring.util.JsonSerializer;
+import com.directi.jacksparrow_spring.exception.ApiException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 
 public class ApiAuthInterceptor extends HandlerInterceptorAdapter {
@@ -27,15 +25,6 @@ public class ApiAuthInterceptor extends HandlerInterceptorAdapter {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    private boolean unauthorizedAccess(
-            HttpServletResponse response, final String message)
-            throws IOException {
-        int code = HttpStatus.UNAUTHORIZED.value();
-        response.setStatus(code);
-        new JsonSerializer().write(response, new Error(code, message).toMap());
-        return false;
-    }
-
     @Override
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response,
@@ -44,17 +33,18 @@ public class ApiAuthInterceptor extends HandlerInterceptorAdapter {
 
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null) {
-            return unauthorizedAccess(response, "No 'Authorization' header");
+            throw new ApiException(HttpStatus.UNAUTHORIZED,
+                    "No 'Authorization' header");
         }
 
         String[] authTokens = authHeader.split("[ :]");
         if (authTokens.length != 3) {
-            return unauthorizedAccess(response,
+            throw new ApiException(HttpStatus.UNAUTHORIZED,
                     "Malformed 'Authorization' header");
         }
 
         if (!authTokens[0].trim().equals(AUTH_TYPE)) {
-            return unauthorizedAccess(response,
+            throw new ApiException(HttpStatus.UNAUTHORIZED,
                     "Expect Authorization type '" + AUTH_TYPE + "'");
         }
 
@@ -66,7 +56,8 @@ public class ApiAuthInterceptor extends HandlerInterceptorAdapter {
                 "SELECT count(*) FROM \"user\" WHERE id=? AND password=?",
                 userId, password);
         if (count == 0) {
-            return unauthorizedAccess(response, "Invalid credentials");
+            throw new ApiException(HttpStatus.UNAUTHORIZED,
+                    "Invalid credentials");
         }
 
         request.setAttribute("authorizedUser", userId);
