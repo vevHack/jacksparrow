@@ -1,52 +1,26 @@
-var assert = require("assert");
 var request = require("request");
 var should = require("should");
-var config = require("./TEST_CONFIG.js");
+var config = require("./_CONFIG.js");
+var common = require("./_COMMON.js");
 
 describe("Authorization", function() {
-
-    function shouldBe200JsonFactory(done) {
-        return function(error, response, body) {
-            should.not.exist(error);
-            response.should.have.status(200);
-            response.should.be.json;
-            done();
-        };
-    }
-
-    before(function(done) {
-        request(config.url("/api/ping"), shouldBe200JsonFactory(done));
-    });
+    
+    before(common.isServerUp.bind(common));
 
     describe("#Public API", function() {
         it("should not require authorization", function(done) {
             request(
                 config.url("/api/public/followers?user=", config.testUser.id), 
-                shouldBe200JsonFactory(done));
+                common.shouldBe200JsonFactory(done));
         });
     });
 
     describe("#Authorized API", function() {
 
-        function shouldRespondWithErrorFactory(code, msg, done) {
-            return function(error, response, body) {
-                should.not.exist(error);
-                response.should.have.status(401);
-                response.should.be.json;
-                JSON.parse(body).should.eql({
-                    error: {
-                        code: code,
-                        message: msg
-                    }
-                });
-                done();
-            };
-        }
-
         it("should require authorization", function(done) {
             request(
                 config.url("/api/auth/feed?user=", config.testUser.id), 
-                shouldRespondWithErrorFactory(401, 
+                common.shouldBeErrorFactory(401, 
                     "No 'Authorization' header", done));
         });
 
@@ -56,7 +30,7 @@ describe("Authorization", function() {
                     url: config.url("/api/auth/feed?user=", config.testUser.id), 
                     headers: {"Authorization": ""}
                 },
-                shouldRespondWithErrorFactory(401, 
+                common.shouldBeErrorFactory(401, 
                     "Malformed 'Authorization' header", done));
             });
 
@@ -66,7 +40,7 @@ describe("Authorization", function() {
                 url: config.url("/api/auth/feed?user=", config.testUser.id), 
                 headers: {"Authorization": "Basic 0:foo"}
                 },
-                shouldRespondWithErrorFactory(401, 
+                common.shouldBeErrorFactory(401, 
                     "Expect Authorization type 'Basic-Custom'", done));
         });
 
@@ -76,8 +50,7 @@ describe("Authorization", function() {
                 headers: {"Authorization": 
                     ["Basic-Custom ", config.invalidUser.id, ":test"].join("")}
                 },
-                shouldRespondWithErrorFactory(401, 
-                    "Invalid credentials", done));
+                common.shouldBeErrorFactory(401, "Invalid credentials", done));
         });
 
         it("should reject invalid password", function(done) {
@@ -87,18 +60,15 @@ describe("Authorization", function() {
                     ["Basic-Custom ", config.testUser.id, ":", 
                         config.testUser.password, "foo"].join("")}
                 },
-                shouldRespondWithErrorFactory(401, 
-                    "Invalid credentials", done));
+                common.shouldBeErrorFactory(401, "Invalid credentials", done));
         });
 
         it("should authenticate valid user", function(done) {
             request({
                 url: config.url("/api/auth/feed?user=", config.testUser.id), 
-                headers: {"Authorization": 
-                    ["Basic-Custom ", config.testUser.id, ":", 
-                        config.testUser.password].join("")}
+                headers: {"Authorization": common.authHeader}
                 },
-                shouldBe200JsonFactory(done));
+                common.shouldBe200JsonFactory(done));
         });
 
     });
