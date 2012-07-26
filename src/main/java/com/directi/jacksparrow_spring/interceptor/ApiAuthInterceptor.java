@@ -5,6 +5,7 @@ import com.directi.jacksparrow_spring.util.JsonSerializer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -29,9 +30,9 @@ public class ApiAuthInterceptor extends HandlerInterceptorAdapter {
     private boolean unauthorizedAccess(
             HttpServletResponse response, final String message)
             throws IOException {
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        new JsonSerializer().write(response, new Error(
-                HttpServletResponse.SC_UNAUTHORIZED, message).toMap());
+        int code = HttpStatus.UNAUTHORIZED.value();
+        response.setStatus(code);
+        new JsonSerializer().write(response, new Error(code, message).toMap());
         return false;
     }
 
