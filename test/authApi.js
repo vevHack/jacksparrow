@@ -1,7 +1,7 @@
 var assert = require("assert");
 var request = require("request");
 var should = require("should");
-var config = require("./TEST_CONFIG.js");
+var config = require("./_CONFIG.js");
 var common = require("./_COMMON.js");
 
 describe ("Authorized API Access:", function(){
