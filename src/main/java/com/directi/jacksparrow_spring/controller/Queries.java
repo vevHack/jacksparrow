@@ -2,10 +2,8 @@ package com.directi.jacksparrow_spring.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -55,5 +53,11 @@ public class Queries {
     public List<Map<String, Object>> queryFeed (int user) {
        return jdbcTemplate.queryForList(
                 "SELECT post FROM feed WHERE \"user\"=?", user);
+    }
+
+    public int register(String username, String email, String password) {
+        jdbcTemplate.update("INSERT INTO \"user\" (username, email, password)" +
+                " VALUES (?, ?, ?)", username, email, password);
+        return jdbcTemplate.queryForInt("SELECT LASTVAL()");
     }
 }
