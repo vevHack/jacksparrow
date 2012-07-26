@@ -1,18 +1,17 @@
 package com.directi.jacksparrow_spring.interceptor;
 
+import com.directi.jacksparrow_spring.util.Error;
+import com.directi.jacksparrow_spring.util.JsonSerializer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.converter.HttpMessageNotWritableException;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.http.server.ServletServerHttpResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
 
 
 public class ApiAuthInterceptor extends HandlerInterceptorAdapter {
@@ -28,27 +27,12 @@ public class ApiAuthInterceptor extends HandlerInterceptorAdapter {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    private void writeJson(HttpServletResponse response, Object object)
-        throws IOException {
-        MappingJackson2HttpMessageConverter jsonConverter =
-                new MappingJackson2HttpMessageConverter();
-        try {
-            jsonConverter.write(object, null,
-                    new ServletServerHttpResponse(response));
-        } catch (HttpMessageNotWritableException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-    private boolean unauthorizedAccess(HttpServletResponse response,
-            final String message) throws IOException {
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        writeJson(response, new HashMap<String, Object>() {{
-                    put("error", new HashMap<String, Object>() {{
-                        put("code", HttpServletResponse.SC_UNAUTHORIZED);
-                        put("message", message);
-                    }});
-            }});
+    private boolean unauthorizedAccess(
+            HttpServletResponse response, final String message)
+            throws IOException {
+        int code = HttpStatus.UNAUTHORIZED.value();
+        response.setStatus(code);
+        new JsonSerializer().write(response, new Error(code, message).toMap());
         return false;
     }
 
