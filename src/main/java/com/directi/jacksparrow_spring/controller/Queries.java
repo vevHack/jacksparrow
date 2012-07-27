@@ -46,6 +46,13 @@ public class Queries {
 
     public void createPost (int user, String content) {
         jdbcTemplate.update("INSERT INTO post(\"user\", content) VALUES(?,?)", user, content);
+        int post_id=jdbcTemplate.queryForInt("SELECT LASTVAL()");
+        List<Map<String, Object>> followers = jdbcTemplate.queryForList("" +
+                "SELECT follower FROM follows WHERE followee=?", user);
+        for(Map<String, Object> row: followers)
+            jdbcTemplate.update("" +
+                    "INSERT INTO feed(\"user\", post) VALUES(?,?)",
+                    row.get("follower"), post_id);
     }
 
     public void updateFollow (int follower, int followee) {
@@ -55,5 +62,18 @@ public class Queries {
     public List<Map<String, Object>> queryFeed (int user) {
        return jdbcTemplate.queryForList(
                 "SELECT post FROM feed WHERE \"user\"=?", user);
+    }
+
+    public boolean existsUser (int user) {
+        if(jdbcTemplate.queryForList("SELECT * FROM \"user\" WHERE id=?", user).size()==0)
+            return false;
+        return true;
+    }
+
+    public boolean isFollowing (int follower, int followee) {
+        if(jdbcTemplate.queryForList("SELECT * FROM follows WHERE follower=? AND followee=?",
+                follower, followee).size()==0)
+            return false;
+        return true;
     }
 }

@@ -19,13 +19,13 @@ describe("Create", function() {
 
     it("should not accept blank content", function(done) {
         request(
-            requestParamsFactory({user:config.testUser.id, content:""}),
+            requestParamsFactory({content:""}),
             common.shouldBeErrorFactory(412, "Content cannot be empty", done));
     });
 
     it("should complete valid request", function(done) {
         request(
-            requestParamsFactory({user:config.testUser.id, content:"hello"}),
+            requestParamsFactory({content:"hello"}),
             common.shouldBe200BlankFactory(done));
     });
 
