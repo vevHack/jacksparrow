@@ -19,7 +19,7 @@ describe("Register", function() {
             data.user.should.have.property("id");
         })
         /* XXX check that the user exists by calling another API */
-        .fail(common.shouldNotHappen)
+        .fail(common.shouldNotFail)
         .always(function(){done()});
     });
 

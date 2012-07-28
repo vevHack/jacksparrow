@@ -1,7 +1,7 @@
-var request = require("request");
+var $ = require("jquery");
 var should = require("should");
 var config = require("./_CONFIG.js");
-var common = require("./_COMMON.js");
+var common = require("./_COMMON2.js");
 
 describe("Authorization", function() {
     
@@ -9,66 +9,79 @@ describe("Authorization", function() {
 
     describe("#Public API", function() {
         it("should not require authorization", function(done) {
-            request(
-                config.url("/api/public/followers?user=", config.testUser.id), 
-                common.shouldBe200JsonFactory(done));
+            $.getJSON(
+                config.url("/api/public/followers?user=", config.testUser.id))
+                .fail(common.shouldNotFail)
+                .always(function(){done()});
         });
     });
 
     describe("#Authorized API", function() {
 
         it("should require authorization", function(done) {
-            request(
-                config.url("/api/auth/feed?user=", config.testUser.id), 
-                common.shouldBeErrorFactory(401, 
-                    "No 'Authorization' header", done));
+            $.getJSON(
+                config.url("/api/auth/feed?user=", config.testUser.id))
+                .done(common.shouldNotSucceed)
+                .fail(common.shouldBeErrorFactory(
+                        401, "No 'Authorization' header"))
+                .always(function(){done()});
         });
 
         it("should have format 'Authorization: Basic-Custom user:password'", 
             function(done) {
-                request({
-                    url: config.url("/api/auth/feed?user=", config.testUser.id), 
-                    headers: {"Authorization": ""}
-                },
-                common.shouldBeErrorFactory(401, 
-                    "Malformed 'Authorization' header", done));
-            });
-
+            $.ajax({
+                url: config.url("/api/auth/feed?user=", config.testUser.id),
+                headers: {"Authorization": ""},
+                dataType: "json"
+                })
+                .done(common.shouldNotSucceed)
+                .fail(common.shouldBeErrorFactory(
+                            401, "Malformed 'Authorization' header"))
+                .always(function(){done()});
+        });
 
         it("should expect Authorization type Basic-Custom", function(done) {
-            request({
+            $.ajax({
                 url: config.url("/api/auth/feed?user=", config.testUser.id), 
-                headers: {"Authorization": "Basic 0:foo"}
-                },
-                common.shouldBeErrorFactory(401, 
-                    "Expect Authorization type 'Basic-Custom'", done));
+                headers: {"Authorization": "Basic 0:foo"},
+                dataType: "json"
+                })
+                .done(common.shouldNotSucceed)
+                .fail(common.shouldBeErrorFactory(
+                    401, "Expect Authorization type 'Basic-Custom'"))
+                .always(function(){done()});
         });
 
         it("should reject invalid user", function(done) {
-            request({
+            $.ajax({
                 url: config.url("/api/auth/feed?user=", config.testUser.id), 
                 headers: {"Authorization": 
-                    ["Basic-Custom ", config.invalidUser.id, ":test"].join("")}
-                },
-                common.shouldBeErrorFactory(401, "Invalid credentials", done));
+                    ["Basic-Custom ", config.invalidUser.id, ":test"].join("")},
+                dataType: "json"
+                })
+                .done(common.shouldNotSucceed)
+                .fail(common.shouldBeErrorFactory(401, "User does not exist"))
+                .always(function(){done()});
         });
 
         it("should reject invalid password", function(done) {
-            request({
+            $.ajax({
                 url: config.url("/api/auth/feed?user=", config.testUser.id), 
                 headers: {"Authorization": 
                     ["Basic-Custom ", config.testUser.id, ":", 
-                        config.testUser.password, "foo"].join("")}
-                },
-                common.shouldBeErrorFactory(401, "Invalid credentials", done));
+                        config.testUser.password, "foo"].join("")},
+                dataType: "json"
+                })
+                .done(common.shouldNotSucceed)
+                .fail(common.shouldBeErrorFactory(401, "Incorrect password"))
+                .always(function(){done()});
         });
 
         it("should authenticate valid user", function(done) {
-            request({
-                url: config.url("/api/auth/feed?user=", config.testUser.id), 
-                headers: {"Authorization": common.authHeader}
-                },
-                common.shouldBe200JsonFactory(done));
+            common.authGetJson(
+                config.url("/api/auth/feed?user=", config.testUser.id))
+                .fail(common.shouldNotFail)
+                .always(function(){done()});
         });
 
     });

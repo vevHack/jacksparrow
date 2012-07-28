@@ -1,7 +1,7 @@
 package com.directi.jacksparrow_spring.controller;
 
 import com.directi.jacksparrow_spring.exception.ApiException;
-import com.google.common.collect.ImmutableMap;
+import com.directi.jacksparrow_spring.model.User;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +24,12 @@ public class AuthorizedApiController extends ControllerWithJdbcWiring {
 
     private @Autowired HttpServletRequest request;
 
+    private User getAuthorizedUser2() {
+        return (User)request.getAttribute("authorizedUser");
+    }
+
     private int getAuthorizedUser() {
-        return (Integer)request.getAttribute("authorizedUser");
+        return ((User)request.getAttribute("authorizedUser")).getId();
     }
 
     int authorizedUser=5;
@@ -79,7 +83,6 @@ public class AuthorizedApiController extends ControllerWithJdbcWiring {
     }
 
     @RequestMapping(value="/create", method=RequestMethod.POST)
-    @ResponseBody
     public void create(@RequestParam String content)
             throws ApiException{
         log.info("create request from " + getAuthorizedUser());
