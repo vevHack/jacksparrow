@@ -1,82 +1,26 @@
-var assert = require("assert");
-var request = require("request");
+var $ = require("jquery");
 var should = require("should");
 var config = require("./_CONFIG.js");
-var common = require("./_COMMON.js");
-var $ = require("jQuery");
+var common = require("./_COMMON2.js");
 
 describe("Register", function() {
 
-    function requestParamsFactory(postData) {
-        return {
-            method: "POST",
-            url: config.url("/api/public/register"),
-            form: postData
-        };
-    }
-
-    /*
-    function requestParamsFactory(postData) {
-        return {
-            method: "POST",
-            url: config.url("/api/auth/create"),
-            headers: {"Authorization": common.authHeader},
-            form: postData
-        };
-    }
-    */
-
-    /*
     before(common.isServerUp.bind(common));
-    */
 
-    /*
-    it("should not accept blank content", function(done) {
-        request(
-            requestParamsFactory({user:config.testUser.id, content:""}),
-            common.shouldBeErrorFactory(412, "Content cannot be empty", done));
-    });
-    */
-
-    function foo() {
-        var dfd = $.Deferred();
-        request(config.url("/api/ping"), 
-                /*
-            requestParamsFactory({
-                username:"XXXrandom", 
-                email: "foo@bar.com",
-                password: "password"
-            }),
-            */
-            function(error, response, body) {
-                dfd.resolve(error, response, body);
-            });
-        return dfd.promise();
-    }
-
-                            /*
-    shouldBe200JsonFactory: function(error, response, body) {
-        should.not.exist(error);
-        response.should.have.status(200);
-        response.should.be.json;
-    };
- 
-
-    isServerUp: function(done) {
-        request(config.url("/api/ping"), this.shouldBe200JsonFactory(done));
-    },
-    */
     it("should complete valid request", function(done) {
-        foo().done(
-            function(error, response, body) {
-                console.log('test');
-                done();
-            }
-            );
-        /*
-            function(error, 
-            common.shouldBe200JsonFactory(function(done));
-            */
+        var makeUnique = Math.random();
+        $.post(("http://localhost:8080/api/public/register"), {
+            username: "foo" + makeUnique,
+            email: ["foo", makeUnique, "@bar.com"].join(""),
+            password: "foo"
+        })
+        .done(function(data, textStatus, jqXHR) {
+            data.should.have.property("user");
+            data.user.should.have.property("id");
+        })
+        /* XXX check that the user exists by calling another API */
+        .fail(common.shouldNotHappen)
+        .always(function(){done()});
     });
 
 });
