@@ -30,7 +30,7 @@ describe ("Authorized API Access:", function(){
             method: 'POST',
             url: config.url("/api/auth/create"),
             headers: {"Authorization":common.authHeader},
-            form:{user:config.testUser.id, content:"hellowww"}
+            form:{content:"hellowww"}
             },
             common.shouldBe200BlankFactory(done));
     });
@@ -43,9 +43,21 @@ describe ("Authorized API Access:", function(){
             headers: {"Authorization":
                 ["Basic-Custom ", config.testUser.id, ":", config.testUser.password].join("")
             },
-            form:{user:4}
+            form:{user:15}
         },
         shouldBe200JsonFactory(done));
+    });
+
+    it("unfollow should return OK status",function(done){
+        request({
+                method: 'POST',
+                url: config.url("/api/auth/unfollow"),
+                headers: {"Authorization":
+                    ["Basic-Custom ", config.testUser.id, ":", config.testUser.password].join("")
+                },
+                form:{user:15}
+            },
+            shouldBe200JsonFactory(done));
     });
 
 

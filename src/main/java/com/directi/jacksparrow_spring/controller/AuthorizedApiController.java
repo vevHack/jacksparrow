@@ -52,31 +52,41 @@ public class AuthorizedApiController extends ControllerWithJdbcWiring {
 
     @RequestMapping(value="/follow", method=RequestMethod.POST)
     @ResponseBody
-    public HashMap<String, Object> follow(@RequestParam int user, HttpServletRequest request) {
+    public HashMap<String, Object> follow(@RequestParam int user)
+        throws ApiException {
+        log.info("User "+getAuthorizedUser()+" wants to follow user "+user);
+        if(!query.existsUser(user))
+            throw new ApiException(HttpStatus.PRECONDITION_FAILED,
+                    "Followee does not exist");
         query.updateFollow((Integer)request.getAttribute("authorizedUser"), user);
-        HashMap map =  new HashMap<String,Object>();
-        map.put("status", "success");
-        return map;
+        return new HashMap<String, Object>() {{
+            put("status", "success");
+        }};
     }
 
     @RequestMapping(value="/unfollow", method=RequestMethod.POST)
     @ResponseBody
-    public ImmutableMap unfollow(@RequestParam int user, HttpServletRequest request) {
-
+    public HashMap<String, Object> unfollow(@RequestParam int user)
+        throws ApiException{
         log.info("Unfollow request from user "+getAuthorizedUser()+" to unfollow user "+user);
+        if(!query.isFollowing(getAuthorizedUser(), user))
+            throw new ApiException(HttpStatus.PRECONDITION_FAILED,
+                "follows relationship is required to unfollow");
         query.updateUnfollow((Integer)request.getAttribute("authorizedUser"), user);
-        return ImmutableMap.of("status", "success");
+        return new HashMap<String, Object>() {{
+            put("status", "success");
+        }};
     }
 
     @RequestMapping(value="/create", method=RequestMethod.POST)
     @ResponseBody
-    public void create(@RequestParam int user, @RequestParam String content)
+    public void create(@RequestParam String content)
             throws ApiException{
         log.info("create request from " + getAuthorizedUser());
         if (content.isEmpty()) {
             throw new ApiException(HttpStatus.PRECONDITION_FAILED,
                     "Content cannot be empty");
         }
-        query.createPost(user, content);
+        query.createPost(getAuthorizedUser(), content);
     }
 }
