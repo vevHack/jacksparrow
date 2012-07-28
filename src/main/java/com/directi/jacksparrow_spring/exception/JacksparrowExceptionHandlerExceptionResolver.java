@@ -14,14 +14,14 @@ import java.util.ArrayList;
 
 /* https://github.com/rstoyanchev/spring-mvc-31-demo/ */
 
-public class ApiExceptionHandlerExceptionResolver
+public class JacksparrowExceptionHandlerExceptionResolver
         extends ExceptionHandlerExceptionResolver {
 
     private Object handler;
     private ExceptionHandlerMethodResolver methodResolver;
 
-    public ApiExceptionHandlerExceptionResolver() {
-        this.handler = new ApiExceptionHandler();
+    public JacksparrowExceptionHandlerExceptionResolver() {
+        this.handler = new JacksparrowExceptionHandler();
         this.methodResolver =
                 new ExceptionHandlerMethodResolver(handler.getClass());
         setOrder(Ordered.HIGHEST_PRECEDENCE);

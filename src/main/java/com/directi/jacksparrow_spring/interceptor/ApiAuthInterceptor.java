@@ -1,12 +1,10 @@
 package com.directi.jacksparrow_spring.interceptor;
 
-import com.directi.jacksparrow_spring.exception.ApiException;
-import com.directi.jacksparrow_spring.exception.UserValidationException;
+import com.directi.jacksparrow_spring.exception.UserAuthorizationException;
 import com.directi.jacksparrow_spring.repository.UserRepository;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,18 +28,17 @@ public class ApiAuthInterceptor extends HandlerInterceptorAdapter {
 
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null) {
-            throw new ApiException(HttpStatus.UNAUTHORIZED,
-                    "No 'Authorization' header");
+            throw new UserAuthorizationException("No 'Authorization' header");
         }
 
         String[] authTokens = authHeader.split("[ :]");
         if (authTokens.length != 3) {
-            throw new ApiException(HttpStatus.UNAUTHORIZED,
+            throw new UserAuthorizationException(
                     "Malformed 'Authorization' header");
         }
 
         if (!authTokens[0].trim().equals(AUTH_TYPE)) {
-            throw new ApiException(HttpStatus.UNAUTHORIZED,
+            throw new UserAuthorizationException(
                     "Expect Authorization type '" + AUTH_TYPE + "'");
         }
 
@@ -49,12 +46,8 @@ public class ApiAuthInterceptor extends HandlerInterceptorAdapter {
         /* XXX Base64 encode the password */
         String password = authTokens[2];
 
-        try {
-            request.setAttribute("authorizedUser",
-                    userRepository.getUserFromCredentials(userId, password));
-        } catch (UserValidationException ex) {
-            throw new ApiException(HttpStatus.UNAUTHORIZED, ex.getMessage());
-        }
+        request.setAttribute("authorizedUser",
+                userRepository.getUserFromCredentials(userId, password));
 
         return true;
     }

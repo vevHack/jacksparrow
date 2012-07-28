@@ -22,7 +22,7 @@ import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMeth
 import java.util.HashMap;
 import java.util.Map;
 
-public class ApiExceptionHandler {
+public class JacksparrowExceptionHandler {
 
 	@ExceptionHandler(value=Exception.class)
 	public ResponseEntity<Map<String, Object>> handle(final Exception ex) {
@@ -30,8 +30,8 @@ public class ApiExceptionHandler {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpStatus status = null;
-        if (ex instanceof ApiException) {
-            status = ((ApiException)ex).getHttpStatus();
+        if (ex instanceof JacksparrowException) {
+            status = ((JacksparrowException)ex).getHttpStatus();
         } else {
             status = getStatusForDefaultException(ex);
         }
