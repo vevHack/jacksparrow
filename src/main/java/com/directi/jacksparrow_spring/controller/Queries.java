@@ -62,12 +62,6 @@ public class Queries {
                 "SELECT post FROM feed WHERE \"user\"=?", user);
     }
 
-    public int register(String username, String email, String password) {
-        jdbcTemplate.update("INSERT INTO \"user\" (username, email, password)" +
-                " VALUES (?, ?, ?)", username, email, password);
-        return jdbcTemplate.queryForInt("SELECT LASTVAL()");
-    }
-
     public boolean existsUser (int user) {
         if(jdbcTemplate.queryForList("SELECT * FROM \"user\" WHERE id=?", user).size()==0)
             return false;

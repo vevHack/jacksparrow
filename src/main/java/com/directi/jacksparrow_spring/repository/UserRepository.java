@@ -33,6 +33,23 @@ public class UserRepository {
     }
 
     public void addUser(User user) {
-
+        jdbcTemplate.update(
+                "INSERT INTO \"user\" (username, email, password) " +
+                "VALUES (?, ?, ?)",
+                user.getUsername(), user.getEmail(), user.getPassword());
+        user.setId(jdbcTemplate.queryForInt("SELECT LASTVAL()"));
     }
+
+    public boolean existsUserWithUsername(String username) {
+        return jdbcTemplate.queryForInt(
+                "SELECT COUNT(*) FROM \"user\" WHERE username=?",
+                username) != 0;
+    }
+
+    public boolean existsUserWithEmail(String email) {
+        return jdbcTemplate.queryForInt(
+                "SELECT COUNT(*) FROM \"user\" WHERE email=?",
+                email) != 0;
+    }
+
 }

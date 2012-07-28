@@ -7,6 +7,8 @@ module.exports = {
 
     testUser: {
         id: 5,
+        username: "foo",
+        email: "foo@bar.com",
         password: "test"
     },
     invalidUser: {

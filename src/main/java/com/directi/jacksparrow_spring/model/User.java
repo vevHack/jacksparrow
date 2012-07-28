@@ -1,15 +1,11 @@
 package com.directi.jacksparrow_spring.model;
 
-import org.springframework.jdbc.core.RowMapper;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 public class User {
 
     private String email, username, password, name;
     private int id;
 
+    /*
     public static final RowMapper<User> rowMapper = new RowMapper<User>() {
         @Override
         public User mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -25,6 +21,7 @@ public class User {
         name = rs.getString("name");
 
     }
+    */
 
     public User() {
     }

@@ -4,6 +4,10 @@ var config = require("./_CONFIG.js");
 
 module.exports = {
 
+    logArguments: function() {
+        console.log(arguments);
+    },
+
     shouldNotSucceed: function(data, textStatus, jqXHR) {
         jqXHR.status.should.not.be(200);
         should.not.exist(data);

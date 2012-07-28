@@ -152,7 +152,7 @@ COPY post (id, "user", created_on, content) FROM stdin;
 --
 
 COPY "user" (id, email, username, password, name, created_on) FROM stdin;
-5	fo@bar.com	foo	test	\N	2012-07-25 20:24:30.119612
+5	foo@bar.com	foo	test	\N	2012-07-25 20:24:30.119612
 \.
 
 
