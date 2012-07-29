@@ -1,56 +1,68 @@
 (function() {
 
+    var nop = new Function("");
+
     function preload() {
         $.fetch.template("register");
+        $.fetch.js("register");
     }
 
-    function fadeReplaceFactory(element, withElement) {
+    function fadeReplaceFactory(selector, withSelector) {
     /* XXX ignore clicks ie disable triggers during anim? */
         return function() {
+            var temp;
         /* XXX
-            element.fadeOut("fast", function() {
-                withElement.fadeIn("fast");
+            $(selector).fadeOut("fast", function() {
+                $(withSelector).fadeIn("fast");
             });
             */
-            element.hide();
-            withElement.show();
+            $(selector).hide();
+            $(withSelector).show();
+
+            temp = selector;
+            selector = withSelector;
+            withSelector = temp;
         };
     }
+
+    var toggleLoginRegister = fadeReplaceFactory("#login", "#register");
 
     var onShowRegister = (function() {
         var action;
 
         function firstTime() {
-            $.fetch.template("register")
-                .done(function(template) {
+            $.when(
+                $.fetch.template("register"),
+                $.fetch.js("register")
+                )
+                .done(function() {
+                    var template = arguments[0][0];
                     $("#register")
-                        .prepend(Mustache.render(template));
+                        .prepend(Mustache.render(template))
+                        .on("click", ".trigger", onShowLogin);
+                    jks.register.bindEvents($("#register"));
 
-                    $("#register").on("click", ".trigger", onShowLogin);
-                    $("#register").on("submit", onRegister);
-
-                    action = fadeReplaceFactory($("#login"), $("#register"));
+                    action = toggleLoginRegister;
                     action();
+
+                    /* XXX Restore Focus even after multiple switches
+                       between login/register */
+                    $("#register").find('input[name="email"]').focus();
                 });
+            action = nop;
         }
 
         action = firstTime;
-        return function() {
-            action();
-            return false;
+        return function(event) {
+            action(event);
+            event.preventDefault();
         };
     }());
 
     var onShowLogin = function() {
-        var action = action || fadeReplaceFactory($("#register"), $("#login"));
-        action();
-        return false;
+        toggleLoginRegister();
+        event.preventDefault();
     }
-
-    var onRegister = function() {
-        console.log("you clicked register");
-        return false;
-    };
 
     var onLogin = function() {
         console.log("you clicked login");
@@ -61,7 +73,8 @@
     $(function() {
         var authFetched = $.fetch.template("authenticate")
             .done(function(template) {
-                $("body").html(Mustache.render(template));
+                $("body").html($(Mustache.render(template))
+                    .filter("#register").hide().end());
                 $("#login").on("click", ".trigger", onShowRegister);
             });
 
@@ -72,7 +85,8 @@
             var template = arguments[1][0];
             $("#login")
                 .prepend(Mustache.render(template))
-                .on("submit", onLogin);
+                .on("submit", onLogin)
+                .find('input[name="email_or_username"]').focus();
         });
 
         preload();
