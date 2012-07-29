@@ -11,6 +11,14 @@ module.exports = {
         email: "foo@bar.com",
         password: "test"
     },
+
+    testUser2: {
+        id: 6,
+        username: "foo2",
+        email: "foo2@bar.com",
+        password: "test"
+    },
+
     invalidUser: {
         id: 0
     }

@@ -22,6 +22,16 @@ module.exports = {
         should.not.exist(data);
     },
 
+    shouldBeEmptyJson: function(data, textStatus, jqXHR) {
+        data.should.eql({});
+    },
+
+    shouldBeErrorCodeFactory: function(code) {
+        return function(jqXHR, errorText, thrownError) {
+            code.should.equal(jqXHR.status);
+        };
+    },
+
     shouldBeErrorFactory: function(code, msg) {
         return function(jqXHR, errorText, thrownError) {
             code.should.equal(jqXHR.status);

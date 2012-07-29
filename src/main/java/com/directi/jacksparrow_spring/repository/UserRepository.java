@@ -7,6 +7,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -50,6 +51,25 @@ public class UserRepository {
         return jdbcTemplate.queryForInt(
                 "SELECT COUNT(*) FROM \"user\" WHERE email=?",
                 email) != 0;
+    }
+
+
+    /* XXX does this make existsUserWithUsername redundant */
+    public User getUserHavingUsername(String username) {
+        final List<Map<String, Object>> ids = jdbcTemplate.queryForList(
+                "SELECT id FROM \"user\" WHERE username=?", username);
+        return ids.isEmpty() ? null : new User() {{
+            setId((Integer)ids.get(0).get("id"));
+        }};
+    }
+
+    /* XXX does this make existsUserWithEmail redundant */
+    public User getUserHavingEmail(String email) {
+        final List<Map<String, Object>> ids = jdbcTemplate.queryForList(
+                "SELECT id FROM \"user\" WHERE email=?", email);
+        return ids.isEmpty() ? null : new User() {{
+            setId((Integer)ids.get(0).get("id"));
+        }};
     }
 
 }
