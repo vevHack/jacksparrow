@@ -103,5 +103,4 @@ public class PublicApiController extends ControllerWithJdbcWiring {
 
         return userToMapConverter.convert(user);
     }
-
 }

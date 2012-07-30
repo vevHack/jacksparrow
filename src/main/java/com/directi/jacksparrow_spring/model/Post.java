@@ -10,7 +10,7 @@ public class Post {
     private int user_id, id;
     private String content;
 
-    public static final RowMapper<Post> rowMapper = new RowMapper<Post>() {
+/*    public static final RowMapper<Post> rowMapper = new RowMapper<Post>() {
         @Override public Post mapRow(ResultSet resultSet, int i) throws SQLException {
             return new Post(resultSet);
         }
@@ -22,7 +22,7 @@ public class Post {
         id = resultSet.getInt("id");
         content = resultSet.getString("content");
     }
-
+*/
 
     public int getUser_id() {
         return user_id;

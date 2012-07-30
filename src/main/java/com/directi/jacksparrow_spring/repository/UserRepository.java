@@ -41,10 +41,21 @@ public class UserRepository {
         user.setId(jdbcTemplate.queryForInt("SELECT LASTVAL()"));
     }
 
+    public List<Map<String, Object>>getFollowers(User user) {
+        return jdbcTemplate.queryForList(
+                "SELECT follower FROM follows WHERE followee=?", user.getId());
+    }
+
     public boolean existsUserWithUsername(String username) {
         return jdbcTemplate.queryForInt(
                 "SELECT COUNT(*) FROM \"user\" WHERE username=?",
                 username) != 0;
+    }
+
+    public boolean existsUserWithId(int id) {
+        return jdbcTemplate.queryForInt(
+                "SELECT COUNT(*) FROM \"user\" WHERE id=?",
+                id) != 0;
     }
 
     public boolean existsUserWithEmail(String email) {
@@ -53,6 +64,11 @@ public class UserRepository {
                 email) != 0;
     }
 
+    public boolean isFollowing(User follower, User followee) {
+        return jdbcTemplate.queryForList("SELECT COUNT(*) FROM follows WHERE follower=? AND followee=?",
+                follower.getId(), followee.getId()).size()!=0;
+
+    }
 
     /* XXX does this make existsUserWithUsername redundant */
     public User getUserHavingUsername(String username) {
@@ -70,6 +86,22 @@ public class UserRepository {
         return ids.isEmpty() ? null : new User() {{
             setId((Integer)ids.get(0).get("id"));
         }};
+    }
+
+    public List<Map<String, Object>> getFeed(User user) {
+        return jdbcTemplate.queryForList(
+                "SELECT post FROM feed WHERE \"user\"=?", user.getId());
+    }
+
+    public void updateFollow(User follower, User followee) {
+        jdbcTemplate.update("INSERT INTO follows(follower, followee) VALUES(?,?)",
+                follower.getId(), followee.getId()) ;
+    }
+
+    public void updateUnfollow(User follower, User followee) {
+        jdbcTemplate.update(
+                "UPDATE follows SET end_on=LOCALTIMESTAMP WHERE follower=? AND followee=? AND end_on IS NULL",
+                follower.getId(), followee.getId());
     }
 
 }
