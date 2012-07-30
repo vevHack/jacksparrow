@@ -1,7 +1,10 @@
 package com.directi.jacksparrow_spring.controller;
 
 import com.directi.jacksparrow_spring.exception.ApiException;
+import com.directi.jacksparrow_spring.model.Post;
 import com.directi.jacksparrow_spring.model.User;
+import com.directi.jacksparrow_spring.repository.PostRepository;
+import com.directi.jacksparrow_spring.repository.UserRepository;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,46 +27,41 @@ public class AuthorizedApiController extends ControllerWithJdbcWiring {
     private final Log log = LogFactory.getLog(this.getClass());
 
     private @Autowired HttpServletRequest request;
+    private @Autowired PostRepository postRepository;
+    private @Autowired UserRepository userRepository;
 
-    private User getAuthorizedUser2() {
+    private User getAuthorizedUser() {
         return (User)request.getAttribute("authorizedUser");
-    }
-
-    private int getAuthorizedUser() {
-        return ((User)request.getAttribute("authorizedUser")).getId();
-    }
-
-    int authorizedUser=5;
-    Queries query;
-
-    @Autowired
-    public void setQuery(Queries query) {
-        this.query = query;
     }
 
     @RequestMapping("/feed")
     @ResponseBody
     public Map<String, Object> getFeed(@RequestParam final int user)
         throws ApiException {
+
         log.info("Request for feed of user "+user);
-        if(user!=getAuthorizedUser()) {
+        if(user!= getAuthorizedUser().getId()) {
             throw new ApiException(HttpStatus.PRECONDITION_FAILED,
                     "Authorized user and callee are different");
         }
         return new HashMap<String, Object>() {{
-            put("feed", query.queryFeed(user));
+            put("feed", userRepository.getFeed(new User(){{
+                setId(user);
+            }}));
         }};
     }
 
     @RequestMapping(value="/follow", method=RequestMethod.POST)
     @ResponseBody
-    public HashMap<String, Object> follow(@RequestParam int user)
+    public HashMap<String, Object> follow(@RequestParam final int user)
         throws ApiException {
-        log.info("User "+getAuthorizedUser()+" wants to follow user "+user);
-        if(!query.existsUser(user))
+        log.info("User "+ getAuthorizedUser().getId()+" wants to follow user "+user);
+        if(!userRepository.existsUserWithId(user))
             throw new ApiException(HttpStatus.PRECONDITION_FAILED,
                     "Followee does not exist");
-        query.updateFollow((Integer)request.getAttribute("authorizedUser"), user);
+        userRepository.updateFollow(getAuthorizedUser(), new User() {{
+            setId(user);
+        }});
         return new HashMap<String, Object>() {{
             put("status", "success");
         }};
@@ -70,26 +69,33 @@ public class AuthorizedApiController extends ControllerWithJdbcWiring {
 
     @RequestMapping(value="/unfollow", method=RequestMethod.POST)
     @ResponseBody
-    public HashMap<String, Object> unfollow(@RequestParam int user)
+    public HashMap<String, Object> unfollow(@RequestParam final int user)
         throws ApiException{
-        log.info("Unfollow request from user "+getAuthorizedUser()+" to unfollow user "+user);
-        if(!query.isFollowing(getAuthorizedUser(), user))
+        log.info("Unfollow request from user "+ getAuthorizedUser().getId()+" to unfollow user "+user);
+        if(!userRepository.isFollowing(getAuthorizedUser(), new User(){{
+            setId(user);
+        }}))
             throw new ApiException(HttpStatus.PRECONDITION_FAILED,
                 "follows relationship is required to unfollow");
-        query.updateUnfollow((Integer)request.getAttribute("authorizedUser"), user);
+        userRepository.updateUnfollow((User)request.getAttribute("authorizedUser"), new User() {{
+            setId(user);
+        }});
         return new HashMap<String, Object>() {{
             put("status", "success");
         }};
     }
 
     @RequestMapping(value="/create", method=RequestMethod.POST)
-    public void create(@RequestParam String content)
-            throws ApiException{
-        log.info("create request from " + getAuthorizedUser());
+    public void create(@RequestParam final String content)
+            throws ApiException, SQLException {
+        log.info("create request from " + getAuthorizedUser().getId());
         if (content.isEmpty()) {
             throw new ApiException(HttpStatus.PRECONDITION_FAILED,
                     "Content cannot be empty");
         }
-        query.createPost(getAuthorizedUser(), content);
+        postRepository.createPost(new Post() {{
+            setId(getAuthorizedUser().getId());
+            setContent(content);
+        }});
     }
 }
