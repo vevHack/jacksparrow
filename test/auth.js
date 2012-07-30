@@ -78,7 +78,7 @@ describe("Authorization", function() {
         });
 
         it("should authenticate valid user", function(done) {
-            common.authGetJson(
+            common.authJson(
                 config.url("/api/auth/feed?user=", config.testUser.id))
                 .fail(common.shouldNotFail)
                 .always(function(){done()});

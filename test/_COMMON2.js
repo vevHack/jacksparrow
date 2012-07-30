@@ -47,7 +47,7 @@ module.exports = {
     authHeader: {"Authorization": ["Basic-Custom ", config.testUser.id, 
         ":", config.testUser.password].join("")},
 
-    authGetJson: function(options) {
+    authJson: function(options) {
         if (typeof options === 'string') {
             options = {url: options};
         }
