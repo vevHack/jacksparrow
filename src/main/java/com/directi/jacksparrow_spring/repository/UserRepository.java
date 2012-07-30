@@ -41,9 +41,25 @@ public class UserRepository {
         user.setId(jdbcTemplate.queryForInt("SELECT LASTVAL()"));
     }
 
+    public List<Map<String, Object>>getUsers() {
+        return jdbcTemplate.queryForList("SELECT id FROM \"user\"");
+    }
+
+
+    public List<Map<String, Object>>getPosts(User user) {
+        return jdbcTemplate.queryForList(
+                "SELECT id, content FROM post WHERE \"user\"=?", user.getId());
+    }
+
+
     public List<Map<String, Object>>getFollowers(User user) {
         return jdbcTemplate.queryForList(
                 "SELECT follower FROM follows WHERE followee=?", user.getId());
+    }
+
+    public List<Map<String, Object>> getFollowing(User user) {
+        return jdbcTemplate.queryForList(
+                "SELECT followee FROM follows WHERE follower=?", user.getId());
     }
 
     public boolean existsUserWithUsername(String username) {

@@ -34,26 +34,32 @@ public class PublicApiController extends ControllerWithJdbcWiring {
 
     @RequestMapping("/followers")
     @ResponseBody
-    public List<Map<String, Object>> getFollowers(@RequestParam int user) {
-        return query.queryFollowers(user);
+    public List<Map<String, Object>> getFollowers(@RequestParam final int user) {
+        return userRepository.getFollowers(new User() {{
+            setId(user);
+        }});
     }
 
     @RequestMapping("/following")
     @ResponseBody
-    public List<Map<String, Object>> getFollowing(@RequestParam int user) {
-        return query.queryFollowing(user);
+    public List<Map<String, Object>> getFollowing(@RequestParam final int user) {
+        return userRepository.getFollowing(new User() {{
+            setId(user);
+        }});
     }
 
     @RequestMapping("/users")
     @ResponseBody
     public List<Map<String, Object>> getUsers() {
-        return query.queryUsers();
+        return userRepository.getUsers();
     }
 
     @RequestMapping("/posts")
     @ResponseBody
-    public List <Map<String, Object>> getPosts(@RequestParam int user) {
-        return query.queryPosts(user);
+    public List <Map<String, Object>> getPosts(@RequestParam final int user) {
+        return userRepository.getPosts(new User(){{
+            setId(user);
+        }});
     }
 
     @RequestMapping(value="/register", method=RequestMethod.POST)
