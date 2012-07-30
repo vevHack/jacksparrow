@@ -1,3 +1,5 @@
+var jks = jks || {};
+
 (function() {
 
     var nop = new Function("");
@@ -5,6 +7,7 @@
     function preload() {
         $.fetch.template("register");
         $.fetch.js("register");
+        $.fetch.img("ajax-loader.gif")
     }
 
     function fadeReplaceFactory(selector, withSelector) {
@@ -71,7 +74,9 @@
 
 /* TODO XXX HANDLE FAILURES */
     $(function() {
-        var authFetched = $.fetch.template("authenticate")
+        var authFetched;
+
+        authFetched = $.fetch.template("authenticate")
             .done(function(template) {
                 $("body").html($(Mustache.render(template))
                     .filter("#register").hide().end());

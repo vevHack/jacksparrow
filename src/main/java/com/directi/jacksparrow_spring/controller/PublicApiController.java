@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -104,4 +105,43 @@ public class PublicApiController extends ControllerWithJdbcWiring {
         return userToMapConverter.convert(user);
     }
 
+    @RequestMapping(value="/validate")
+    @ResponseBody
+    public Map<?,?> validate(
+            @RequestParam(required=false) String username,
+            @RequestParam(required=false) String email)
+        throws ValidationException {
+
+        int nonNullCount = 0;
+        for (Object o: new Object[] {username, email}) {
+            if (o != null) {
+                nonNullCount += 1;
+            }
+        }
+        if (nonNullCount != 1) {
+            throw new ValidationException(
+                    "Require one and only one field for validation at a time");
+        }
+
+        try {
+            if (username != null) {
+                validator.validateUsername(username);
+            } else if (email != null) {
+                validator.validateEmail(email) ;
+            }
+        } catch (final ValidationException ex) {
+            return new HashMap<String, Object>() {{
+                put("validation", new HashMap<String, Object>() {{
+                    put("status", "failed");
+                    put("reason", ex.getMessage());
+                }});
+            }};
+        }
+
+        return new HashMap<String, Object>() {{
+            put("validation", new HashMap<String, Object>() {{
+                put("status", "ok");
+            }});
+        }};
+    }
 }

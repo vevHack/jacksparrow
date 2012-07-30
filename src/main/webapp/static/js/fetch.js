@@ -1,5 +1,10 @@
 (function($) {
-    $.fetch = $.fetch || {
+    if ($.fetch) {
+        return;
+    }
+
+    images = {};
+    $.fetch = {
 
         template:  function(template) {
             return $.ajax({
@@ -15,6 +20,26 @@
                 cache: true,
                 dataType: "script"
             });
+        },
+
+        img: function(src) {
+            var deferred, promise;
+            src = ["/static/img/", src].join("");
+
+            if (images[src]) {
+                return images[src];
+            }
+
+            promise = (deferred = $.Deferred()).promise();
+            $("<img />")
+                .on("load", function(event) {
+                    images[src] = promise;
+                    deferred.resolve($(event.target));
+                })
+                .attr("src", src);
+            return deferred.promise();
         }
+
     };
+
 }(jQuery));
