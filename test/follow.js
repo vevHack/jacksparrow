@@ -1,8 +1,8 @@
-var assert = require("assert");
 var request = require("request");
 var should = require("should");
 var config = require("./_CONFIG.js");
 var common = require("./_COMMON.js");
+var $ = require("jQuery");
 
 describe ("Authorized API Access:", function(){
 

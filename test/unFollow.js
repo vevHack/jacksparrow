@@ -2,21 +2,48 @@ var assert = require("assert");
 var request = require("request");
 var should = require("should");
 var config = require("./_CONFIG.js");
-var common = require("./_COMMON.js");
+var common = require("./_COMMON2.js");
+var $ = require("jquery");
 
-describe ("Authorized API Access:", function(){
+describe ("unfollow:", function(){
 
-    it("unfollow should return OK status",function(done){
-        request({
-                method: 'POST',
-                url: config.url("/api/auth/unfollow"),
-                headers: {"Authorization":
-                    ["Basic-Custom ", config.testUser.id, ":", config.testUser.password].join("")
-                },
-                form:{user:config.testUser2.id}
-            },
-            common.shouldBe200JsonFactory(done));
+    before(common.isServerUp.bind(common));
+
+    it("should return OK status",function(done){
+        $.ajax({
+            type: "POST",
+            url: config.url("/api/auth/unfollow"),
+            headers: common.authHeader,
+            data: {user: config.testUser2.id}
+        }, "json")
+            .fail(common.shouldNotFail)
+            .always(function(){done();});
+
     });
 
+    it("should return precondition failed", function(done){
+        $.ajax({
+            type: "POST",
+            url: config.url("/api/auth/unfollow"),
+            headers: common.authHeader,
+            data: {user: config.invalidUser.id}
+        })
+            .done(common.shouldNotSucceed)
+            .fail(common.shouldBeErrorCodeFactory(412))
+            .always(function(){done();});
+
+    });
+
+    it("should return precondition failed", function(done){
+        $.ajax({
+            type: "POST",
+            url: config.url("/api/auth/unfollow"),
+            headers: common.authHeader
+        })
+            .done(common.shouldNotSucceed)
+            .fail(common.shouldBeErrorCodeFactory(400))
+            .always(function(){done();});
+
+    });
 
 });

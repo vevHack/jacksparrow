@@ -81,8 +81,9 @@ public class UserRepository {
     }
 
     public boolean isFollowing(User follower, User followee) {
-        return jdbcTemplate.queryForList("SELECT COUNT(*) FROM follows WHERE follower=? AND followee=?",
-                follower.getId(), followee.getId()).size()!=0;
+        return jdbcTemplate.queryForInt("SELECT COUNT(*) FROM follows" +
+                " WHERE follower=? AND followee=?",
+                follower.getId(), followee.getId())!=0;
 
     }
 
@@ -110,13 +111,15 @@ public class UserRepository {
     }
 
     public void updateFollow(User follower, User followee) {
-        jdbcTemplate.update("INSERT INTO follows(follower, followee) VALUES(?,?)",
+        jdbcTemplate.update("INSERT INTO follows" +
+                "(follower, followee) VALUES(?,?)",
                 follower.getId(), followee.getId()) ;
     }
 
     public void updateUnfollow(User follower, User followee) {
         jdbcTemplate.update(
-                "UPDATE follows SET end_on=LOCALTIMESTAMP WHERE follower=? AND followee=? AND end_on IS NULL",
+                "UPDATE follows SET end_on=LOCALTIMESTAMP WHERE " +
+                        "follower=? AND followee=? AND end_on IS NULL",
                 follower.getId(), followee.getId());
     }
 

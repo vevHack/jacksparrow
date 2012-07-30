@@ -1,6 +1,7 @@
 package com.directi.jacksparrow_spring.controller;
 
 import com.directi.jacksparrow_spring.exception.ApiException;
+import com.directi.jacksparrow_spring.exception.PreconditionViolatedException;
 import com.directi.jacksparrow_spring.model.Post;
 import com.directi.jacksparrow_spring.model.User;
 import com.directi.jacksparrow_spring.repository.PostRepository;
@@ -55,7 +56,8 @@ public class AuthorizedApiController extends ControllerWithJdbcWiring {
     @ResponseBody
     public HashMap<String, Object> follow(@RequestParam final int user)
         throws ApiException {
-        log.info("User "+ getAuthorizedUser().getId()+" wants to follow user "+user);
+        log.info("User "+ getAuthorizedUser().getId()+"" +
+                " wants to follow user "+user);
         if(!userRepository.existsUserWithId(user))
             throw new ApiException(HttpStatus.PRECONDITION_FAILED,
                     "Followee does not exist");
@@ -67,19 +69,25 @@ public class AuthorizedApiController extends ControllerWithJdbcWiring {
         }};
     }
 
-    @RequestMapping(value="/unfollow", method=RequestMethod.POST)
+    @RequestMapping(value = "/unfollow", method = RequestMethod.POST)
     @ResponseBody
     public HashMap<String, Object> unfollow(@RequestParam final int user)
-        throws ApiException{
-        log.info("Unfollow request from user "+ getAuthorizedUser().getId()+" to unfollow user "+user);
-        if(!userRepository.isFollowing(getAuthorizedUser(), new User(){{
+            throws PreconditionViolatedException {
+        log.info("Unfollow request from user " + getAuthorizedUser().getId()
+                + " to unfollow user " + user);
+
+        User authorizedUser = getAuthorizedUser();
+        User userToUnfollow = new User() {{
             setId(user);
-        }}))
-            throw new ApiException(HttpStatus.PRECONDITION_FAILED,
-                "follows relationship is required to unfollow");
-        userRepository.updateUnfollow((User)request.getAttribute("authorizedUser"), new User() {{
-            setId(user);
-        }});
+        }};
+
+        if (!userRepository.isFollowing(authorizedUser, userToUnfollow)) {
+            throw new PreconditionViolatedException(
+                    "follows relationship is required to unfollow");
+        }
+
+        userRepository.updateUnfollow(authorizedUser, userToUnfollow);
+
         return new HashMap<String, Object>() {{
             put("status", "success");
         }};
