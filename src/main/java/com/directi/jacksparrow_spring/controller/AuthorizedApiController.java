@@ -38,11 +38,11 @@ public class AuthorizedApiController extends ControllerWithJdbcWiring {
     @RequestMapping("/feed")
     @ResponseBody
     public Map<String, Object> getFeed(@RequestParam final int user)
-        throws ApiException {
+            throws PreconditionViolatedException {
 
         log.info("Request for feed of user "+user);
         if(user!= getAuthorizedUser().getId()) {
-            throw new ApiException(HttpStatus.PRECONDITION_FAILED,
+            throw new PreconditionViolatedException(
                     "Authorized user and callee are different");
         }
         return new HashMap<String, Object>() {{
@@ -55,15 +55,17 @@ public class AuthorizedApiController extends ControllerWithJdbcWiring {
     @RequestMapping(value="/follow", method=RequestMethod.POST)
     @ResponseBody
     public HashMap<String, Object> follow(@RequestParam final int user)
-        throws ApiException {
+            throws ApiException, PreconditionViolatedException {
         log.info("User "+ getAuthorizedUser().getId()+"" +
                 " wants to follow user "+user);
         if(!userRepository.existsUserWithId(user))
-            throw new ApiException(HttpStatus.PRECONDITION_FAILED,
+            throw new PreconditionViolatedException(
                     "Followee does not exist");
+
         userRepository.updateFollow(getAuthorizedUser(), new User() {{
             setId(user);
         }});
+
         return new HashMap<String, Object>() {{
             put("status", "success");
         }};
@@ -95,10 +97,10 @@ public class AuthorizedApiController extends ControllerWithJdbcWiring {
 
     @RequestMapping(value="/create", method=RequestMethod.POST)
     public void create(@RequestParam final String content)
-            throws ApiException, SQLException {
+            throws PreconditionViolatedException {
         log.info("create request from " + getAuthorizedUser().getId());
         if (content.isEmpty()) {
-            throw new ApiException(HttpStatus.PRECONDITION_FAILED,
+            throw new PreconditionViolatedException(
                     "Content cannot be empty");
         }
         postRepository.createPost(new Post() {{

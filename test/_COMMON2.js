@@ -57,6 +57,18 @@ module.exports = {
                 }, options));
     },
 
+    authJsonPost: function(options) {
+        if (typeof options === 'string') {
+            options = {url: options};
+        }
+        return $.ajax($.extend({
+            "headers": this.authHeader,
+            "dataType": "json",
+            "type": "POST"
+        }, options));
+
+    },
+
     isServerUp: function(done) {
         $.getJSON(config.url("/api/ping"))
             .fail(this.shouldNotFail)
