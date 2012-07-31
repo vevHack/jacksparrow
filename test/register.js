@@ -23,6 +23,7 @@ describe("Register", function() {
         .done(function(data, textStatus, jqXHR) {
             data.should.have.property("user");
             data.user.should.have.property("id");
+            data.user.should.have.property("accessToken");
         })
         /* XXX check that the user exists by calling another API */
         .fail(common.shouldNotFail)

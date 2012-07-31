@@ -17,6 +17,7 @@ describe("Create", function() {
 
     before(common.isServerUp.bind(common));
 
+/* XXX
     it("should not accept blank content", function(done) {
         request(
             requestParamsFactory({content:""}),
@@ -29,4 +30,5 @@ describe("Create", function() {
             common.shouldBe200BlankFactory(done));
     });
 
+*/
 });

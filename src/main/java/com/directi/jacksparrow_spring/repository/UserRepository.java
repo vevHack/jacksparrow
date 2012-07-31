@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Repository
 public class UserRepository {
@@ -31,6 +32,32 @@ public class UserRepository {
         return new User() {{
             setId(id);
         }};
+    }
+
+    public User verifyUserWithCredentials(User user, String password)
+            throws UserAuthorizationException {
+        String dbPassword = (String)jdbcTemplate.queryForObject(
+                "SELECT password FROM \"user\" WHERE id=?",
+                String.class, user.getId());
+        if (!dbPassword.equals(password)) {
+            throw new UserAuthorizationException("Incorrect password");
+        }
+        return user;
+    }
+
+    public User generateAccessToken(User user) {
+        String accessToken = (String)jdbcTemplate.queryForObject(
+                "SELECT access_token FROM \"user\" WHERE id=?",
+                String.class, user.getId());
+
+        if (accessToken == null) {
+            accessToken = UUID.randomUUID().toString();
+            jdbcTemplate.update("UPDATE \"user\" SET access_token = ? WHERE " +
+                    "id = ?", accessToken, user.getId());
+        }
+        user.setAccessToken(accessToken);
+
+        return user;
     }
 
     public void addUser(User user) {

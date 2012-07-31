@@ -20,4 +20,16 @@ public class UserToMapConverter {
         }};
     }
 
+    /** XXX REFACTOR , or create new MessageConverter2JsonFromModelObject **/
+    public Map<?,?> convert2(final User user) {
+        if (user == null) {
+            return new HashMap<String, Object>();
+        }
+        return new HashMap<String, Object>() {{
+            put("user", new HashMap<String, Object>() {{
+                put("id", user.getId());
+                put("accessToken", user.getAccessToken());
+            }});
+        }};
+    }
 }

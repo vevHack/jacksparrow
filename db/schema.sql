@@ -110,6 +110,7 @@ CREATE TABLE "user" (
     username character varying(100) NOT NULL,
     password text,
     name text,
+    access_token character varying(40),
     created_on timestamp without time zone DEFAULT ('now'::text)::timestamp without time zone
 );
 

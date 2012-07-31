@@ -1,5 +1,3 @@
-var jks = jks || {};
-
 (function() {
     "use strict";
 
@@ -68,11 +66,6 @@ var jks = jks || {};
         event.preventDefault();
     }
 
-    var onLogin = function() {
-        console.log("you clicked login");
-        return false;
-    };
-
 /* TODO XXX HANDLE FAILURES */
     $(function() {
         var authFetched;
@@ -86,13 +79,15 @@ var jks = jks || {};
 
         $.when(
             authFetched,
-            $.fetch.template("login")
+            $.fetch.template("login"),
+            $.fetch.js("login")
         ).done(function(){
             var template = arguments[1][0];
             $("#login")
                 .prepend(Mustache.render(template))
-                .on("submit", onLogin)
                 .find('input[name="email_or_username"]').focus();
+
+            jks.login.bindEvents($("#login"));
         });
 
         preload();

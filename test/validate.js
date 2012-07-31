@@ -53,6 +53,7 @@ describe("Validate", function() {
     [  
         {username: "foo/bar", reason: "Username cannot contain /"},
         {username: "f\\oobar", reason: "Username cannot contain \\"},
+        {username: "foo@bar", reason: "Username cannot contain @"},
         {username: "f  oobar", reason: "Username cannot contain whitespace"},
         {username: "foo\tb\nar", reason: "Username cannot contain whitespace"},
         {username: "api", reason: "Username cannot be api"},

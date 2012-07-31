@@ -1,9 +1,11 @@
 (function($) {
+    "use strict";
+
     if ($.fetch) {
         return;
     }
 
-    images = {};
+    var images = {};
 
     $.fetch = {
 

@@ -2,6 +2,7 @@ package com.directi.jacksparrow_spring.exception;
 
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,17 +31,22 @@ public class JacksparrowExceptionHandler {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpStatus status = null;
+        String message = ex.getMessage();
         if (ex instanceof JacksparrowException) {
             status = ((JacksparrowException)ex).getHttpStatus();
+        } else if (ex instanceof DataAccessException) {
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            message = "[DB Error] " + message;
         } else {
             status = getStatusForDefaultException(ex);
         }
 
         final Integer code = status.value();
+        final String msgFinal = message;
         Map<String, Object> content = new HashMap<String, Object>() {{
             put("error", new HashMap<String, Object>() {{
                 put("code", code);
-                put("message", ex.getMessage());
+                put("message", msgFinal);
             }});
         }};
 

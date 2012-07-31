@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 @Service
 public class JacksparrowValidator {
 
-    private static final String[] invalidCharacters = {"/", "\\"};
+    private static final String[] invalidCharacters = {"@", "/", "\\"};
     private static final String[] invalidUsernames = {"api", "admin", "god"};
     private static final Pattern whiteSpaceRegex = Pattern.compile(".*\\s.*");
     private static final Pattern controlCharRegex =

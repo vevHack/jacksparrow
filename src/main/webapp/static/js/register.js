@@ -6,31 +6,6 @@ jks.register = jks.register || (function() {
     var trigger = {};
     var doRegister;
 
-    function spinnerFactoryFactory(src) {
-        var baseImg = $("<img />");
-        var pending = [];
-
-        $.fetch.img(src)
-            .done(function(img) {
-                baseImg = img;
-                pending.forEach(function(img) {
-                    img.replaceWith(baseImg.clone());
-                });
-            })
-            .fail(jks.common.warn)
-            .always(function() {pending = undefined});
-        
-        return function() {
-            var img = baseImg.clone();
-            if (typeof pending !== "undefined") {
-                pending.push(img);
-            }
-            return img;
-        };
-    }
-
-    var spinnerFactory = spinnerFactoryFactory("ajax-loader.gif");
-
     function attachValidator(input, name, ensureUnique) {
         var spinner, value, pendingXHR, deferred;
         var info = $('<span class="info" />').insertAfter(input);
@@ -102,7 +77,7 @@ jks.register = jks.register || (function() {
                 if (input.val().localeCompare(value) !== 0) {
                     value = input.val();
                     validated[name] = false;
-                    spinner = spinnerFactory().insertAfter(input);
+                    spinner = jks.common.spinnerFactory().insertAfter(input);
                     info.html("");
                     requestParams[name] = value;
                     pendingXHR = $.get("/api/public/validate", requestParams)
@@ -195,13 +170,14 @@ jks.register = jks.register || (function() {
         }
 
         function doRegister() {
-            var spinner = spinnerFactory().insertAfter(button);
+            var spinner = jks.common.spinnerFactory().insertAfter(button);
             button.parents("form").find("input").attr("disabled", true);
             $.post("/api/public/register", validated)
                 .done(function() {
                     spinner.remove();
                     console.log("XXX do login");
-                });
+                })
+                .fail(jks.common.throwTodo);
         }
 
         return function (event) {
@@ -228,7 +204,7 @@ jks.register = jks.register || (function() {
                 prepopulateUsernameFactory(
                     form.find('input[name="username"]')));
 
-            div.on("submit", registerHandlerFactory(
+            form.on("submit", registerHandlerFactory(
                 form.find('input[type="submit"]')));
         }
     };

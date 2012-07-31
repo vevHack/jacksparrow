@@ -117,6 +117,7 @@ CREATE TABLE "user" (
     username character varying(100) NOT NULL,
     password text,
     name text,
+    access_token character varying(40),
     created_on timestamp without time zone DEFAULT ('now'::text)::timestamp without time zone
 );
 
@@ -151,9 +152,9 @@ COPY post (id, "user", created_on, content) FROM stdin;
 -- Data for Name: user; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY "user" (id, email, username, password, name, created_on) FROM stdin;
-5	foo@bar.com	foo	test	\N	2012-07-25 20:24:30.119612
-6	foo2@bar.com	foo2	test	\N	2012-07-27 00:36:18.938863
+COPY "user" (id, email, username, password, name, access_token, created_on) FROM stdin;
+5	foo@bar.com	foo	test	\N	\N	2012-07-25 20:24:30.119612
+6	foo2@bar.com	foo2	test	\N	\N	2012-07-27 00:36:18.938863
 \.
 
 
