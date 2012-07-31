@@ -109,11 +109,12 @@ public class PublicApiController extends ControllerWithJdbcWiring {
     @ResponseBody
     public Map<?,?> validate(
             @RequestParam(required=false) String username,
-            @RequestParam(required=false) String email)
+            @RequestParam(required=false) String email,
+            @RequestParam(required=false) String password)
         throws ValidationException {
 
         int nonNullCount = 0;
-        for (Object o: new Object[] {username, email}) {
+        for (Object o: new Object[] {username, email, password}) {
             if (o != null) {
                 nonNullCount += 1;
             }
@@ -128,7 +129,10 @@ public class PublicApiController extends ControllerWithJdbcWiring {
                 validator.validateUsername(username);
             } else if (email != null) {
                 validator.validateEmail(email) ;
+            } else if (password != null) {
+                validator.validatePassword(password) ;
             }
+            assert (false);
         } catch (final ValidationException ex) {
             return new HashMap<String, Object>() {{
                 put("validation", new HashMap<String, Object>() {{

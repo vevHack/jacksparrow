@@ -4,6 +4,7 @@
     }
 
     images = {};
+
     $.fetch = {
 
         template:  function(template) {
@@ -31,10 +32,14 @@
             }
 
             promise = (deferred = $.Deferred()).promise();
+            /* XXX ERROR HANDLING */
             $("<img />")
                 .on("load", function(event) {
                     images[src] = promise;
                     deferred.resolve($(event.target));
+                })
+                .on("error", function(event) {
+                    deferred.reject($(event.target));
                 })
                 .attr("src", src);
             return deferred.promise();

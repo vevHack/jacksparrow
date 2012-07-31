@@ -3,3 +3,5 @@ node_modules/.bin/
 .idea/workspace.xml
 .idea/misc.xml
 *.swp
+Session
+tags

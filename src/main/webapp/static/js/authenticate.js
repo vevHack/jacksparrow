@@ -1,6 +1,7 @@
 var jks = jks || {};
 
 (function() {
+    "use strict";
 
     var nop = new Function("");
 

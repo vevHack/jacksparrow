@@ -5,3 +5,15 @@ body {
 .hidden {
     display: none;
 }
+
+label .info {
+    text-style: italics;
+}
+
+input.unvalidated {
+    background-color: #FAAAAA;
+}
+
+input.validated {
+    background-color: #adffbb;
+}
