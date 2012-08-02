@@ -1,5 +1,6 @@
 package com.directi.jacksparrow_spring.controller;
 
+import com.directi.jacksparrow_spring.exception.PreconditionViolatedException;
 import com.directi.jacksparrow_spring.exception.ValidationException;
 import com.directi.jacksparrow_spring.model.User;
 import com.directi.jacksparrow_spring.repository.UserRepository;
@@ -150,4 +151,20 @@ public class PublicApiController extends ControllerWithJdbcWiring {
             }});
         }};
     }
+
+    @RequestMapping(value = "/idtousername", method =  RequestMethod.POST)
+    @ResponseBody
+    public HashMap<String, Object> getUsernameFromID(@RequestParam int id)
+            throws PreconditionViolatedException {
+
+        if(!userRepository.existsUserWithId(id))
+            throw new PreconditionViolatedException(
+                    "User with the provided id does not exist");
+
+        final User user = userRepository.getUserHavingId(id);
+        return new HashMap<String, Object>(){{
+            put("username", user.getUsername());
+        }};
+    }
+
 }

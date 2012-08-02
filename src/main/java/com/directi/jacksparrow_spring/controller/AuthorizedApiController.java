@@ -2,14 +2,15 @@ package com.directi.jacksparrow_spring.controller;
 
 import com.directi.jacksparrow_spring.exception.ApiException;
 import com.directi.jacksparrow_spring.exception.PreconditionViolatedException;
+import com.directi.jacksparrow_spring.model.Feed;
 import com.directi.jacksparrow_spring.model.Post;
 import com.directi.jacksparrow_spring.model.User;
 import com.directi.jacksparrow_spring.repository.PostRepository;
 import com.directi.jacksparrow_spring.repository.UserRepository;
+import com.directi.jacksparrow_spring.util.FeedToMapConverter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,8 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -30,6 +32,7 @@ public class AuthorizedApiController extends ControllerWithJdbcWiring {
     private @Autowired HttpServletRequest request;
     private @Autowired PostRepository postRepository;
     private @Autowired UserRepository userRepository;
+    private @Autowired FeedToMapConverter feedToMapConverter;
 
     private User getAuthorizedUser() {
         return (User)request.getAttribute("authorizedUser");
@@ -45,14 +48,23 @@ public class AuthorizedApiController extends ControllerWithJdbcWiring {
             throw new PreconditionViolatedException(
                     "Authorized user and callee are different");
         }
+
+        List<Feed> feedList = userRepository.getFeed(new User(){{
+            setId(user);
+        }});
+
+        final List<Map<String, Object>> feeds =
+                new ArrayList<Map<String, Object>>();
+
+        for (Feed feed:feedList)
+            feeds.add(feedToMapConverter.convert(feed));
+
         return new HashMap<String, Object>() {{
-            put("feed", userRepository.getFeed(new User(){{
-                setId(user);
-            }}));
+            put("feeds",feeds);
         }};
     }
 
-    @RequestMapping(value="/follow", method=RequestMethod.POST)
+    @RequestMapping(value = "/follow", method = RequestMethod.POST)
     @ResponseBody
     public HashMap<String, Object> follow(@RequestParam final int user)
             throws ApiException, PreconditionViolatedException {
@@ -95,7 +107,7 @@ public class AuthorizedApiController extends ControllerWithJdbcWiring {
         }};
     }
 
-    @RequestMapping(value="/create", method=RequestMethod.POST)
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
     public void create(@RequestParam final String content)
             throws PreconditionViolatedException {
         log.info("create request from " + getAuthorizedUser().getId());

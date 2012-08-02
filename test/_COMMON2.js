@@ -61,12 +61,7 @@ module.exports = {
         if (typeof options === 'string') {
             options = {url: options};
         }
-        return $.ajax($.extend({
-            "headers": this.authHeader,
-            "dataType": "json",
-            "type": "POST"
-        }, options));
-
+        return this.authJson($.extend(options, {type: "POST"}));
     },
 
     isServerUp: function(done) {

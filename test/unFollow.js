@@ -4,7 +4,7 @@ var $ = require("jquery");
 
 describe ("unfollow", function(){
 
-    var unfollowUrl=config.url("/api/auth/unfollow");
+    var unfollowUrl = config.url("/api/auth/unfollow");
     before(common.isServerUp.bind(common));
 
     it("should return OK status",function(done){
@@ -16,23 +16,22 @@ describe ("unfollow", function(){
             .always(function(){done();});
     });
 
-    it("should return precondition failed", function(done){
-        common.authJsonPost({
-            url: unfollowUrl,
-            data: {user: config.invalidUser.id}
-        })
-            .done(common.shouldNotSucceed)
-            .fail(common.shouldBeErrorCodeFactory(412))
-            .always(function(){done();});
-    });
+    function ErrorFactory(params, code) {
+        return function (done) {
+            common.authJsonPost(params)
+                .done(common.shouldNotSucceed)
+                .fail(common.shouldBeErrorCodeFactory(code))
+                .always(function () {
+                    done();
+                });
+        };
+    }
 
-    it("should return bad request error", function(done){
-        common.authJsonPost({
-            url: unfollowUrl
-        })
-            .done(common.shouldNotSucceed)
-            .fail(common.shouldBeErrorCodeFactory(400))
-            .always(function(){done();});
-    });
+    it("should return precondition failed", ErrorFactory({
+        url:unfollowUrl,
+        data:{user: config.invalidUser.id}
+    }, 412));
+
+    it("should return bad request error", ErrorFactory({url:unfollowUrl}, 400));
 
 });
