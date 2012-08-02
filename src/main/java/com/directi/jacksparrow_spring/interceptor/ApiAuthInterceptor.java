@@ -1,12 +1,14 @@
 package com.directi.jacksparrow_spring.interceptor;
 
 import com.directi.jacksparrow_spring.exception.UserAuthorizationException;
-import com.directi.jacksparrow_spring.repository.UserRepository;
+import com.directi.jacksparrow_spring.repository.SessionRepository;
+import com.directi.jacksparrow_spring.util.AccessTokenCookieFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,9 +17,7 @@ public class ApiAuthInterceptor extends HandlerInterceptorAdapter {
 
     private final Log log = LogFactory.getLog(this.getClass());
 
-    static final String AUTH_TYPE = "Basic-Custom";
-
-    private @Autowired UserRepository userRepository;
+    private @Autowired SessionRepository sessionRepository;
 
     @Override
     public boolean preHandle(HttpServletRequest request,
@@ -26,28 +26,20 @@ public class ApiAuthInterceptor extends HandlerInterceptorAdapter {
         log.info("Intercepted request for Authorization: "
                 + request.getRequestURI());
 
-        String authHeader = request.getHeader("Authorization");
-        if (authHeader == null) {
-            throw new UserAuthorizationException("No 'Authorization' header");
+        String accessToken = null;
+        for (Cookie cookie : request.getCookies()) {
+            if (cookie.getName().equals(AccessTokenCookieFactory.COOKIE_NAME)) {
+                accessToken = cookie.getValue();
+                break;
+            }
         }
 
-        String[] authTokens = authHeader.split("[ :]");
-        if (authTokens.length != 3) {
-            throw new UserAuthorizationException(
-                    "Malformed 'Authorization' header");
+        if (accessToken == null) {
+            throw new UserAuthorizationException("Missing API Access Token");
         }
-
-        if (!authTokens[0].trim().equals(AUTH_TYPE)) {
-            throw new UserAuthorizationException(
-                    "Expect Authorization type '" + AUTH_TYPE + "'");
-        }
-
-        int userId = Integer.parseInt(authTokens[1]);
-        /* XXX Base64 encode the password */
-        String password = authTokens[2];
 
         request.setAttribute("authorizedUser",
-                userRepository.getUserFromCredentials(userId, password));
+                sessionRepository.getUserFromAccessToken(accessToken));
 
         return true;
     }

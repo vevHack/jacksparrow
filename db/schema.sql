@@ -141,6 +141,13 @@ CREATE INDEX feed_user_index ON feed USING btree ("user");
 
 
 --
+-- Name: user_access_token_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE UNIQUE INDEX user_access_token_idx ON "user" USING btree (access_token);
+
+
+--
 -- Name: public; Type: ACL; Schema: -; Owner: postgres
 --
 

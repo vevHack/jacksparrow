@@ -9,14 +9,16 @@ module.exports = {
         id: 5,
         username: "foo",
         email: "foo@bar.com",
-        password: "test"
+        password: "test",
+        access_token: 5
     },
 
     testUser2: {
         id: 6,
         username: "foo2",
         email: "foo2@bar.com",
-        password: "test"
+        password: "test",
+        access_token: 6
     },
 
     invalidUser: {

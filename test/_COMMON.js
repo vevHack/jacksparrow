@@ -41,8 +41,6 @@ module.exports = {
         };
     },
 
-    authHeader: 
-        ["Basic-Custom ", config.testUser.id, ":", config.testUser.password]
-        .join("")
+    authHeader: {"Cookie": ["API-ACT", config.testUser.accessToken].join("=")}
 
 };

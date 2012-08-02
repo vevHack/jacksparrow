@@ -153,8 +153,8 @@ COPY post (id, "user", created_on, content) FROM stdin;
 --
 
 COPY "user" (id, email, username, password, name, access_token, created_on) FROM stdin;
-5	foo@bar.com	foo	test	\N	\N	2012-07-25 20:24:30.119612
-6	foo2@bar.com	foo2	test	\N	\N	2012-07-27 00:36:18.938863
+5	foo@bar.com	foo	test	\N	5	2012-07-25 20:24:30.119612
+6	foo2@bar.com	foo2	test	\N	6	2012-07-27 00:36:18.938863
 \.
 
 
@@ -179,6 +179,13 @@ ALTER TABLE ONLY "user"
 --
 
 CREATE INDEX feed_user_index ON feed USING btree ("user");
+
+
+--
+-- Name: user_access_token_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE UNIQUE INDEX user_access_token_idx ON "user" USING btree (access_token);
 
 
 --
