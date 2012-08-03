@@ -1,19 +1,9 @@
-var assert = require("assert");
-var request = require("request");
+var $ = require("jquery");
 var should = require("should");
 var config = require("./_CONFIG.js");
-var common = require("./_COMMON.js");
+var common = require("./_COMMON2.js");
 
 describe("Create", function() {
-
-    function requestParamsFactory(postData) {
-        return {
-            method: "POST",
-            url: config.url("/api/auth/create"),
-            headers: {"Authorization": common.authHeader},
-            form: postData
-        };
-    }
 
     before(common.isServerUp.bind(common));
 

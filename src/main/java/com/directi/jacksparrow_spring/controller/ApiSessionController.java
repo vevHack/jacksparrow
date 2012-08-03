@@ -8,10 +8,7 @@ import com.directi.jacksparrow_spring.repository.UserRepository;
 import com.directi.jacksparrow_spring.util.AccessTokenCookieFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
@@ -28,6 +25,7 @@ public class ApiSessionController {
     private @Autowired AccessTokenCookieFactory cookieFactory;
 
     @RequestMapping(value="/create", method=RequestMethod.POST)
+    @ResponseBody
     public Map<?,?> create(@RequestParam(value="user") final int userId,
                            @RequestParam String password,
                            HttpServletResponse response)

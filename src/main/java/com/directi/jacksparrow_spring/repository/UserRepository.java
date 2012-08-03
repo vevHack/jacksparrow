@@ -36,9 +36,15 @@ public class UserRepository {
 
     public User verifyUserWithCredentials(User user, String password)
             throws UserAuthorizationException {
-        String dbPassword = (String)jdbcTemplate.queryForObject(
-                "SELECT password FROM \"user\" WHERE id=?",
-                String.class, user.getId());
+        String dbPassword;
+        try {
+            dbPassword = (String)jdbcTemplate.queryForObject(
+                    "SELECT password FROM \"user\" WHERE id=?",
+                    String.class, user.getId());
+        } catch (DataAccessException ex) {
+            throw new UserAuthorizationException("User does not exist");
+        }
+
         if (!dbPassword.equals(password)) {
             throw new UserAuthorizationException("Incorrect password");
         }

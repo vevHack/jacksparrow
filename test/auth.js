@@ -2,6 +2,8 @@ var $ = require("jquery");
 var should = require("should");
 var config = require("./_CONFIG.js");
 var common = require("./_COMMON2.js");
+var ajaxWithCookieFactory = require("./_ajaxWithCookieFactory.js")
+
 
 describe("Authorization", function() {
     
@@ -18,70 +20,43 @@ describe("Authorization", function() {
 
     describe("#Authorized API", function() {
 
-        it("should require authorization", function(done) {
-            $.getJSON(
-                config.url("/api/auth/feed?user=", config.testUser.id))
+        var apiRequiringAuthorization = 
+            config.url("/api/auth/feed?user=", config.testUser.id);
+
+        it("should expect API Access Token", function(done) {
+            $.getJSON(apiRequiringAuthorization)
                 .done(common.shouldNotSucceed)
                 .fail(common.shouldBeErrorFactory(
-                        401, "No 'Authorization' header"))
+                        401, "Missing API Access Token"))
                 .always(function(){done()});
         });
 
-        it("should have format 'Authorization: Basic-Custom user:password'", 
-            function(done) {
-            $.ajax({
-                url: config.url("/api/auth/feed?user=", config.testUser.id),
-                headers: {"Authorization": ""},
-                dataType: "json"
-                })
+        it("should reject invalid API Access Token", function(done) {
+            var ajaxWithCookie = ajaxWithCookieFactory();
+            ajaxWithCookie.addCookie("API-ACT=banana");
+            ajaxWithCookie.go(apiRequiringAuthorization)
                 .done(common.shouldNotSucceed)
-                .fail(common.shouldBeErrorFactory(
-                            401, "Malformed 'Authorization' header"))
+                .fail(common.shouldBeErrorFactory(401, 
+                    "Invalid API Access Token"))
                 .always(function(){done()});
         });
 
-        it("should expect Authorization type Basic-Custom", function(done) {
-            $.ajax({
-                url: config.url("/api/auth/feed?user=", config.testUser.id), 
-                headers: {"Authorization": "Basic 0:foo"},
-                dataType: "json"
-                })
-                .done(common.shouldNotSucceed)
-                .fail(common.shouldBeErrorFactory(
-                    401, "Expect Authorization type 'Basic-Custom'"))
-                .always(function(){done()});
-        });
-
-        it("should reject invalid user", function(done) {
-            $.ajax({
-                url: config.url("/api/auth/feed?user=", config.testUser.id), 
-                headers: {"Authorization": 
-                    ["Basic-Custom ", config.invalidUser.id, ":test"].join("")},
-                dataType: "json"
-                })
-                .done(common.shouldNotSucceed)
-                .fail(common.shouldBeErrorFactory(401, "User does not exist"))
-                .always(function(){done()});
-        });
-
-        it("should reject invalid password", function(done) {
-            $.ajax({
-                url: config.url("/api/auth/feed?user=", config.testUser.id), 
-                headers: {"Authorization": 
-                    ["Basic-Custom ", config.testUser.id, ":", 
-                        config.testUser.password, "foo"].join("")},
-                dataType: "json"
-                })
-                .done(common.shouldNotSucceed)
-                .fail(common.shouldBeErrorFactory(401, "Incorrect password"))
-                .always(function(){done()});
-        });
-
-        it("should authenticate valid user", function(done) {
-            common.authJson(
-                config.url("/api/auth/feed?user=", config.testUser.id))
+        it("should accept valid API Access Token", function(done) {
+            var ajaxWithCookie = ajaxWithCookieFactory();
+            ajaxWithCookie.go({
+                type: "POST",
+                url: config.url("/api/session/create"),
+                data: {
+                    user: config.testUser.id, 
+                    password: config.testUser.password
+                }
+            })
                 .fail(common.shouldNotFail)
-                .always(function(){done()});
+                .done(function() {
+                    ajaxWithCookie.go(apiRequiringAuthorization)
+                        .fail(common.shouldNotFail)
+                        .always(function(){done()});
+                    });
         });
 
     });
