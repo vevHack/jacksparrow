@@ -19,7 +19,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping (value="/api/public", produces="application/json")
-public class PublicApiController extends ControllerWithJdbcWiring {
+public class PublicApiController {
 
     private @Autowired JacksparrowValidator validator;
     private @Autowired UserRepository userRepository;

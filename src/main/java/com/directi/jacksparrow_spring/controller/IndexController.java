@@ -8,7 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/")
-public class IndexController extends ControllerWithJdbcWiring {
+public class IndexController {
 
     @RequestMapping()
     public ModelAndView onIndex(

@@ -22,7 +22,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping (value="/api/auth", produces="application/json")
-public class AuthorizedApiController extends ControllerWithJdbcWiring {
+public class AuthorizedApiController {
 
     private final Log log = LogFactory.getLog(this.getClass());
 

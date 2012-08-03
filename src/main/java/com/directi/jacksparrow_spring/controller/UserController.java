@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class UserController extends ControllerWithJdbcWiring {
+public class UserController {
 
     @RequestMapping("/{username}")
     public ModelAndView onUser(@PathVariable String username) {
