@@ -25,36 +25,22 @@ public class PublicApiController {
     private @Autowired UserRepository userRepository;
     private @Autowired UserToMapConverter userToMapConverter;
 
-    Queries query;
-
-    @Autowired
-    public void setQuery(Queries query) {
-        this.query = query;
-    }
-
-
     @RequestMapping("/followers")
     @ResponseBody
     public List<Map<String, Object>> getFollowers(@RequestParam int user) {
-        return query.queryFollowers(user);
+        return null;
     }
 
     @RequestMapping("/following")
     @ResponseBody
     public List<Map<String, Object>> getFollowing(@RequestParam int user) {
-        return query.queryFollowing(user);
-    }
-
-    @RequestMapping("/users")
-    @ResponseBody
-    public List<Map<String, Object>> getUsers() {
-        return query.queryUsers();
+        return null;
     }
 
     @RequestMapping("/posts")
     @ResponseBody
     public List <Map<String, Object>> getPosts(@RequestParam int user) {
-        return query.queryPosts(user);
+        return null;
     }
 
     @RequestMapping(value="/accessToken", method=RequestMethod.POST)
