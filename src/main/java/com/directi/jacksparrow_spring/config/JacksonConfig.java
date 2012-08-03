@@ -1,5 +1,6 @@
 package com.directi.jacksparrow_spring.config;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.beans.BeansException;
@@ -22,6 +23,7 @@ public class JacksonConfig implements BeanPostProcessor {
             ObjectMapper objectMapper = jsonConverter.getObjectMapper();
             objectMapper.configure(
                     SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             jsonConverter.setObjectMapper(objectMapper);
         }
         return bean;

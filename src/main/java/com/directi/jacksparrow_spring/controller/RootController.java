@@ -15,7 +15,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/api")
-public class ApiController {
+public class RootController {
 
     private @Autowired JdbcTemplate jdbcTemplate;
 

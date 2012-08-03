@@ -67,17 +67,18 @@ public class AuthorizedApiController {
 
     @RequestMapping(value = "/follow", method = RequestMethod.POST)
     @ResponseBody
-    public HashMap<String, Object> follow(@RequestParam final int user)
+    public HashMap<String, Object> follow(
+            @RequestParam(value="user") final int userId)
             throws ApiException, PreconditionViolatedException {
         log.info("User "+ getAuthorizedUser().getId()+"" +
-                " wants to follow user "+user);
-        if(!userRepository.existsUserWithId(user))
+                " wants to follow user "+userId);
+        User user = userRepository.getUserHavingId(userId);
+        if (user == null) {
             throw new PreconditionViolatedException(
                     "Followee does not exist");
+        }
 
-        userRepository.updateFollow(getAuthorizedUser(), new User() {{
-            setId(user);
-        }});
+        userRepository.updateFollow(getAuthorizedUser(), user);
 
         return new HashMap<String, Object>() {{
             put("status", "success");

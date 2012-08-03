@@ -16,7 +16,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/api/session")
-public class ApiSessionController {
+public class SessionController {
 
     private static final String COOKIE_NAME = "API-ACT";
 

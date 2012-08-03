@@ -1,4 +1,4 @@
-package com.directi.jacksparrow_spring.controller;
+package com.directi.jacksparrow_spring.controller.web;
 
 import com.directi.jacksparrow_spring.util.AccessTokenCookieFactory;
 import org.springframework.stereotype.Controller;

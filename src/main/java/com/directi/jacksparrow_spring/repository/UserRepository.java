@@ -1,5 +1,6 @@
 package com.directi.jacksparrow_spring.repository;
 
+import com.directi.jacksparrow_spring.exception.EntityNotFoundException;
 import com.directi.jacksparrow_spring.exception.UserAuthorizationException;
 import com.directi.jacksparrow_spring.model.Feed;
 import com.directi.jacksparrow_spring.model.User;
@@ -13,11 +14,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Repository
 public class UserRepository {
     private @Autowired JdbcTemplate jdbcTemplate;
+
+    public static class UserIdMapper implements RowMapper<User> {
+        @Override
+        public User mapRow(final ResultSet rs, int rowNum) throws SQLException {
+            return new User() {{
+                setId(rs.getInt("id"));
+            }};
+        }
+    }
 
     public User getUserFromCredentials(final int id, String password)
             throws UserAuthorizationException {
@@ -55,21 +64,6 @@ public class UserRepository {
         return user;
     }
 
-    public User generateAccessToken(User user) {
-        String accessToken = (String)jdbcTemplate.queryForObject(
-                "SELECT access_token FROM \"user\" WHERE id=?",
-                String.class, user.getId());
-
-        if (accessToken == null) {
-            accessToken = UUID.randomUUID().toString();
-            jdbcTemplate.update("UPDATE \"user\" SET access_token = ? WHERE " +
-                    "id = ?", accessToken, user.getId());
-        }
-        user.setAccessToken(accessToken);
-
-        return user;
-    }
-
     public void addUser(User user) {
         jdbcTemplate.update(
                 "INSERT INTO \"user\" (username, email, password) " +
@@ -78,20 +72,27 @@ public class UserRepository {
         user.setId(jdbcTemplate.queryForInt("SELECT LASTVAL()"));
     }
 
+    public List<Map<String, Object>>getUsers() {
+        return jdbcTemplate.queryForList("SELECT id FROM \"user\"");
+    }
+
+
     public List<Map<String, Object>>getPosts(User user) {
         return jdbcTemplate.queryForList(
                 "SELECT id, content FROM post WHERE \"user\"=?", user.getId());
     }
 
 
-    public List<Map<String, Object>>getFollowers(User user) {
-        return jdbcTemplate.queryForList(
-                "SELECT follower FROM follows WHERE followee=?", user.getId());
+    public List<User> getFollowers(User user) {
+        return jdbcTemplate.query(
+                "SELECT follower as id FROM follows WHERE followee=?",
+                new UserIdMapper(), user.getId());
     }
 
-    public List<Map<String, Object>> getFollowing(User user) {
-        return jdbcTemplate.queryForList(
-                "SELECT followee FROM follows WHERE follower=?", user.getId());
+    public List<User> getFollowing(User user) {
+        return jdbcTemplate.query(
+                "SELECT followee as id FROM follows WHERE follower=?",
+                new UserIdMapper(), user.getId());
     }
 
     public boolean existsUserWithUsername(String username) {
@@ -117,6 +118,16 @@ public class UserRepository {
                 " WHERE follower=? AND followee=?",
                 follower.getId(), followee.getId())!=0;
 
+    }
+
+    public User findById(int id) throws EntityNotFoundException {
+        try {
+            return jdbcTemplate.queryForObject(
+                    "SELECT id FROM \"user\" WHERE id=?",
+                    new UserIdMapper(), id);
+        } catch (DataAccessException ex) {
+            throw new EntityNotFoundException("User");
+        }
     }
 
 

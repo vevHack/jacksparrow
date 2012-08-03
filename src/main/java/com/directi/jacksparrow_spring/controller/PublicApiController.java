@@ -1,6 +1,5 @@
 package com.directi.jacksparrow_spring.controller;
 
-import com.directi.jacksparrow_spring.exception.UserAuthorizationException;
 import com.directi.jacksparrow_spring.exception.PreconditionViolatedException;
 import com.directi.jacksparrow_spring.exception.ValidationException;
 import com.directi.jacksparrow_spring.model.User;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -79,7 +77,6 @@ public class PublicApiController {
         }
 
         userRepository.addUser(user);
-        userRepository.generateAccessToken(user);
 
         return userToMapConverter.convert2(user);
     }

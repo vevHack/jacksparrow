@@ -90,7 +90,7 @@ ALTER TABLE public.unique_sequence OWNER TO postgres;
 -- Name: unique_sequence; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('unique_sequence', 5, true);
+SELECT pg_catalog.setval('unique_sequence', 7, true);
 
 
 --
