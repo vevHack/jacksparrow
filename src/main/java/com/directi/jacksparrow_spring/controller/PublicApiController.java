@@ -1,6 +1,7 @@
 package com.directi.jacksparrow_spring.controller;
 
 import com.directi.jacksparrow_spring.exception.UserAuthorizationException;
+import com.directi.jacksparrow_spring.exception.PreconditionViolatedException;
 import com.directi.jacksparrow_spring.exception.ValidationException;
 import com.directi.jacksparrow_spring.model.User;
 import com.directi.jacksparrow_spring.repository.UserRepository;
@@ -27,47 +28,32 @@ public class PublicApiController {
 
     @RequestMapping("/followers")
     @ResponseBody
-    public List<Map<String, Object>> getFollowers(@RequestParam int user) {
-        return null;
+    public Map<String, Object> getFollowers(@RequestParam final int user) {
+        return new HashMap<String, Object>(){{
+            put("followers", userRepository.getFollowers(new User() {{
+                setId(user);
+            }}));
+        }};
     }
 
     @RequestMapping("/following")
     @ResponseBody
-    public List<Map<String, Object>> getFollowing(@RequestParam int user) {
-        return null;
+    public Map<String, Object> getFollowing(@RequestParam final int user) {
+        return new HashMap<String, Object>() {{
+            put("following", userRepository.getFollowing(new User() {{
+                setId(user);
+            }}));
+        }};
     }
 
     @RequestMapping("/posts")
     @ResponseBody
-    public List <Map<String, Object>> getPosts(@RequestParam int user) {
-        return null;
-    }
-
-    @RequestMapping(value="/accessToken", method=RequestMethod.POST)
-    @ResponseBody
-    public Map<?,?> accessToken(
-            @RequestParam(value="email_or_username") String emailOrUsername,
-            @RequestParam String password)
-        throws UserAuthorizationException {
-
-        User user;
-        if (emailOrUsername.contains("@")) {
-            user = userRepository.getUserHavingEmail(emailOrUsername);
-            if (user == null) {
-                throw new UserAuthorizationException(
-                        "No user having given email exists");
-            }
-        } else {
-            user = userRepository.getUserHavingUsername(emailOrUsername);
-            if (user == null) {
-                throw new UserAuthorizationException(
-                        "No user having given username exists");
-            }
-        }
-
-        userRepository.verifyUserWithCredentials(user, password);
-
-        return userToMapConverter.convert2(user);
+    public Map<String, Object> getPosts(@RequestParam final int user) {
+        return new HashMap<String, Object>(){{
+                put("posts",userRepository.getPosts(new User(){{
+                    setId(user);
+                }}));
+        }};
     }
 
     @RequestMapping(value="/register", method=RequestMethod.POST)
@@ -163,4 +149,20 @@ public class PublicApiController {
             }});
         }};
     }
+
+    @RequestMapping(value = "/username")
+    @ResponseBody
+    public HashMap<String, Object> getUsernameFromID(@RequestParam int id)
+            throws PreconditionViolatedException {
+
+        if(!userRepository.existsUserWithId(id))
+            throw new PreconditionViolatedException(
+                    "User with the provided id does not exist");
+
+        final User user = userRepository.getUserHavingId(id);
+        return new HashMap<String, Object>(){{
+            put("username", user.getUsername());
+        }};
+    }
+
 }

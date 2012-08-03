@@ -1,10 +1,20 @@
 (function() {
 
     $(function() {
-        $.fetch.template("post").done(function(template) {
-                $("body").html(Mustache.render(template));
+        $.fetch.template("user").done(function(template){
+            $.ajax({
+                url: "/api/auth/posts",
+                data: {user:5}
+            }).done( function(posts) {
+                    $("body").html(
+                        Mustache.render(template,posts));
+                    $.fetch.template("post").done(function(template) {
+                        $("#post_container").html(Mustache.render(template));
+                    });
             });
-    });
+
+        });
+    })
 
 }());
 

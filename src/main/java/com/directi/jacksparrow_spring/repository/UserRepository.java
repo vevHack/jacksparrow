@@ -1,12 +1,16 @@
 package com.directi.jacksparrow_spring.repository;
 
 import com.directi.jacksparrow_spring.exception.UserAuthorizationException;
+import com.directi.jacksparrow_spring.model.Feed;
 import com.directi.jacksparrow_spring.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -74,9 +78,20 @@ public class UserRepository {
         user.setId(jdbcTemplate.queryForInt("SELECT LASTVAL()"));
     }
 
+    public List<Map<String, Object>>getPosts(User user) {
+        return jdbcTemplate.queryForList(
+                "SELECT id, content FROM post WHERE \"user\"=?", user.getId());
+    }
+
+
     public List<Map<String, Object>>getFollowers(User user) {
         return jdbcTemplate.queryForList(
                 "SELECT follower FROM follows WHERE followee=?", user.getId());
+    }
+
+    public List<Map<String, Object>> getFollowing(User user) {
+        return jdbcTemplate.queryForList(
+                "SELECT followee FROM follows WHERE follower=?", user.getId());
     }
 
     public boolean existsUserWithUsername(String username) {
@@ -98,10 +113,21 @@ public class UserRepository {
     }
 
     public boolean isFollowing(User follower, User followee) {
-        return jdbcTemplate.queryForList("SELECT COUNT(*) FROM follows WHERE follower=? AND followee=?",
-                follower.getId(), followee.getId()).size()!=0;
+        return jdbcTemplate.queryForInt("SELECT COUNT(*) FROM follows" +
+                " WHERE follower=? AND followee=?",
+                follower.getId(), followee.getId())!=0;
 
     }
+
+
+    public User getUserHavingId(int user) {
+        final List<Map<String, Object>> ids = jdbcTemplate.queryForList(
+                "SELECT username FROM \"user\" WHERE id=?", user);
+        return ids.isEmpty() ? null : new User() {{
+            setUsername((String)ids.get(0).get("username"));
+        }};
+    }
+
 
     /* XXX does this make existsUserWithUsername redundant */
     public User getUserHavingUsername(String username) {
@@ -121,19 +147,39 @@ public class UserRepository {
         }};
     }
 
-    public List<Map<String, Object>> getFeed(User user) {
-        return jdbcTemplate.queryForList(
-                "SELECT post FROM feed WHERE \"user\"=?", user.getId());
+    public List<Feed> getFeed(User user) {
+
+        List<Feed> feeds = this.jdbcTemplate.query(
+                "SELECT post, post.user \"user\", content, added_on FROM" +
+                        " post, feed WHERE" +
+                        " feed.user=? AND post.id=feed.post",
+
+                new RowMapper<Feed>() {
+                    public Feed mapRow(ResultSet resultSet, int row)
+                        throws SQLException {
+                        Feed feed = new Feed();
+                        feed.setUserId(resultSet.getInt("user"));
+                        feed.setContent(resultSet.getString("content"));
+                        feed.setPost(resultSet.getInt("post"));
+                        feed.setTimestamp(resultSet.getTimestamp("added_on"));
+                        return feed;
+                    }
+
+                }, user.getId());
+
+        return feeds;
     }
 
     public void updateFollow(User follower, User followee) {
-        jdbcTemplate.update("INSERT INTO follows(follower, followee) VALUES(?,?)",
+        jdbcTemplate.update("INSERT INTO follows" +
+                "(follower, followee) VALUES(?,?)",
                 follower.getId(), followee.getId()) ;
     }
 
     public void updateUnfollow(User follower, User followee) {
         jdbcTemplate.update(
-                "UPDATE follows SET end_on=LOCALTIMESTAMP WHERE follower=? AND followee=? AND end_on IS NULL",
+                "UPDATE follows SET end_on=LOCALTIMESTAMP WHERE " +
+                        "follower=? AND followee=? AND end_on IS NULL",
                 follower.getId(), followee.getId());
     }
 

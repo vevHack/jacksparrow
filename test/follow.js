@@ -5,26 +5,36 @@ var common2 = require("./_COMMON2.js");
 
 describe ("Follow", function(){
 
-    /* XXX BAD TEST */
-    it("should return OK status", function(done){
-        common2.authJson({
-            type: 'POST',
-            url: config.url("/api/auth/follow"),
-            form:{user:config.testUser2.id}
-        })
-            .done(common2.dataShouldBeBlank)
-            .fail(common2.shouldNotFail)
+    var followUrl=config.url("/api/auth/follow");
+    before(common.isServerUp.bind(common));
+
+    it("should return OK status",function(done){
+        common.authJsonPost({
+            url: followUrl,
+            data: {user:config.testUser2.id}
+        }, "json")
+            .fail(common.shouldNotFail)
             .always(function(){done()});
     });
 
+
     it("should fail on missing argument", function(done) {
-        common2.authJson({
-            type: "POST",
-            url: config.url("/api/auth/follow"),
-            form: {}
+        common.authJsonPost({
+            url: followUrl,
+            data: {}
         })
-            .done(common2.shouldNotSucceed)
-            .fail(common2.shouldBeErrorCodeFactory(400))
+            .done(common.shouldNotSucceed)
+            .fail(common.shouldBeErrorCodeFactory(400))
+            .always(function(){done()});
+    });
+
+    it("should fail on non-existing user-to-follow", function(done) {
+        common.authJsonPost({
+            url: followUrl,
+            data: {user:config.invalidUser.id}
+        })
+            .done(common.shouldNotSucceed)
+            .fail(common.shouldBeErrorCodeFactory(412))
             .always(function(){done()});
     });
 
