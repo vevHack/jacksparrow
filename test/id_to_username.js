@@ -10,6 +10,7 @@ describe ("ID -> Username", function(){
 
     it("should return OK status", function(done) {
         common.authJsonPost({
+            type: "GET",
             url: idUnameUrl,
             data: {id:config.testUser.id}
         })
@@ -22,6 +23,7 @@ describe ("ID -> Username", function(){
     it("should not pass if user with the given id doesn't exist",
         function(done) {
             common.authJsonPost({
+                type: "GET",
                 url: idUnameUrl,
                 data: {id:config.invalidUser.id}
             })

@@ -35,18 +35,22 @@ public class PublicApiController extends ControllerWithJdbcWiring {
 
     @RequestMapping("/followers")
     @ResponseBody
-    public List<Map<String, Object>> getFollowers(@RequestParam final int user) {
-        return userRepository.getFollowers(new User() {{
-            setId(user);
-        }});
+    public Map<String, Object> getFollowers(@RequestParam final int user) {
+        return new HashMap<String, Object>(){{
+            put("followers", userRepository.getFollowers(new User() {{
+                setId(user);
+            }}));
+        }};
     }
 
     @RequestMapping("/following")
     @ResponseBody
-    public List<Map<String, Object>> getFollowing(@RequestParam final int user) {
-        return userRepository.getFollowing(new User() {{
-            setId(user);
-        }});
+    public Map<String, Object> getFollowing(@RequestParam final int user) {
+        return new HashMap<String, Object>() {{
+            put("following", userRepository.getFollowing(new User() {{
+                setId(user);
+            }}));
+        }};
     }
 
     @RequestMapping("/users")
@@ -57,10 +61,12 @@ public class PublicApiController extends ControllerWithJdbcWiring {
 
     @RequestMapping("/posts")
     @ResponseBody
-    public List <Map<String, Object>> getPosts(@RequestParam final int user) {
-        return userRepository.getPosts(new User(){{
-            setId(user);
-        }});
+    public Map<String, Object> getPosts(@RequestParam final int user) {
+        return new HashMap<String, Object>(){{
+                put("posts",userRepository.getPosts(new User(){{
+                    setId(user);
+                }}));
+        }};
     }
 
     @RequestMapping(value="/register", method=RequestMethod.POST)
@@ -152,7 +158,7 @@ public class PublicApiController extends ControllerWithJdbcWiring {
         }};
     }
 
-    @RequestMapping(value = "/idtousername", method =  RequestMethod.POST)
+    @RequestMapping(value = "/username")
     @ResponseBody
     public HashMap<String, Object> getUsernameFromID(@RequestParam int id)
             throws PreconditionViolatedException {

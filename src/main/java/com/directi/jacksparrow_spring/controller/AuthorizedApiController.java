@@ -56,8 +56,9 @@ public class AuthorizedApiController extends ControllerWithJdbcWiring {
         final List<Map<String, Object>> feeds =
                 new ArrayList<Map<String, Object>>();
 
-        for (Feed feed:feedList)
+        for (Feed feed:feedList) {
             feeds.add(feedToMapConverter.convert(feed));
+        }
 
         return new HashMap<String, Object>() {{
             put("feeds",feeds);
