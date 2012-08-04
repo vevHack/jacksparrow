@@ -20,8 +20,7 @@ describe("Authorization", function() {
 
     describe("#Authorized API", function() {
 
-        var apiRequiringAuthorization = 
-            config.url("/api/auth/feed?user=", config.testUser.id);
+        var apiRequiringAuthorization = config.url("/api/user/feed");
 
         it("should expect API Access Token", function(done) {
             $.getJSON(apiRequiringAuthorization)
@@ -31,22 +30,52 @@ describe("Authorization", function() {
                 .always(function(){done()});
         });
 
-        it("should reject invalid API Access Token", function(done) {
-            var ajaxWithCookie = ajaxWithCookieFactory();
-            ajaxWithCookie.addCookie("API-ACT=banana");
-            ajaxWithCookie.go(apiRequiringAuthorization)
-                .done(common.shouldNotSucceed)
-                .fail(common.shouldBeErrorFactory(401, 
-                    "Invalid API Access Token"))
-                .always(function(){done()});
-        });
+        describe("#Using Cookies", function() {
 
-        it("should accept valid API Access Token", function(done) {
-            common.authRequest().done(function(cjax) {
-                cjax.go(apiRequiringAuthorization)
-                    .fail(common.shouldNotFail)
+            it("should reject invalid API Access Token", function(done) {
+                var ajaxWithCookie = ajaxWithCookieFactory();
+                ajaxWithCookie.addCookie("API-ACT=banana");
+                ajaxWithCookie.go(apiRequiringAuthorization)
+                    .done(common.shouldNotSucceed)
+                    .fail(common.shouldBeErrorFactory(401, 
+                        "Invalid API Access Token"))
                     .always(function(){done()});
             });
+
+            it("should accept valid API Access Token", function(done) {
+                common.ajaxWithCookieRequest()
+                    .done(function(ajaxWithCookie) {
+                        ajaxWithCookie.go(apiRequiringAuthorization)
+                            .fail(common.shouldNotFail)
+                            .always(function(){done()});
+                    });
+            });
+
+        });
+
+        describe("#Using Authentication Header", function(done) {
+
+            it("should reject invalid API Access Token", function(done) {
+                $.ajax({
+                    url: apiRequiringAuthorization,
+                    headers: {"Authorization": "API-ACT banana"}
+                })
+                    .done(common.shouldNotSucceed)
+                    .fail(common.shouldBeErrorFactory(401, 
+                        "Invalid API Access Token"))
+                    .always(function(){done()});
+            });
+
+
+            it("should accept valid API Access Token", function(done) {
+                common.createSession()
+                    .done(function(access_token) {
+                        common.authJson(access_token, apiRequiringAuthorization)
+                            .fail(common.shouldNotFail)
+                            .always(function(){done()});
+                    });
+            });
+
         });
 
     });

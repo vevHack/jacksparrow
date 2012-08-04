@@ -3,7 +3,7 @@ var should = require("should");
 var config = require("./config");
 var ajaxWithCookieFactory = require("./ajaxWithCookieFactory")
 
-function authRequestAsUser(asUser) {
+function ajaxWithCookieRequestAsUser(asUser) {
     var ajaxWithCookie = ajaxWithCookieFactory();
     var deferred = $.Deferred();
     ajaxWithCookie.go({
@@ -61,23 +61,27 @@ module.exports = {
         };
     },
 
-    authHeader: {"Cookie": ["API-ACT", config.testUser.accessToken].join("=")},
-
-    authJson: function(options) {
+    authAjax: function(token, options) {
         if (typeof options === 'string') {
             options = {url: options};
         }
         return $.ajax($.extend({ 
-                    "headers": this.authHeader,
-                    "dataType": "json"
-                }, options));
+            headers: {"Authorization": ["API-ACT", token].join(" ")},
+        }, options));
     },
 
-    authJsonPost: function(options) {
+    authJson: function(token, options) {
         if (typeof options === 'string') {
             options = {url: options};
         }
-        return this.authJson($.extend(options, {type: "POST"}));
+        return this.authAjax(token, $.extend(options, {dataType: "json"}));
+    },
+
+    authJsonPost: function(token, options) {
+        if (typeof options === 'string') {
+            options = {url: options};
+        }
+        return this.authJson(token, $.extend(options, {type: "POST"}));
     },
 
     isServerUp: function(done) {
@@ -86,7 +90,27 @@ module.exports = {
             .always(function(){done()});
     },
 
-    authRequest: function() { return authRequestAsUser(config.testUser); }
+    ajaxWithCookieRequest: function() { 
+        return ajaxWithCookieRequestAsUser(config.testUser); 
+    },
+
+    createSession: function(user) {
+        if (typeof user === 'undefined') {
+            user = config.testUser;
+        }
+        var deferred = $.Deferred();
+        $.ajax({
+            type: "POST",
+            url: config.url("/api/session/create"),
+            data: { user: user.id, password: user.password },
+            dataType: "json"
+        })
+            .fail(this.shouldNotFail)
+            .done(function(data) {
+                deferred.resolve(data.session.access_token);
+            });
+        return deferred.promise();
+    }
 
 };
 

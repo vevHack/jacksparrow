@@ -69,16 +69,23 @@ public class UserController {
     }
 
 
+    @RequestMapping("/feed")
+    @ResponseBody
+    public Map feed() throws UserAuthorizationException {
+        return new HashMap() {{
+            put("feed", userRepository.feedOf(authorizer.getAuthorizedUser()));
+        }};
+    }
 
     @RequestMapping("/posts")
     @ResponseBody
-    public Map<?, ?> getPosts(@RequestParam final int user) {
-        return new HashMap<String, Object>() {{
-            put("posts", userRepository.getPosts(new User() {{
-                setId(user);
-            }}));
+    public Map posts(@RequestParam final int user)
+            throws EntityNotFoundException {
+        return new HashMap() {{
+            put("posts", userRepository.postsOf(userRepository.findById(user)));
         }};
     }
+
 
     @RequestMapping("/find")
     @ResponseBody

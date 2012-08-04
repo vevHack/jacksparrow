@@ -33,13 +33,19 @@ describe("Feature Follow", function(){
         });
     });
 
+    var access_token;
+    before(function(done) {
+        common.createSession().done(function(token) {
+            access_token = token;
+            done();
+        });
+    });
 
     function request(url, user) {
-        return { 
-            type: "POST", 
+        return common.authJsonPost(access_token, {
             url: config.url(url), 
-            data: { user: user.id } 
-        };
+            data: { user: user.id }
+        });
     }
 
 
@@ -51,43 +57,37 @@ describe("Feature Follow", function(){
         describe(feature.name, function() {
 
             it("should expect existing user", function(done) { 
-                common.authRequest().done(function(cjax) {
-                    cjax.go(request(feature.url, config.invalidUser))
-                        .done(common.shouldNotSucceed)
-                        .fail(common.shouldBeErrorFactory(412, "User not found"))
-                        .always(function(){done()});
-                });
+                request(feature.url, config.invalidUser)
+                    .done(common.shouldNotSucceed)
+                    .fail(common.shouldBeErrorFactory(412, "User not found"))
+                    .always(function(){done()});
             });
-
         });
+
     });
 
 
     describe("#Follow", function() {
 
         it("should fail if already following user", function(done) { 
-            common.authRequest().done(function(cjax) {
-                cjax.go(request("/api/user/follow", config.testUser2))
-                    .always(function() {
-                        cjax.go(request("/api/user/follow", config.testUser2))
-                            .done(common.shouldNotSucceed)
-                            .fail(common.shouldBeErrorFactory(412, 
-                                "Already following user"))
-                            .always(function(){done()});
-                    });
-            });
+            request("/api/user/follow", config.testUser2)
+                .always(function() {
+                    request("/api/user/follow", config.testUser2)
+                        .done(common.shouldNotSucceed)
+                        .fail(common.shouldBeErrorFactory(412, 
+                            "Already following user"))
+                        .always(function(){done()});
+                });
         });
 
         it("should follow previously unfollowed user", function(done) { 
-            common.authRequest().done(function(cjax) {
-                cjax.go(request("/api/user/unfollow", config.testUser2))
-                    .always(function() {
-                        cjax.go(request("/api/user/follow", config.testUser2))
-                            .done(common.shouldBeBlank)
-                            .fail(common.shouldNotFail)
-                            .always(function(){done()});
-                    });
-            });
+            request("/api/user/unfollow", config.testUser2)
+                .always(function() {
+                    request("/api/user/follow", config.testUser2)
+                        .done(common.shouldBeBlank)
+                        .fail(common.shouldNotFail)
+                        .always(function(){done()});
+                });
         });
 
     });
@@ -95,28 +95,24 @@ describe("Feature Follow", function(){
     describe("#Unfollow", function() {
 
         it("should fail if not following user", function(done) { 
-            common.authRequest().done(function(cjax) {
-                cjax.go(request("/api/user/unfollow", config.testUser2))
-                    .always(function() {
-                        cjax.go(request("/api/user/unfollow", config.testUser2))
-                            .done(common.shouldNotSucceed)
-                            .fail(common.shouldBeErrorFactory(412, 
-                                "Not following user"))
-                            .always(function(){done()});
-                    });
-            });
+            request("/api/user/unfollow", config.testUser2)
+                .always(function() {
+                    request("/api/user/unfollow", config.testUser2)
+                        .done(common.shouldNotSucceed)
+                        .fail(common.shouldBeErrorFactory(412, 
+                            "Not following user"))
+                        .always(function(){done()});
+                });
         });
 
         it("should unfollow previously followed user", function(done) { 
-            common.authRequest().done(function(cjax) {
-                cjax.go(request("/api/user/follow", config.testUser2))
-                    .always(function() {
-                        cjax.go(request("/api/user/unfollow", config.testUser2))
-                            .done(common.shouldBeBlank)
-                            .fail(common.shouldNotFail)
-                            .always(function(){done()});
-                    });
-            });
+            request("/api/user/follow", config.testUser2)
+                .always(function() {
+                    request("/api/user/unfollow", config.testUser2)
+                        .done(common.shouldBeBlank)
+                        .fail(common.shouldNotFail)
+                        .always(function(){done()});
+                });
         });
 
     });

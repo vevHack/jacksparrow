@@ -19,10 +19,23 @@ public class Authorizer {
         throws UserAuthorizationException {
 
         String accessToken = null;
-        for (Cookie cookie : request.getCookies()) {
-            if (cookie.getName().equals(AccessTokenCookieFactory.COOKIE_NAME)) {
-                accessToken = cookie.getValue();
-                break;
+
+        accessToken = request.getHeader("Authorization");
+        if (accessToken != null) {
+            String[] components = accessToken.split("\\s");
+            if (components[0].equals(AccessTokenCookieFactory.COOKIE_NAME)) {
+                accessToken = components[1];
+            } else {
+                accessToken = null;
+            }
+        }
+
+        if (accessToken == null) {
+            for (Cookie cookie : request.getCookies()) {
+                if (cookie.getName().equals(AccessTokenCookieFactory.COOKIE_NAME)) {
+                    accessToken = cookie.getValue();
+                    break;
+                }
             }
         }
 
