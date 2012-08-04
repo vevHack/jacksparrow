@@ -1,8 +1,9 @@
 var $ = require("jquery");
 var should = require("should");
-var config = require("./_CONFIG.js");
-var common = require("./_COMMON2.js");
-var ajaxWithCookieFactory = require("./_ajaxWithCookieFactory.js")
+var config = require("./util/config");
+var common = require("./util/common");
+var ajaxWithCookieFactory = require("./util/ajaxWithCookieFactory")
+
 
 describe("Session", function() {
     

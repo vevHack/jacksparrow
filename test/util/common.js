@@ -1,6 +1,23 @@
 var $ = require("jquery");
 var should = require("should");
-var config = require("./_CONFIG.js");
+var config = require("./config");
+var ajaxWithCookieFactory = require("./ajaxWithCookieFactory")
+
+function authRequestAsUser(asUser) {
+    var ajaxWithCookie = ajaxWithCookieFactory();
+    var deferred = $.Deferred();
+    ajaxWithCookie.go({
+        type: "POST",
+        url: config.url("/api/session/create"),
+        data: { user: asUser.id, password: asUser.password }
+    })
+    .fail(this.shouldNotFail)
+    .done(function() {
+        deferred.resolve(ajaxWithCookie);
+    });
+    return deferred.promise();
+}
+
 
 module.exports = {
 
@@ -9,7 +26,7 @@ module.exports = {
     },
 
     shouldNotSucceed: function(data, textStatus, jqXHR) {
-        jqXHR.status.should.not.be(200);
+        jqXHR.status.should.not.equal(200);
         should.not.exist(data);
     },
 
@@ -67,6 +84,9 @@ module.exports = {
         $.getJSON(config.url("/api/ping"))
             .fail(this.shouldNotFail)
             .always(function(){done()});
-    }
+    },
+
+    authRequest: function() { return authRequestAsUser(config.testUser); }
+
 };
 

@@ -1,4 +1,4 @@
-package com.directi.jacksparrow_spring.validator;
+package com.directi.jacksparrow_spring.service;
 
 import com.directi.jacksparrow_spring.exception.ValidationException;
 import org.apache.commons.validator.EmailValidator;

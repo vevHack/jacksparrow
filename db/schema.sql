@@ -64,7 +64,7 @@ ALTER TABLE public.feed OWNER TO postgres;
 
 CREATE TABLE follows (
     follower integer NOT NULL,
-    followee integer NOT NULL,
+    following integer NOT NULL,
     start_on timestamp without time zone DEFAULT ('now'::text)::timestamp without time zone,
     end_on timestamp without time zone
 );
@@ -138,6 +138,20 @@ ALTER TABLE ONLY "user"
 --
 
 CREATE INDEX feed_user_index ON feed USING btree ("user");
+
+
+--
+-- Name: follows_follower_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX follows_follower_idx ON follows USING btree (follower);
+
+
+--
+-- Name: follows_following_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX follows_following_idx ON follows USING btree (following);
 
 
 --

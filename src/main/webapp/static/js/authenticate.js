@@ -1,3 +1,5 @@
+var jks = jks || {};
+
 (function() {
     "use strict";
 

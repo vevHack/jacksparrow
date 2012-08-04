@@ -12,6 +12,5 @@
 
     <import resource="data-access.xml" />
     <import resource="view-resolver.xml" />
-    <import resource="interceptors.xml" />
 
 </beans>

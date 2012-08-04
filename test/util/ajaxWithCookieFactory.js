@@ -39,13 +39,13 @@ function ajaxWithCookieFactory() {
             
             var deferred = $.Deferred();
             request(options, function (error, response, body) {
+                response.status = response.statusCode;
                 if (!error && response.statusCode == 200) {
                     if ("json".localeCompare(jqParams.dataType) === 0) {
                         body = JSON.parse(body);
                     }
-                    deferred.resolve(body, "success", {});
+                    deferred.resolve(body, "success", response);
                 } else {
-                    response.status = response.statusCode;
                     response.responseText = body;
                     deferred.reject(response, error);
                 }

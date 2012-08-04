@@ -5,7 +5,7 @@ import com.directi.jacksparrow_spring.exception.ValidationException;
 import com.directi.jacksparrow_spring.model.User;
 import com.directi.jacksparrow_spring.repository.UserRepository;
 import com.directi.jacksparrow_spring.util.UserToMapConverter;
-import com.directi.jacksparrow_spring.validator.JacksparrowValidator;
+import com.directi.jacksparrow_spring.service.JacksparrowValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

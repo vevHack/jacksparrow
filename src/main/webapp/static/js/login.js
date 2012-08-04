@@ -8,14 +8,19 @@ jks.login = jks.login || (function() {
         button = form.find('input[type="submit"]');
 
         function initLogin() {
+            var email_or_username, data;
+
             if (info) {
                 info.html("");
             }
             spinner = jks.common.spinnerFactory().insertAfter(button);
             button.attr("disabled", true);
-            $.post("/api/public/accessToken", {
-                email_or_username: form.find(
-                    'input[name="email_or_username"]').val(),
+
+            email_or_username = 
+                form.find('input[name="email_or_username"]').val();
+            if (email_or_username.indexOf("@")
+
+            $.post("/api/public/findUser", {
                 password: form.find('input[type="password"]').val()
             })
                 .done(loginSucceeded)

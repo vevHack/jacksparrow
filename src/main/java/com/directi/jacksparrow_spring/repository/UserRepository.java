@@ -1,6 +1,7 @@
 package com.directi.jacksparrow_spring.repository;
 
 import com.directi.jacksparrow_spring.exception.EntityNotFoundException;
+import com.directi.jacksparrow_spring.exception.PreconditionViolatedException;
 import com.directi.jacksparrow_spring.exception.UserAuthorizationException;
 import com.directi.jacksparrow_spring.model.Feed;
 import com.directi.jacksparrow_spring.model.User;
@@ -85,13 +86,13 @@ public class UserRepository {
 
     public List<User> getFollowers(User user) {
         return jdbcTemplate.query(
-                "SELECT follower as id FROM follows WHERE followee=?",
+                "SELECT follower as id FROM follows WHERE following=?",
                 new UserIdMapper(), user.getId());
     }
 
     public List<User> getFollowing(User user) {
         return jdbcTemplate.query(
-                "SELECT followee as id FROM follows WHERE follower=?",
+                "SELECT following as id FROM follows WHERE follower=?",
                 new UserIdMapper(), user.getId());
     }
 
@@ -181,17 +182,33 @@ public class UserRepository {
         return feeds;
     }
 
-    public void updateFollow(User follower, User followee) {
-        jdbcTemplate.update("INSERT INTO follows" +
-                "(follower, followee) VALUES(?,?)",
-                follower.getId(), followee.getId()) ;
+    private boolean doesFollow(User follower, User following) {
+        int c = jdbcTemplate.queryForInt("SELECT COUNT(*) FROM follows WHERE " +
+                "follower=? AND following=? AND end_on IS NULL",
+                follower.getId(), following.getId());
+        if (c > 1) {
+            throw new RuntimeException("Follows table is inconsistent");
+        }
+        return (c == 1);
     }
 
-    public void updateUnfollow(User follower, User followee) {
-        jdbcTemplate.update(
-                "UPDATE follows SET end_on=LOCALTIMESTAMP WHERE " +
-                        "follower=? AND followee=? AND end_on IS NULL",
-                follower.getId(), followee.getId());
+    public void addFollower(User follower, User following)
+        throws PreconditionViolatedException {
+        if (doesFollow(follower, following)) {
+            throw new PreconditionViolatedException("Already following user");
+        }
+        jdbcTemplate.update("INSERT INTO follows (follower, following) " +
+                "VALUES(?,?)", follower.getId(), following.getId());
+    }
+
+    public void removeFollower(User follower, User following)
+        throws PreconditionViolatedException {
+        if (!doesFollow(follower, following)) {
+            throw new PreconditionViolatedException("Not following user");
+        }
+        jdbcTemplate.update("UPDATE follows SET end_on=LOCALTIMESTAMP WHERE " +
+                "follower=? AND following=? AND end_on IS NULL",
+                follower.getId(), following.getId());
     }
 
 }

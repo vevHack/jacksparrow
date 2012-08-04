@@ -1,8 +1,8 @@
 var $ = require("jquery");
 var should = require("should");
-var config = require("./_CONFIG.js");
-var common = require("./_COMMON2.js");
-var ajaxWithCookieFactory = require("./_ajaxWithCookieFactory.js")
+var config = require("./util/config");
+var common = require("./util/common");
+var ajaxWithCookieFactory = require("./util/ajaxWithCookieFactory")
 
 
 describe("Authorization", function() {
@@ -42,21 +42,11 @@ describe("Authorization", function() {
         });
 
         it("should accept valid API Access Token", function(done) {
-            var ajaxWithCookie = ajaxWithCookieFactory();
-            ajaxWithCookie.go({
-                type: "POST",
-                url: config.url("/api/session/create"),
-                data: {
-                    user: config.testUser.id, 
-                    password: config.testUser.password
-                }
-            })
-                .fail(common.shouldNotFail)
-                .done(function() {
-                    ajaxWithCookie.go(apiRequiringAuthorization)
-                        .fail(common.shouldNotFail)
-                        .always(function(){done()});
-                    });
+            common.authRequest().done(function(cjax) {
+                cjax.go(apiRequiringAuthorization)
+                    .fail(common.shouldNotFail)
+                    .always(function(){done()});
+            });
         });
 
     });

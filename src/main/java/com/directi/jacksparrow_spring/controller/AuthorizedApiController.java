@@ -1,6 +1,5 @@
 package com.directi.jacksparrow_spring.controller;
 
-import com.directi.jacksparrow_spring.exception.ApiException;
 import com.directi.jacksparrow_spring.exception.PreconditionViolatedException;
 import com.directi.jacksparrow_spring.model.Feed;
 import com.directi.jacksparrow_spring.model.Post;
@@ -62,50 +61,6 @@ public class AuthorizedApiController {
 
         return new HashMap<String, Object>() {{
             put("feeds",feeds);
-        }};
-    }
-
-    @RequestMapping(value = "/follow", method = RequestMethod.POST)
-    @ResponseBody
-    public HashMap<String, Object> follow(
-            @RequestParam(value="user") final int userId)
-            throws ApiException, PreconditionViolatedException {
-        log.info("User "+ getAuthorizedUser().getId()+"" +
-                " wants to follow user "+userId);
-        User user = userRepository.getUserHavingId(userId);
-        if (user == null) {
-            throw new PreconditionViolatedException(
-                    "Followee does not exist");
-        }
-
-        userRepository.updateFollow(getAuthorizedUser(), user);
-
-        return new HashMap<String, Object>() {{
-            put("status", "success");
-        }};
-    }
-
-    @RequestMapping(value = "/unfollow", method = RequestMethod.POST)
-    @ResponseBody
-    public HashMap<String, Object> unfollow(@RequestParam final int user)
-            throws PreconditionViolatedException {
-        log.info("Unfollow request from user " + getAuthorizedUser().getId()
-                + " to unfollow user " + user);
-
-        User authorizedUser = getAuthorizedUser();
-        User userToUnfollow = new User() {{
-            setId(user);
-        }};
-
-        if (!userRepository.isFollowing(authorizedUser, userToUnfollow)) {
-            throw new PreconditionViolatedException(
-                    "follows relationship is required to unfollow");
-        }
-
-        userRepository.updateUnfollow(authorizedUser, userToUnfollow);
-
-        return new HashMap<String, Object>() {{
-            put("status", "success");
         }};
     }
 

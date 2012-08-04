@@ -18,7 +18,8 @@ db-backup-schema:
 	@pg_dump ${dbparams} --schema-only --create ${dbname} >db/schema.sql 
 
 db-backup-test:
-	@pg_dump ${dbparams} --create ${dbname} >db/testdb.sql 
+	@pg_dump ${dbparams} --schema-only --create ${dbname} >db/schema.sql && \
+		pg_dump ${dbparams} --data-only --create ${dbname} >db/testdb.sql 
 
 db-restore-schema:
 	@dropdb ${dbparams} --interactive ${dbname} && \
@@ -26,7 +27,8 @@ db-restore-schema:
 
 db-restore-test:
 	@dropdb ${dbparams} --interactive ${dbname} && \
-		psql ${dbparams} -f db/testdb.sql
+		psql ${dbparams} -f db/schema.sql && \
+		psql ${dbparams} jacksparrow -f db/testdb.sql
 
 
 
