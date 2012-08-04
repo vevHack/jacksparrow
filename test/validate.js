@@ -55,7 +55,6 @@ describe("Validate", function() {
         shouldValidate("username " + username, {username: username}); 
     });
 
-    /*
     [  
         {username: "foo/bar", reason: "Username cannot contain /"},
         {username: "f\\oobar", reason: "Username cannot contain \\"},
@@ -100,9 +99,16 @@ describe("Validate", function() {
     shouldNotValidate("blank password", {password: ""}, 
         "Password cannot be blank");
 
+    shouldValidate("content", {content: "chemistry is acheMystery!"});
+    shouldNotValidate("blank content", {password: ""}, 
+        "Content cannot be blank");
+    shouldNotValidate(">140 character content", 
+        {content: new Array(140+1+1).join("x")}, 
+        "Content cannot exceed 140 characters");
+
     it("should fail when no argument is provided", 
         function(done) {
-            request(data)
+            request({})
                 .done(common.shouldNotSucceed)
                 .fail(common.shouldBeErrorFactory(412,
                     "Require one and only one field for validation at a time"))
@@ -121,5 +127,4 @@ describe("Validate", function() {
                 .always(function(){done()});
         });
 
-*/
 });

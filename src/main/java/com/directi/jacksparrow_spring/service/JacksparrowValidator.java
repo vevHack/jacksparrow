@@ -78,4 +78,13 @@ public class JacksparrowValidator {
         }
     }
 
+    public void validateContent(String input)
+            throws ValidationException {
+        if (genericValidator.isBlankOrNull(input)) {
+            throw new ValidationException("Content cannot be blank");
+        }
+        if (input.length() > 140) {
+            throw new ValidationException("Content cannot exceed 140 characters");
+        }
+    }
 }

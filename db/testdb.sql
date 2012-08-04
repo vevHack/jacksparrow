@@ -14,7 +14,7 @@ SET search_path = public, pg_catalog;
 -- Name: unique_sequence; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('unique_sequence', 7, true);
+SELECT pg_catalog.setval('unique_sequence', 8, true);
 
 
 --
@@ -22,6 +22,7 @@ SELECT pg_catalog.setval('unique_sequence', 7, true);
 --
 
 COPY feed ("user", post, added_on) FROM stdin;
+5	8	2012-08-04 22:58:20.73056
 \.
 
 
@@ -38,6 +39,7 @@ COPY follows (follower, following, start_on, end_on) FROM stdin;
 --
 
 COPY post (id, "user", created_on, content) FROM stdin;
+8	5	2012-08-04 22:56:44.472613	pirates do tweet
 \.
 
 

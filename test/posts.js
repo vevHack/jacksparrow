@@ -23,6 +23,7 @@ describe("Posts", function(){
             .done(function(data) {
                 data.should.have.property("posts");
                 data.posts.should.be.instanceof(Array);
+                data.posts.should.includeEql(config.testPost);
             })
             .fail(common.shouldNotFail)
             .always(function(){done();});

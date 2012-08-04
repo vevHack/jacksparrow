@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 public class Post {
 
     private int id;
-    private int user;
+    private User user;
     private String content;
     private Timestamp createdOn;
 
@@ -17,11 +17,11 @@ public class Post {
         this.id = id;
     }
 
-    public int getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(int user) {
+    public void setUser(User user) {
         this.user = user;
     }
 

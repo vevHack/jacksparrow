@@ -43,7 +43,9 @@ public class UserRepository {
         public Post mapRow(final ResultSet rs, int rowNum) throws SQLException {
             return new Post() {{
                 setId(rs.getInt("id"));
-                setUser(rs.getInt("user"));
+                setUser(new User() {{
+                    setId(rs.getInt("user"));
+                }});
                 setContent(rs.getString("content"));
                 setCreatedOn(rs.getTimestamp("created_on"));
             }};
@@ -83,13 +85,13 @@ public class UserRepository {
 
     public List<Post> feedOf(User user) {
         return jdbcTemplate.query(
-                "SELECT id, user, content, created_on FROM post where " +
+                "SELECT id, \"user\", content, created_on FROM post where " +
                         "id in (SELECT post FROM feed WHERE \"user\"=?)",
                 new PostMapper(), user.getId());
     }
 
     public List<Post> postsOf(User user) {
-        return jdbcTemplate.query("SELECT id, user, content, created_on " +
+        return jdbcTemplate.query("SELECT id, \"user\", content, created_on " +
                 "FROM post WHERE \"user\"=?", new PostMapper(), user.getId());
     }
 

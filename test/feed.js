@@ -14,6 +14,7 @@ describe("Feed", function(){
                     .done(function(data) {
                         data.should.have.property("feed");
                         data.feed.should.be.instanceof(Array);
+                        data.feed.should.includeEql(config.testPost);
                     })
                     .fail(common.shouldNotFail)
                     .always(function(){done();});

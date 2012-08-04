@@ -10,7 +10,6 @@ module.exports = {
         username: "foo",
         email: "foo@bar.com",
         password: "test",
-        access_token: 5
     },
 
     testUser2: {
@@ -23,6 +22,13 @@ module.exports = {
 
     invalidUser: {
         id: 0
-    }
+    },
+
+    testPost: { 
+        id: 8,
+        user: { id: 5 },
+        content: 'pirates do tweet',
+        created_on: '2012-08-04T17:26:44.472+0000' 
+    } 
 
 };

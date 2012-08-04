@@ -1,19 +1,18 @@
 package com.directi.jacksparrow_spring.repository;
 
 import com.directi.jacksparrow_spring.model.Post;
+import com.directi.jacksparrow_spring.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
-import java.util.Map;
 
 @Repository
 public class PostRepository {
 
     private @Autowired JdbcTemplate jdbcTemplate;
 
-    public void createPost (Post post) {
+    public Post create(User user, String content) {
+        /*XXX
         jdbcTemplate.update("" +
                 "INSERT INTO post(\"user\", content) VALUES(?,?)",
                 post.getUser(), post.getContent());
@@ -31,5 +30,7 @@ public class PostRepository {
             jdbcTemplate.update(
                     "INSERT INTO feed(\"user\", post) VALUES(?,?)",
                     follower.get("follower"), post_id);
+                    */
+        return new Post() {{}};
     }
 }

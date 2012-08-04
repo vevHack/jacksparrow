@@ -25,11 +25,12 @@ public class ValidationController {
     public Map validate(
             @RequestParam(required=false) String username,
             @RequestParam(required=false) String email,
-            @RequestParam(required=false) String password)
+            @RequestParam(required=false) String password,
+            @RequestParam(required=false) String content)
             throws ValidationException {
 
         int nonNullCount = 0;
-        for (Object o: new Object[] {username, email, password}) {
+        for (Object o: new Object[] {username, email, password, content}) {
             if (o != null) {
                 nonNullCount += 1;
             }
@@ -46,6 +47,8 @@ public class ValidationController {
                 validator.validateEmail(email) ;
             } else if (password != null) {
                 validator.validatePassword(password) ;
+            } else if (content != null) {
+                validator.validateContent(content) ;
             }
             assert (false);
         } catch (final ValidationException ex) {

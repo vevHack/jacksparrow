@@ -37,7 +37,7 @@ public class SessionRepository {
         try {
             return new User() {{
                 setId(jdbcTemplate.queryForInt(
-                        "SELECT id FROM \"user\" WHERE access_token=?",
+                        "SELECT id FROM \"user\" WHERE access_token = ?",
                         accessToken));
             }};
         } catch (DataAccessException ex) {
