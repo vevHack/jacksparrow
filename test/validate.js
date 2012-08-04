@@ -100,7 +100,7 @@ describe("Validate", function() {
         "Password cannot be blank");
 
     shouldValidate("content", {content: "chemistry is acheMystery!"});
-    shouldNotValidate("blank content", {password: ""}, 
+    shouldNotValidate("blank content", {content: ""}, 
         "Content cannot be blank");
     shouldNotValidate(">140 character content", 
         {content: new Array(140+1+1).join("x")}, 
