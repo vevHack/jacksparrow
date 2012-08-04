@@ -1,4 +1,4 @@
-package com.directi.jacksparrow_spring.util;
+package com.directi.jacksparrow_spring.service;
 
 import org.springframework.stereotype.Service;
 

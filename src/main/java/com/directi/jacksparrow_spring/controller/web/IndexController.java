@@ -1,6 +1,6 @@
 package com.directi.jacksparrow_spring.controller.web;
 
-import com.directi.jacksparrow_spring.util.AccessTokenCookieFactory;
+import com.directi.jacksparrow_spring.service.AccessTokenCookieFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;

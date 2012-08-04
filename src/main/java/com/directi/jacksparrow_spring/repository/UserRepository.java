@@ -3,6 +3,8 @@ package com.directi.jacksparrow_spring.repository;
 import com.directi.jacksparrow_spring.exception.EntityNotFoundException;
 import com.directi.jacksparrow_spring.exception.PreconditionViolatedException;
 import com.directi.jacksparrow_spring.exception.UserAuthorizationException;
+import com.directi.jacksparrow_spring.model.GenericRowMapper;
+import com.directi.jacksparrow_spring.model.IdRowMapper;
 import com.directi.jacksparrow_spring.model.Post;
 import com.directi.jacksparrow_spring.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,30 +15,23 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class UserRepository {
     private @Autowired JdbcTemplate jdbcTemplate;
 
-    public static class UserIdMapper implements RowMapper<User> {
-        @Override
-        public User mapRow(final ResultSet rs, int rowNum) throws SQLException {
-            return new User() {{
-                setId(rs.getInt("id"));
-            }};
-        }
-    }
+    private static final RowMapper<User> userIdMapper
+            = new IdRowMapper<User>(User.class);
 
-    /* XXX */
-    public static class PostIdMapper implements RowMapper<Post> {
-        @Override
-        public Post mapRow(final ResultSet rs, int rowNum) throws SQLException {
-            return new Post() {{
-                setId(rs.getInt("id"));
+    private static final Map<?, ?> allowedBindings =
+            new HashMap<String, String> () {{
+                put("username", "username");
+                put("email", "email");
+                put("name", "name");
             }};
-        }
-    }
 
     public static class PostMapper implements RowMapper<Post> {
         @Override
@@ -74,13 +69,13 @@ public class UserRepository {
     public List<User> followers(User user) {
         return jdbcTemplate.query(
                 "SELECT follower as id FROM follows WHERE following=?",
-                new UserIdMapper(), user.getId());
+                userIdMapper, user.getId());
     }
 
     public List<User> following(User user) {
         return jdbcTemplate.query(
                 "SELECT following as id FROM follows WHERE follower=?",
-                new UserIdMapper(), user.getId());
+                userIdMapper, user.getId());
     }
 
     public List<Post> feedOf(User user) {
@@ -99,8 +94,7 @@ public class UserRepository {
     public User findById(int id) throws EntityNotFoundException {
         try {
             return jdbcTemplate.queryForObject(
-                    "SELECT id FROM \"user\" WHERE id=?",
-                    new UserIdMapper(), id);
+                    "SELECT id FROM \"user\" WHERE id=?", userIdMapper, id);
         } catch (DataAccessException ex) {
             throw new EntityNotFoundException("User");
         }
@@ -111,7 +105,7 @@ public class UserRepository {
         try {
             return jdbcTemplate.queryForObject(
                     "SELECT id FROM \"user\" WHERE username=?",
-                    new UserIdMapper(), username);
+                    userIdMapper, username);
         } catch (DataAccessException ex) {
             throw new EntityNotFoundException("User");
         }
@@ -122,7 +116,7 @@ public class UserRepository {
         try {
             return jdbcTemplate.queryForObject(
                     "SELECT id FROM \"user\" WHERE email=?",
-                    new UserIdMapper(), email);
+                    userIdMapper, email);
         } catch (DataAccessException ex) {
             throw new EntityNotFoundException("User");
         }
@@ -165,5 +159,31 @@ public class UserRepository {
         return new User() {{
             setId(jdbcTemplate.queryForInt("SELECT LASTVAL()"));
         }};
+    }
+
+
+    public User details(int id, List<String> fields)
+            throws PreconditionViolatedException, EntityNotFoundException {
+
+        Map<String, String> bindings = new HashMap<String, String>() {{
+            put("id", "id");
+        }};
+        for (String field: fields) {
+            String modelField = (String)allowedBindings.get(field);
+            if (modelField == null) {
+                throw new PreconditionViolatedException("Invalid detail " + field);
+            }
+            bindings.put(field, modelField);
+        }
+
+        GenericRowMapper<User> mapper =
+                new GenericRowMapper<User>(User.class, bindings);
+        try {
+            return jdbcTemplate.queryForObject(
+                    "SELECT * FROM \"user\" WHERE id=?", mapper, id);
+        } catch (DataAccessException ex) {
+            throw new EntityNotFoundException("User");
+        }
+
     }
 }

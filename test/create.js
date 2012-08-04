@@ -1,7 +1,7 @@
 var $ = require("jquery");
 var should = require("should");
-var config = require("./_CONFIG.js");
-var common = require("./_COMMON2.js");
+var config = require("./util/config");
+var common = require("./util/common");
 
 describe("Create", function() {
 

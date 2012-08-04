@@ -2,8 +2,8 @@ package com.directi.jacksparrow_spring.model;
 
 public class User {
 
-    private String email, username, password, name, accessToken;
-    private int id;
+    int id;
+    String email, username, password, name, accessToken;
 
     public User() {
     }

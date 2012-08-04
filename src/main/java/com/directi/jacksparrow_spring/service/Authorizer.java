@@ -3,7 +3,6 @@ package com.directi.jacksparrow_spring.service;
 import com.directi.jacksparrow_spring.exception.UserAuthorizationException;
 import com.directi.jacksparrow_spring.model.User;
 import com.directi.jacksparrow_spring.repository.SessionRepository;
-import com.directi.jacksparrow_spring.util.AccessTokenCookieFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

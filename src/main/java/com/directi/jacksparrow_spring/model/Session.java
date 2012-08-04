@@ -1,8 +1,8 @@
 package com.directi.jacksparrow_spring.model;
 
 public class Session {
-    private User user;
-    private String accessToken;
+    User user;
+    String accessToken;
 
     public String getAccessToken() {
         return accessToken;

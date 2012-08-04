@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -113,21 +114,14 @@ public class UserController {
         return map;
     }
 
-    /*
-    @RequestMapping(value = "/username")
+    @RequestMapping("/details")
     @ResponseBody
-    public Map<?, ?> getUsernameFromID(@RequestParam int id)
-            throws PreconditionViolatedException {
-
-        if (!userRepository.existsUserWithId(id)) {
-            throw new PreconditionViolatedException("User does not exist");
-        }
-
-        final User user = userRepository.getUserHavingId(id);
-        return new HashMap<String, Object>() {{
-            put("username", user.getUsername());
+    public Map details(@RequestParam final int user,
+                       @RequestParam("field") final List<String> fields)
+        throws PreconditionViolatedException, EntityNotFoundException {
+        return new HashMap() {{
+            put("user", userRepository.details(user, fields));
         }};
     }
-    */
 
 }

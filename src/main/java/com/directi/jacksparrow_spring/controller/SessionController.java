@@ -7,7 +7,7 @@ import com.directi.jacksparrow_spring.model.User;
 import com.directi.jacksparrow_spring.repository.SessionRepository;
 import com.directi.jacksparrow_spring.repository.UserRepository;
 import com.directi.jacksparrow_spring.service.Authorizer;
-import com.directi.jacksparrow_spring.util.AccessTokenCookieFactory;
+import com.directi.jacksparrow_spring.service.AccessTokenCookieFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
