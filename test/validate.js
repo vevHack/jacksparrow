@@ -1,7 +1,8 @@
 var $ = require("jquery");
 var should = require("should");
-var config = require("./_CONFIG.js");
-var common = require("./_COMMON2.js");
+var config = require("./util/config");
+var common = require("./util/common");
+
 
 describe("Validate", function() {
 
@@ -26,9 +27,13 @@ describe("Validate", function() {
         };
     }
 
+    function request(data) {
+        return $.getJSON(config.url("/api/validate"), data);
+    }
+    
     function shouldValidate(name, data) {
         it("should validate proper " + name, function(done) {
-            $.post("http://localhost:8080/api/public/validate", data, "json")
+            request(data)
                 .done(validationOk)
                 .fail(common.shouldNotFail)
                 .always(function(){done()});
@@ -37,7 +42,7 @@ describe("Validate", function() {
 
     function shouldNotValidate(name, data, reason) {
         it("should not validate bad " + name, function(done) {
-            $.post("http://localhost:8080/api/public/validate", data, "json")
+            request(data)
                 .done(validationErrorFactory(reason))
                 .fail(common.shouldNotFail)
                 .always(function(){done()});
@@ -50,6 +55,7 @@ describe("Validate", function() {
         shouldValidate("username " + username, {username: username}); 
     });
 
+    /*
     [  
         {username: "foo/bar", reason: "Username cannot contain /"},
         {username: "f\\oobar", reason: "Username cannot contain \\"},
@@ -96,7 +102,7 @@ describe("Validate", function() {
 
     it("should fail when no argument is provided", 
         function(done) {
-            $.post("http://localhost:8080/api/public/validate", {}, "json")
+            request(data)
                 .done(common.shouldNotSucceed)
                 .fail(common.shouldBeErrorFactory(412,
                     "Require one and only one field for validation at a time"))
@@ -105,14 +111,15 @@ describe("Validate", function() {
 
     it("should fail when multiple arguments are provided", 
         function(done) {
-            $.post("http://localhost:8080/api/public/validate", {
-                    username: config.testUser.username, 
-                    email: config.testUser2.email
-                }, "json")
+            request({
+                username: config.testUser.username, 
+                email: config.testUser2.email
+            })
                 .done(common.shouldNotSucceed)
                 .fail(common.shouldBeErrorFactory(412,
                     "Require one and only one field for validation at a time"))
                 .always(function(){done()});
         });
 
+*/
 });

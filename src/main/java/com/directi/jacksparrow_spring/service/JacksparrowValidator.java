@@ -21,13 +21,12 @@ public class JacksparrowValidator {
     private GenericValidator genericValidator = new GenericValidator();
     private EmailValidator emailValidator = EmailValidator.getInstance();
 
-    public String validateUsername(String input)
+    public void validateUsername(String input)
             throws ValidationException {
         String error = doValidateUsername(input);
         if (error != null) {
             throw new ValidationException("Username " + error);
         }
-        return input;
     }
 
     private String doValidateUsername(String input) {
@@ -61,7 +60,7 @@ public class JacksparrowValidator {
         return null;
     }
 
-    public String validateEmail(String input)
+    public void validateEmail(String input)
             throws ValidationException {
         if (!emailValidator.isValid(input)) {
             throw new ValidationException("Invalid email address");
@@ -70,16 +69,13 @@ public class JacksparrowValidator {
         if (input.length() > 100) {
             throw new ValidationException("Email cannot exceed 100 characters");
         }
-
-        return input;
     }
 
-    public String validatePassword(String input)
+    public void validatePassword(String input)
             throws ValidationException {
         if (genericValidator.isBlankOrNull(input)) {
             throw new ValidationException("Password cannot be blank");
         }
-        return input;
     }
 
 }

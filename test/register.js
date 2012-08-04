@@ -1,7 +1,8 @@
 var $ = require("jquery");
 var should = require("should");
-var config = require("./_CONFIG.js");
-var common = require("./_COMMON2.js");
+var config = require("./util/config");
+var common = require("./util/common");
+
 
 describe("Register", function() {
 
@@ -17,22 +18,23 @@ describe("Register", function() {
         };
     }
 
+    function request(data) {
+        return $.post(config.url("/api/register"), data, "json");
+    }
+
     it("should complete valid request", function(done) {
-        $.post("http://localhost:8080/api/public/register", 
-            generateRandomUser(), "json")
-        .done(function(data, textStatus, jqXHR) {
-            data.should.have.property("user");
-            data.user.should.have.property("id");
-            data.user.should.have.property("accessToken");
-        })
-        /* XXX check that the user exists by calling another API */
-        .fail(common.shouldNotFail)
-        .always(function(){done()});
+        request(generateRandomUser())
+            .done(function(data, textStatus, jqXHR) {
+                data.should.have.property("user");
+                data.user.should.have.property("id");
+
+            })
+            .fail(common.shouldNotFail)
+            .always(function(){done()});
     });
 
     function preconditionShouldFail(override, msg, done) {
-        $.post("http://localhost:8080/api/public/register", 
-                $.extend(generateRandomUser(), override), "json")
+        request($.extend(generateRandomUser(), override))
             .done(common.shouldNotSucceed)
             .fail(common.shouldBeErrorFactory(412, msg))
             .always(function(){done()});
@@ -48,7 +50,7 @@ describe("Register", function() {
         it("should not accept duplicate", function(done) {
             var username = config.testUser.username;
             preconditionShouldFail({username: username},
-                ["Username", username, "already exists"].join(" "), done);
+                ["Username", username, "already in use"].join(" "), done);
         });
 
         ["/", "\\"].forEach(function(c) {
@@ -74,7 +76,7 @@ describe("Register", function() {
         it("should not accept duplicate", function(done) {
             var email = config.testUser.email;
             preconditionShouldFail({email: email},
-                ["Email", email, "already exists"].join(" "), done);
+                ["Email", email, "already in use"].join(" "), done);
         });
     });
 

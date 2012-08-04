@@ -88,27 +88,16 @@ public class UserRepository {
         return user;
     }
 
-    public void addUser(User user) {
-        jdbcTemplate.update(
-                "INSERT INTO \"user\" (username, email, password) " +
-                "VALUES (?, ?, ?)",
-                user.getUsername(), user.getEmail(), user.getPassword());
-        user.setId(jdbcTemplate.queryForInt("SELECT LASTVAL()"));
-    }
-
-    public List<Post> postsOf(User user) {
-        return jdbcTemplate.query("SELECT id, user, content, created_on " +
-                "FROM post WHERE \"user\"=?", new PostMapper(), user.getId());
-    }
+    //XXX
 
 
-    public List<User> getFollowers(User user) {
+    public List<User> followers(User user) {
         return jdbcTemplate.query(
                 "SELECT follower as id FROM follows WHERE following=?",
                 new UserIdMapper(), user.getId());
     }
 
-    public List<User> getFollowing(User user) {
+    public List<User> following(User user) {
         return jdbcTemplate.query(
                 "SELECT following as id FROM follows WHERE follower=?",
                 new UserIdMapper(), user.getId());
@@ -121,6 +110,11 @@ public class UserRepository {
                 new PostMapper(), user.getId());
     }
 
+    public List<Post> postsOf(User user) {
+        return jdbcTemplate.query("SELECT id, user, content, created_on " +
+                "FROM post WHERE \"user\"=?", new PostMapper(), user.getId());
+    }
+    /*
     public boolean existsUserWithUsername(String username) {
         return jdbcTemplate.queryForInt(
                 "SELECT COUNT(*) FROM \"user\" WHERE username=?",
@@ -139,12 +133,7 @@ public class UserRepository {
                 email) != 0;
     }
 
-    public boolean isFollowing(User follower, User followee) {
-        return jdbcTemplate.queryForInt("SELECT COUNT(*) FROM follows" +
-                " WHERE follower=? AND followee=?",
-                follower.getId(), followee.getId())!=0;
-
-    }
+    */
 
     public User findById(int id) throws EntityNotFoundException {
         try {
@@ -156,36 +145,30 @@ public class UserRepository {
         }
     }
 
+    public User findByUsername(String username)
+            throws EntityNotFoundException {
+        try {
+            return jdbcTemplate.queryForObject(
+                    "SELECT id FROM \"user\" WHERE username=?",
+                    new UserIdMapper(), username);
+        } catch (DataAccessException ex) {
+            throw new EntityNotFoundException("User");
+        }
+    }
 
-    public User getUserHavingId(int user) {
-        final List<Map<String, Object>> ids = jdbcTemplate.queryForList(
-                "SELECT username FROM \"user\" WHERE id=?", user);
-        return ids.isEmpty() ? null : new User() {{
-            setUsername((String)ids.get(0).get("username"));
-        }};
+    public User findByEmail(String email)
+            throws EntityNotFoundException {
+        try {
+            return jdbcTemplate.queryForObject(
+                    "SELECT id FROM \"user\" WHERE email=?",
+                    new UserIdMapper(), email);
+        } catch (DataAccessException ex) {
+            throw new EntityNotFoundException("User");
+        }
     }
 
 
-    /* XXX does this make existsUserWithUsername redundant */
-    public User getUserHavingUsername(String username) {
-        final List<Map<String, Object>> ids = jdbcTemplate.queryForList(
-                "SELECT id FROM \"user\" WHERE username=?", username);
-        return ids.isEmpty() ? null : new User() {{
-            setId((Integer)ids.get(0).get("id"));
-        }};
-    }
-
-    /* XXX does this make existsUserWithEmail redundant */
-    public User getUserHavingEmail(String email) {
-        final List<Map<String, Object>> ids = jdbcTemplate.queryForList(
-                "SELECT id FROM \"user\" WHERE email=?", email);
-        return ids.isEmpty() ? null : new User() {{
-            setId((Integer)ids.get(0).get("id"));
-        }};
-    }
-
-
-    private boolean doesFollow(User follower, User following) {
+    public boolean doesFollow(User follower, User following) {
         int c = jdbcTemplate.queryForInt("SELECT COUNT(*) FROM follows WHERE " +
                 "follower=? AND following=? AND end_on IS NULL",
                 follower.getId(), following.getId());
@@ -214,4 +197,12 @@ public class UserRepository {
                 follower.getId(), following.getId());
     }
 
+
+    public User addUser(String username, String email, String password) {
+        jdbcTemplate.update("INSERT INTO \"user\" (username, email, password) " +
+                "VALUES (?, ?, ?)", username, email, password);
+        return new User() {{
+            setId(jdbcTemplate.queryForInt("SELECT LASTVAL()"));
+        }};
+    }
 }

@@ -6,8 +6,6 @@ import com.directi.jacksparrow_spring.exception.UserAuthorizationException;
 import com.directi.jacksparrow_spring.model.User;
 import com.directi.jacksparrow_spring.repository.UserRepository;
 import com.directi.jacksparrow_spring.service.Authorizer;
-import com.directi.jacksparrow_spring.service.JacksparrowValidator;
-import com.directi.jacksparrow_spring.util.UserToMapConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,10 +21,8 @@ import java.util.Map;
 @SuppressWarnings("unchecked")
 public class UserController {
 
-    private @Autowired JacksparrowValidator validator;
     private @Autowired Authorizer authorizer;
     private @Autowired UserRepository userRepository;
-    private @Autowired UserToMapConverter userToMapConverter;
 
 
     @RequestMapping("/followers")
@@ -34,7 +30,7 @@ public class UserController {
     public Map followers(@RequestParam final int user)
         throws EntityNotFoundException {
         return new HashMap() {{
-            put("followers", userRepository.getFollowers(
+            put("followers", userRepository.followers(
                     userRepository.findById(user)));
         }};
     }
@@ -44,7 +40,7 @@ public class UserController {
     public Map following(@RequestParam final int user)
         throws EntityNotFoundException {
         return new HashMap() {{
-            put("following", userRepository.getFollowing(
+            put("following", userRepository.following(
                     userRepository.findById(user)));
         }};
     }
@@ -89,26 +85,35 @@ public class UserController {
 
     @RequestMapping("/find")
     @ResponseBody
-    public Map<?, ?> findUser(
+    public Map findUser(
             @RequestParam(required = false) String username,
             @RequestParam(required = false) String email) {
         User user = null;
 
-        if (username != null && email != null) {
-            user = userRepository.getUserHavingUsername(username);
-            if (user.getId()
-                    != userRepository.getUserHavingEmail(email).getId()) {
-                user = null;
+        try {
+            if (username != null && email != null) {
+                user = userRepository.findByUsername(username);
+                if (user.getId()
+                        != userRepository.findByEmail(email).getId()) {
+                    user = null;
+                }
+            } else if (username == null) {
+                user = userRepository.findByEmail(email);
+            } else if (email == null) {
+                user = userRepository.findByUsername(username);
             }
-        } else if (username == null) {
-            user = userRepository.getUserHavingEmail(email);
-        } else if (email == null) {
-            user = userRepository.getUserHavingUsername(username);
+        }catch (EntityNotFoundException ex) {
+            user = null;
         }
 
-        return userToMapConverter.convert(user);
+        Map map = new HashMap();
+        if (user != null) {
+            map.put("user", user);
+        }
+        return map;
     }
 
+    /*
     @RequestMapping(value = "/username")
     @ResponseBody
     public Map<?, ?> getUsernameFromID(@RequestParam int id)
@@ -123,5 +128,6 @@ public class UserController {
             put("username", user.getUsername());
         }};
     }
+    */
 
 }
