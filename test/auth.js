@@ -12,7 +12,7 @@ describe("Authorization", function() {
     describe("#Public API", function() {
         it("should not require authorization", function(done) {
             $.getJSON(
-                config.url("/api/public/followers?user=", config.testUser.id))
+                config.url("/api/user/followers?user=", config.testUser.id))
                 .fail(common.shouldNotFail)
                 .always(function(){done()});
         });

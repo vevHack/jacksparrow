@@ -14,7 +14,6 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
 @Repository
 public class UserRepository {
@@ -52,34 +51,15 @@ public class UserRepository {
     }
 
 
-    public User getUserFromCredentials(final int id, String password)
-            throws UserAuthorizationException {
-
-        Map<String, Object> result;
-        try {
-            result = jdbcTemplate.queryForMap(
-                    "SELECT password FROM \"user\" WHERE id=?", id);
-        } catch (DataAccessException ex) {
-            throw new UserAuthorizationException("User does not exist");
-        }
-        if (!result.get("password").equals(password)) {
-            throw new UserAuthorizationException("Incorrect password");
-        }
-
-        return new User() {{
-            setId(id);
-        }};
-    }
-
-    public User verifyUserWithCredentials(User user, String password)
-            throws UserAuthorizationException {
+    public User verifyCredentials(User user, String password)
+            throws UserAuthorizationException, EntityNotFoundException {
         String dbPassword;
         try {
             dbPassword = (String)jdbcTemplate.queryForObject(
                     "SELECT password FROM \"user\" WHERE id=?",
                     String.class, user.getId());
         } catch (DataAccessException ex) {
-            throw new UserAuthorizationException("User does not exist");
+            throw new EntityNotFoundException("User");
         }
 
         if (!dbPassword.equals(password)) {
@@ -87,8 +67,6 @@ public class UserRepository {
         }
         return user;
     }
-
-    //XXX
 
 
     public List<User> followers(User user) {
@@ -114,26 +92,7 @@ public class UserRepository {
         return jdbcTemplate.query("SELECT id, user, content, created_on " +
                 "FROM post WHERE \"user\"=?", new PostMapper(), user.getId());
     }
-    /*
-    public boolean existsUserWithUsername(String username) {
-        return jdbcTemplate.queryForInt(
-                "SELECT COUNT(*) FROM \"user\" WHERE username=?",
-                username) != 0;
-    }
 
-    public boolean existsUserWithId(int id) {
-        return jdbcTemplate.queryForInt(
-                "SELECT COUNT(*) FROM \"user\" WHERE id=?",
-                id) != 0;
-    }
-
-    public boolean existsUserWithEmail(String email) {
-        return jdbcTemplate.queryForInt(
-                "SELECT COUNT(*) FROM \"user\" WHERE email=?",
-                email) != 0;
-    }
-
-    */
 
     public User findById(int id) throws EntityNotFoundException {
         try {

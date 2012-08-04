@@ -15,9 +15,7 @@ public class Authorizer {
     private @Autowired HttpServletRequest request;
     private @Autowired SessionRepository sessionRepository;
 
-    public User getAuthorizedUser()
-        throws UserAuthorizationException {
-
+    public String getAccessToken() {
         String accessToken = null;
 
         accessToken = request.getHeader("Authorization");
@@ -39,10 +37,14 @@ public class Authorizer {
             }
         }
 
+        return accessToken;
+    }
+
+    public User getAuthorizedUser() throws UserAuthorizationException {
+        String accessToken = getAccessToken();
         if (accessToken == null) {
             throw new UserAuthorizationException("Missing API Access Token");
         }
-
         return sessionRepository.getUserFromAccessToken(accessToken);
     }
 }
