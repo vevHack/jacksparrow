@@ -4,6 +4,8 @@ var jks = jks || {};
     "use strict";
 
     function preload() {
+        $.fetch.js("timestamp"),
+        $.fetch.js("idMapper")
     }
 
     function logout() {

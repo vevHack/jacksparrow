@@ -2,8 +2,8 @@
 <div class="post" data-id="{{id}}">
   <div class="content">{{content}}</div>
   <div class="info">
-    By <span class="author" /> (
-      <span class="timestamp" data-staleness="{{staleness}}" />)
+    <span class="author" data-id="{{#user}}{{id}}{{/user}}" /> 
+    (<span class="timestamp" data-staleness="{{staleness}}" />)
   </div>
 </div>
 {{/feed}}

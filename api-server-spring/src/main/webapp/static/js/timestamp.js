@@ -4,7 +4,7 @@
 (function($) {
     "use strict";
 
-    if ($.updateTimestamp) {
+    if ($.updateTS) {
         return;
     }
 
@@ -52,6 +52,7 @@
             setTimeout(update.bind(this), (ms < fastRefresh.threshold) ? 
                 fastRefresh.interval : slowRefresh.interval);
         }
+        return this;
     };
 
     $.fn.updateTS = update;
