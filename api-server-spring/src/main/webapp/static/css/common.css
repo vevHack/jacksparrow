@@ -25,3 +25,10 @@ input.validated {
     font-style: italic;
     font-size: 80%;
 }
+
+.post.current {
+    background-color: yellow;
+}
+
+.post.current img {
+}

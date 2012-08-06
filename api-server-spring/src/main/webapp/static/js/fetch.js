@@ -34,7 +34,6 @@
             }
 
             promise = (deferred = $.Deferred()).promise();
-            /* XXX ERROR HANDLING */
             $("<img />")
                 .on("load", function(event) {
                     images[src] = promise;

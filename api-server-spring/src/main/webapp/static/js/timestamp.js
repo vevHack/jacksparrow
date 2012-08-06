@@ -35,13 +35,6 @@
 
     var reference = null;
 
-    $.timestamp = {
-        setReference: function(reference_) {
-            reference = reference_;
-            return this;
-        }
-    };
-
     function update() {
         var ms = (Date.now() - reference);
         ms = ms < 0 ? 0 : ms;
@@ -55,6 +48,13 @@
         return this;
     };
 
-    $.fn.updateTS = update;
+    $.updateTimestamp = {
+        setReference: function(reference_) {
+            reference = reference_;
+            return this;
+        }
+    }
+
+    $.fn.updateTimestamp = update;
 
 }(jQuery));
