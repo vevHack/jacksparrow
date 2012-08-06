@@ -1,7 +1,9 @@
-{{#feeds}}
-<div>
-<b>Username</b> :	{{username}}<br/>
-<b>Content</b>  :	{{content}}<br/>
-<b>Posted On</b>:	 {{added_on}} <br/><br/>
+{{#feed}}
+<div class="post" data-id="{{id}}">
+  <div class="content">{{content}}</div>
+  <div class="info">
+    By <span class="author" /> (
+      <span class="timestamp" data-staleness="{{staleness}}" />)
+  </div>
 </div>
-{{/feeds}}
+{{/feed}}

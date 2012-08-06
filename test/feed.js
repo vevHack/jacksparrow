@@ -15,6 +15,8 @@ describe("Feed", function(){
                         data.should.have.property("feed");
                         data.feed.should.be.instanceof(Array);
                         data.feed.should.includeEql(config.testPost);
+                        data.should.have.property("now");
+                        should.exist(new Date(data.now));
                     })
                     .fail(common.shouldNotFail)
                     .always(function(){done();});

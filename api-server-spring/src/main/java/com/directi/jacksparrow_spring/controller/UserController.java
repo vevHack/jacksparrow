@@ -4,6 +4,7 @@ import com.directi.jacksparrow_spring.exception.EntityNotFoundException;
 import com.directi.jacksparrow_spring.exception.PreconditionViolatedException;
 import com.directi.jacksparrow_spring.exception.UserAuthorizationException;
 import com.directi.jacksparrow_spring.model.User;
+import com.directi.jacksparrow_spring.repository.BaseRepository;
 import com.directi.jacksparrow_spring.repository.UserRepository;
 import com.directi.jacksparrow_spring.service.Authorizer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ public class UserController {
 
     private @Autowired Authorizer authorizer;
     private @Autowired UserRepository userRepository;
+    private @Autowired BaseRepository baseRepository;
 
 
     @RequestMapping("/followers")
@@ -71,6 +73,7 @@ public class UserController {
     public Map feed() throws UserAuthorizationException {
         return new HashMap() {{
             put("feed", userRepository.feedOf(authorizer.getAuthorizedUser()));
+            put("now", baseRepository.getCurrentTimestamp());
         }};
     }
 
@@ -80,6 +83,7 @@ public class UserController {
             throws EntityNotFoundException {
         return new HashMap() {{
             put("posts", userRepository.postsOf(userRepository.findById(user)));
+            put("now", baseRepository.getCurrentTimestamp());
         }};
     }
 

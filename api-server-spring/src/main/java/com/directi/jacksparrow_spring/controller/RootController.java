@@ -1,5 +1,6 @@
 package com.directi.jacksparrow_spring.controller;
 
+import com.directi.jacksparrow_spring.repository.BaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.SpringVersion;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,6 +19,7 @@ import java.util.Map;
 public class RootController {
 
     private @Autowired JdbcTemplate jdbcTemplate;
+    private @Autowired BaseRepository baseRepository;
 
     @RequestMapping("/**")
     public void captureApiUrls(HttpServletRequest request)
@@ -33,7 +35,7 @@ public class RootController {
             put("timestamp", new Timestamp(System.currentTimeMillis()));
             put("version", new HashMap<String, Object>() {{
                 put("spring", getSpringVersion());
-                put("postgres", getPostgresVersion());
+                put("postgres", baseRepository.getVersion());
                 put("server", getServerVersion(request));
             }});
         }};
@@ -41,11 +43,6 @@ public class RootController {
 
     private String getServerVersion(HttpServletRequest request) {
         return request.getServletContext().getServerInfo();
-    }
-
-    private String getPostgresVersion() {
-        return (String)jdbcTemplate.queryForMap("SELECT VERSION()")
-                .get("version");
     }
 
     private String getSpringVersion() {

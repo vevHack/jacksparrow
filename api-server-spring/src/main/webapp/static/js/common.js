@@ -40,7 +40,25 @@ jks.common = jks.common || (function() {
     
     var nop = new Function("");
 
+    function redirectToHome() {
+        window.location.replace("/");
+    }
+
+    function handleUnauthenticated(jqXHR) {
+        /* http://stackoverflow.com/a/10593045/141220 */
+        function delete_cookie(name) {
+            document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        }
+
+        if (jqXHR.status === 401 && /API\-ACT/.test(document.cookie)) {
+            delete_cookie("API-ACT");
+            window.location.replace("/");
+        }
+    }
+
     return {
+        handleUnauthenticated: handleUnauthenticated,
+        redirectToHome: redirectToHome,
         nop: nop,
         throwTodo: throwTodo,
         warn: warn,

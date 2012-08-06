@@ -6,7 +6,7 @@ body {
     display: none;
 }
 
-.info {
+form .info {
     font-style: italic;
 }
 
@@ -16,4 +16,12 @@ input.unvalidated {
 
 input.validated {
     background-color: #adffbb;
+}
+
+.post .content {
+}
+
+.post .info {
+    font-style: italic;
+    font-size: 80%;
 }

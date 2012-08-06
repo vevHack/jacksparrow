@@ -24,6 +24,8 @@ describe("Posts", function(){
                 data.should.have.property("posts");
                 data.posts.should.be.instanceof(Array);
                 data.posts.should.includeEql(config.testPost);
+                data.should.have.property("now");
+                should.exist(new Date(data.now));
             })
             .fail(common.shouldNotFail)
             .always(function(){done();});

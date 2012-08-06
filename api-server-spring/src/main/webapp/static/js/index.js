@@ -4,59 +4,31 @@ var jks = jks || {};
     "use strict";
 
     function preload() {
-        $.fetch.template("register");
-        $.fetch.template("users");
     }
 
     function logout() {
         $.post("/api/session/destroy")
             .fail(jks.common.warn)
-            .done(function() {
-                window.location.replace("/");
-            })
+            .done(jks.common.redirectToHome);
     }
 
-    var onUsersClick = (function() {
-        var action;
-
-        function firstTime() {
-            $.when(
-                $.fetch.template("users"),
-                $.get("/users")
-            ).done(function () {
-                    $("#users").append($(Mustache.render(arguments[0][0],
-                        { users:arguments[1][0] })).hide());
-                    show();
-                    action = hide;
-                });
-        }
-
-        function hide() {
-            $("#users >ul").hide("slow", function() {
-                action = show;
-            });
-        }
-
-        function show() {
-            $("#users >ul").show("slow", function() {
-                action = hide;
-            });
-        }
-
-        action = firstTime;
-        return function () {
-            action();
-            return false;
-        }
-    }());
-
     $(function() {
-        $.fetch.template("index").done(function(template) {
-                preload();
-                $("body").html(Mustache.render(template));
+        $.when(
+            $.fetch.template("index"),
+            $.getJSON("/api/me")
+                .fail(jks.common.handleUnauthenticated),
+            $.fetch.js("feed")
+        )
+            .fail(jks.common.warn)
+            .done(function() {
+                var template = arguments[0][0];
+                var data = arguments[1][0];
+                $("body").html(Mustache.render(template, data));
                 $("#logout").on("click", ".trigger", logout);
-                $("#users").on("click", ".trigger", onUsersClick);
+                jks.feed.load($("#content"));
             });
+
+        preload();
     });
 }());
 

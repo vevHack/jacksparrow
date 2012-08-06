@@ -176,9 +176,7 @@ jks.register = jks.register || (function() {
                 .fail(jks.common.throwTodo)
                 .pipe(createSession)
                     .fail(jks.common.throwTodo)
-                    .done(function() {
-                        window.location.replace("/");
-                    });
+                    .done(jks.common.redirectToHome);
         }
 
         function createSession(data) {
