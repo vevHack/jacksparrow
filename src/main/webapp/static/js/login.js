@@ -8,7 +8,7 @@ jks.login = jks.login || (function() {
         button = form.find('input[type="submit"]');
 
         function initLogin() {
-            var email_or_username, data;
+            var email_or_username, findParams;
 
             if (info) {
                 info.html("");
@@ -18,31 +18,36 @@ jks.login = jks.login || (function() {
 
             email_or_username = 
                 form.find('input[name="email_or_username"]').val();
-            if (email_or_username.indexOf("@")
+            findParams = {};
+            findParams[ (email_or_username.indexOf("@") !== -1) ? 
+                "email" : "username" ] = email_or_username;
 
-            $.post("/api/public/findUser", {
-                password: form.find('input[type="password"]').val()
-            })
-                .done(loginSucceeded)
+            $.getJSON("/api/user/find", findParams)
                 .fail(loginFailed)
-                .always(function() {
-                    button.attr("disabled", false);
-                    spinner.remove();
+                .done(function(data) {
+                    $.post("/api/session/create", {
+                        user: data.user.id,
+                        password: form.find('input[type="password"]').val()
+                    }, "json")
+                        .fail(loginFailed)
+                        .done(loginSucceeded);
                 });
         }
 
         function loginFailed(jqXHR) {
             var data = JSON.parse(jqXHR.responseText);
-            if (data.error.code === 401) {
+            if ([401, 412].indexOf(data.error.code) !== -1) {
                 info = info || $('<span class="info" />').insertAfter(button);
                 info.html(data.error.message);
             } else {
                 jks.common.warn(arguments);
             }
+            button.attr("disabled", false);
+            spinner.remove();
         }
 
         function loginSucceeded(data) {
-            console.log(data);
+            window.location.replace("/");
         }
 
         return function (event) {
