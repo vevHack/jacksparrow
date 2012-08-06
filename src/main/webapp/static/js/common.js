@@ -37,8 +37,11 @@ jks.common = jks.common || (function() {
     function warn() {
         console.warn(arguments);
     }
+    
+    var nop = new Function("");
 
     return {
+        nop: nop,
         throwTodo: throwTodo,
         warn: warn,
         spinnerFactory: spinnerFactoryFactory("ajax-loader.gif")

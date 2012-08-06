@@ -47,7 +47,7 @@ jks.register = jks.register || (function() {
             if(data.validation.status.localeCompare("ok") === 0) {
                 if (ensureUnique) {
                     requestParams[name] = value;
-                    pendingXHR = $.get("/api/public/findUser", requestParams)
+                    pendingXHR = $.get("/api/user/find", requestParams)
                         .done(onFind)
                         .fail(ignoreAbortElseTodo);
                 } else {
@@ -80,7 +80,7 @@ jks.register = jks.register || (function() {
                     spinner = jks.common.spinnerFactory().insertAfter(input);
                     info.html("");
                     requestParams[name] = value;
-                    pendingXHR = $.get("/api/public/validate", requestParams)
+                    pendingXHR = $.get("/api/validate", requestParams)
                         .done(onValidate)
                         .fail(ignoreAbortElseTodo);
                 }
@@ -152,7 +152,7 @@ jks.register = jks.register || (function() {
         return handler;
     }
 
-    function registerHandlerFactory(button) {
+    function registerHandlerFactory(form, button) {
 
         function doRegisterChecklist() {
             var unvalidatedCount = 3;
@@ -171,13 +171,22 @@ jks.register = jks.register || (function() {
 
         function doRegister() {
             var spinner = jks.common.spinnerFactory().insertAfter(button);
-            button.parents("form").find("input").attr("disabled", true);
-            $.post("/api/public/register", validated)
-                .done(function() {
-                    spinner.remove();
-                    console.log("XXX do login");
-                })
-                .fail(jks.common.throwTodo);
+            form.find("input").attr("disabled", true);
+            $.post("/api/register", validated)
+                .fail(jks.common.throwTodo)
+                .pipe(createSession)
+                    .fail(jks.common.throwTodo)
+                    .done(function() {
+                        window.location.replace("/");
+                    });
+        }
+
+        function createSession(data) {
+            return $.post("/api/session/create", {
+                user: data.user.id,
+                password: validated["password"]
+            }, "json")
+                .fail(jks.common.throwTodo)
         }
 
         return function (event) {
@@ -204,7 +213,7 @@ jks.register = jks.register || (function() {
                 prepopulateUsernameFactory(
                     form.find('input[name="username"]')));
 
-            form.on("submit", registerHandlerFactory(
+            form.on("submit", registerHandlerFactory(form,
                 form.find('input[type="submit"]')));
         }
     };

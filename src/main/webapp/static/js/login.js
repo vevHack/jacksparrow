@@ -6,6 +6,7 @@ jks.login = jks.login || (function() {
         var spinner, info, button;
 
         button = form.find('input[type="submit"]');
+        info = $('<span class="info" />').insertAfter(button);
 
         function initLogin() {
             var email_or_username, findParams;
@@ -24,26 +25,36 @@ jks.login = jks.login || (function() {
 
             $.getJSON("/api/user/find", findParams)
                 .fail(loginFailed)
-                .done(function(data) {
-                    $.post("/api/session/create", {
-                        user: data.user.id,
-                        password: form.find('input[type="password"]').val()
-                    }, "json")
-                        .fail(loginFailed)
-                        .done(loginSucceeded);
+                .done(function(data, textStatus, jqXHR) {
+                    if ("user" in data) {
+                        createSession(data.user);
+                    } else {
+                        info.html("No such user has registered");
+                        loginFailed();
+                    }
                 });
         }
 
-        function loginFailed(jqXHR) {
-            var data = JSON.parse(jqXHR.responseText);
-            if ([401, 412].indexOf(data.error.code) !== -1) {
-                info = info || $('<span class="info" />').insertAfter(button);
-                info.html(data.error.message);
-            } else {
-                jks.common.warn(arguments);
-            }
+        function loginFailed() {
             button.attr("disabled", false);
             spinner.remove();
+        }
+
+        function createSession(user) {
+            $.post("/api/session/create", {
+                user: user.id,
+                password: form.find('input[type="password"]').val()
+            }, "json")
+                .fail(function(jqXHR) {
+                    var data = JSON.parse(jqXHR.responseText);
+                    if (data.error.code === 401) {
+                        info.html(data.error.message);
+                    } else {
+                        jks.common.warn(arguments);
+                    }
+                })
+                .fail(loginFailed)
+                .done(loginSucceeded);
         }
 
         function loginSucceeded(data) {

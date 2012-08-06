@@ -3,8 +3,6 @@ var jks = jks || {};
 (function() {
     "use strict";
 
-    var nop = new Function("");
-
     function preload() {
         $.fetch.template("register");
         $.fetch.js("register");
@@ -12,10 +10,9 @@ var jks = jks || {};
     }
 
     function fadeReplaceFactory(selector, withSelector) {
-    /* XXX ignore clicks ie disable triggers during anim? */
         return function() {
             var temp;
-        /* XXX
+            /* XXX
             $(selector).fadeOut("fast", function() {
                 $(withSelector).fadeIn("fast");
             });
@@ -32,31 +29,31 @@ var jks = jks || {};
     var toggleLoginRegister = fadeReplaceFactory("#login", "#register");
 
     var onShowRegister = (function() {
-        var action;
-
-        function firstTime() {
+        var action = function () {
             $.when(
                 $.fetch.template("register"),
                 $.fetch.js("register")
-                )
-                .done(function() {
-                    var template = arguments[0][0];
-                    $("#register")
-                        .prepend(Mustache.render(template))
-                        .on("click", ".trigger", onShowLogin);
-                    jks.register.bindEvents($("#register"));
+            )
+            .fail(jks.common.warn)
+            .done(function() {
+                var template = arguments[0][0];
+                var registerDiv = $("#register");
 
-                    action = toggleLoginRegister;
-                    action();
+                registerDiv
+                    .prepend(Mustache.render(template))
+                    .on("click", ".trigger", onShowLogin);
+                jks.register.bindEvents(registerDiv);
 
-                    /* XXX Restore Focus even after multiple switches
-                       between login/register */
-                    $("#register").find('input[name="email"]').focus();
-                });
-            action = nop;
+            action = toggleLoginRegister;
+            action();
+
+            /* XXX Restore Focus even after multiple switches
+            between login/register */
+            $("#register").find('input[name="email"]').focus();
+            });
+            action = jks.common.nop;
         }
 
-        action = firstTime;
         return function(event) {
             action(event);
             event.preventDefault();
@@ -68,29 +65,33 @@ var jks = jks || {};
         event.preventDefault();
     }
 
-/* TODO XXX HANDLE FAILURES */
     $(function() {
         var authFetched;
 
         authFetched = $.fetch.template("authenticate")
+            .fail(jks.common.warn)
             .done(function(template) {
                 $("body").html($(Mustache.render(template))
                     .filter("#register").hide().end());
                 $("#login").on("click", ".trigger", onShowRegister);
-            });
+            })
+
 
         $.when(
             authFetched,
             $.fetch.template("login"),
             $.fetch.js("login")
-        ).done(function(){
-            var template = arguments[1][0];
-            $("#login")
-                .prepend(Mustache.render(template))
-                .find('input[name="email_or_username"]').focus();
+        )
+            .fail(jks.common.warn)
+            .done(function(){
+                var template = arguments[1][0];
+                var loginDiv = $("#login");
 
-            jks.login.bindEvents($("#login"));
-        });
+                loginDiv
+                    .prepend(Mustache.render(template))
+                    .find('input[name="email_or_username"]').focus();
+                jks.login.bindEvents(loginDiv);
+            });
 
         preload();
     });

@@ -6,8 +6,8 @@ body {
     display: none;
 }
 
-label .info {
-    text-style: italics;
+.info {
+    font-style: italic;
 }
 
 input.unvalidated {
