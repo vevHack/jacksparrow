@@ -7,7 +7,7 @@ libs=( \
 )
 
 
-cd src/main/webapp/static/lib/
+cd api-server-spring/src/main/webapp/static/lib/
 for lib in ${libs[@]}
 do
     curl -O "$lib"
