@@ -1,7 +1,7 @@
-spring/target/
+api-server-spring/target/
 node_modules/.bin/
-spring/.idea/workspace.xml
-spring/.idea/misc.xml
+api-server-spring/.idea/workspace.xml
+api-server-spring/.idea/misc.xml
 *.swp
 Session
 tags
