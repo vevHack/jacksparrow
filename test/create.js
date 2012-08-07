@@ -30,44 +30,60 @@ describe("Create", function() {
                 data[attribute].should.be.instanceof(Array);
                 len = data[attribute].length;
                 for (i = 0; i < len; i += 1) {
-                    if (data[attribute].id === id) {
+                    if (data[attribute][i].id === id) {
                         break;  
                     }
                 }
-                i.should.be.equal(len, 
+                i.should.not.be.equal(len, 
                     [id, "not present in", data[attribute]].join(" "));
             }
         }
 
+        function shouldBePresentInPostsAndFeeds(pid, me, follower, done) {
+            function checkInFeed(user) {
+                var deferred = $.Deferred();
+                common.createSession(user)
+                    .done(function(access_token) {
+                        common.authJson(access_token, 
+                            config.url("/api/user/feed"))
+                            .done(shouldBePresentFactory("feed", pid))
+                            .done(deferred.resolve)
+                            .fail(deferred.reject)
+                    })
+                    .fail(deferred.reject);
+                return deferred.promise();
+            }
+
+            $.when(
+                $.getJSON(config.url("/api/user/posts"), {user: me.id})
+                    .done(shouldBePresentFactory("posts", pid)),
+                checkInFeed(me),
+                checkInFeed(follower)
+            )
+            .fail(common.shouldNotFail)
+            .always(function(){done();});
+        }
+
         var content = "here be dragons";
-        var uid = config.testUser.id;
-        common.createSession()
+        /* testUser follows testUser2 */
+        common.createSession(config.testUser2)
             .done(function(access_token) {
                 common.authJsonPost(access_token, {
                     url: config.url("/api/post/create"), 
                     data: {content: content}
                 })
-                    .fail(common.shouldNotFail)
-                    .done(function(data) {
-                        var pid;
-                        data.should.have.property("post");
-                        data.post.should.have.property("id");
-                        data.post.should.have.property("user");
-                        data.post.user.should.have.property("id");
-                        data.post.user.id.should.equal(uid);
+                .fail(common.shouldNotFail)
+                .done(function(data) {
+                    data.should.have.property("post");
+                    data.post.should.have.property("id");
+                    data.post.should.have.property("user");
+                    data.post.user.should.have.property("id");
+                    data.post.user.id.should.equal(config.testUser2.id);
 
-                        pid = data.post.id;
-                        $.when(
-                            $.getJSON(config.url("/api/user/posts"), {user: uid})
-                                .done(shouldBePresentFactory("posts", pid)),
-                            common.authJson(access_token, 
-                                config.url("/api/user/feed"))
-                                .done(shouldBePresentFactory("feed", pid))
-                        )
-                            .fail(common.shouldNotFail)
-                            .always(function(){done();});
-                    });
-            });
+                    shouldBePresentInPostsAndFeeds(data.post.id, 
+                        config.testUser2, config.testUser, done);
+                });
+        });
     });
 
 });
