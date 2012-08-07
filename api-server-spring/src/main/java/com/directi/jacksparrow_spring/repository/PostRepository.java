@@ -21,7 +21,6 @@ public class PostRepository {
         Post post = new Post() {{
             setId(jdbcTemplate.queryForInt("SELECT LASTVAL()"));
             setUser(user);
-            setContent(content);
         }};
 
         List<Integer> followersIds = jdbcTemplate.queryForList(
@@ -32,8 +31,10 @@ public class PostRepository {
                 user.getId(), post.getId());
 
         jdbcTemplate.update("INSERT INTO feed(\"user\", post) " +
-                "SELECT follower as \"user\", ? as post FROM follows" +
+                "SELECT follower as \"user\", ? as post FROM follows " +
                 "WHERE following=?", post.getId(), user.getId());
+
+        /* XXX NOTIFY the NOTIFY SERVER */
 
         return post;
     }

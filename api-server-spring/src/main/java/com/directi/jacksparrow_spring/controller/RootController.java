@@ -29,13 +29,12 @@ public class RootController {
     @RequestMapping("/ping")
     @ResponseBody
     public Map<String, Object> sayHi(final HttpServletRequest request) {
-        System.out.println(baseRepository.getCurrentTimestamp());
         return new HashMap<String, Object>() {{
-            put("message", "Hi!");
+            put("message", "Namaste!");
             put("timestamp", baseRepository.getCurrentTimestamp());
             put("version", new HashMap<String, Object>() {{
                 put("spring", getSpringVersion());
-                put("postgres", baseRepository.getVersion());
+                put("database", baseRepository.getVersion());
                 put("server", getServerVersion(request));
             }});
         }};
