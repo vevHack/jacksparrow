@@ -4,9 +4,10 @@ var app = express()
   , server = http.createServer(app)
   , io = require('socket.io').listen(server);
 
+app.use(express.bodyParser());
+
 //maintain a list of client socket ids 
 var clients={};
-var users={};
 var list = ['harsh', 'akshay'];
 var username;
 
@@ -18,23 +19,30 @@ console.log("All the connections will be notified to others");
 // routing .... mapping URLs to request handlers
 app.get('/page', function (req, res) {
 	//obtain sockets username	
-//	console.log("Request came ::" +JSON.stringify(req));	
-	username=req.query.id;
+	username=req.query.id || 'unknown';
 	console.log("Request came from user "+username);
 	res.sendfile(__dirname + '/notificationClient.html');
 });
+
+app.post('/notify', function(req, res) {
+	if(req!=null) {	
+		console.log("Received request from spring ... "+ JSON.stringify(req.headers));
+		console.log(req.param("msg", "def"));
+		res.write("success");
+	}	
+});
+
 
 
 // on connection, this server will simply dump data if any on console, to the client
 io.sockets.on('connection', function (socket) {
 	//store the mapping
 	
-	users[username] = socket.id;
-	clients[socket.id] = socket; 	
-
-	for (var user in list) {
-		if(users[user]) {
-			clients[users[user]].emit('userList',JSON.stringify(users));
+	clients[username] = socket;
+	for (var index in list) {
+		console.log("checking for "+list[index]);
+		if(clients[list[index]]) {
+			clients[list[index]].emit('userList',"NOTE");
 		}
 	}
 });
