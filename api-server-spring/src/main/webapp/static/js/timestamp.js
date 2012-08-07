@@ -33,11 +33,11 @@
             );
     }
 
-    var reference = null;
+    var serverReference, skewBetweenClientAndServer;
 
     function update() {
-        var ms = (Date.now() - reference);
-        ms = ms < 0 ? 0 : ms;
+        var ms = Math.abs(
+            (Date.now() - serverReference) - skewBetweenClientAndServer);
         ms += this.data("staleness");
         this.text(inWords(ms));
 
@@ -49,8 +49,9 @@
     };
 
     $.updateTimestamp = {
-        setReference: function(reference_) {
-            reference = reference_;
+        setReference: function(serverNow) {
+            serverReference = serverNow;
+            skewBetweenClientAndServer = (Date.now() - serverNow);
             return this;
         }
     }
