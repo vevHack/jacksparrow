@@ -52,7 +52,7 @@ SET default_with_oids = false;
 CREATE TABLE feed (
     "user" integer NOT NULL,
     post integer NOT NULL,
-    added_on timestamp without time zone DEFAULT ('now'::text)::timestamp without time zone
+    added_on timestamp with time zone DEFAULT timezone('UTC'::text, ('now'::text)::timestamp(3) with time zone)
 );
 
 
@@ -65,8 +65,8 @@ ALTER TABLE public.feed OWNER TO postgres;
 CREATE TABLE follows (
     follower integer NOT NULL,
     following integer NOT NULL,
-    start_on timestamp without time zone DEFAULT ('now'::text)::timestamp without time zone,
-    end_on timestamp without time zone
+    start_on timestamp with time zone DEFAULT timezone('UTC'::text, ('now'::text)::timestamp(3) with time zone),
+    end_on timestamp with time zone
 );
 
 
@@ -93,7 +93,7 @@ ALTER TABLE public.unique_sequence OWNER TO postgres;
 CREATE TABLE post (
     id integer DEFAULT nextval('unique_sequence'::regclass) NOT NULL,
     "user" integer NOT NULL,
-    created_on timestamp without time zone DEFAULT ('now'::text)::timestamp without time zone,
+    created_on timestamp with time zone DEFAULT timezone('UTC'::text, ('now'::text)::timestamp(3) with time zone),
     content text
 );
 
@@ -111,7 +111,7 @@ CREATE TABLE "user" (
     password text,
     name text,
     access_token character varying(40),
-    created_on timestamp without time zone DEFAULT ('now'::text)::timestamp without time zone
+    created_on timestamp with time zone DEFAULT timezone('UTC'::text, ('now'::text)::timestamp(3) with time zone)
 );
 
 

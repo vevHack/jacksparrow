@@ -147,7 +147,8 @@ public class UserRepository {
         if (!doesFollow(follower, following)) {
             throw new PreconditionViolatedException("Not following user");
         }
-        jdbcTemplate.update("UPDATE follows SET end_on=LOCALTIMESTAMP WHERE " +
+        jdbcTemplate.update("UPDATE follows SET " +
+                "end_on=CURRENT_TIMESTAMP(3) AT TIME ZONE 'UTC' WHERE " +
                 "follower=? AND following=? AND end_on IS NULL",
                 follower.getId(), following.getId());
     }

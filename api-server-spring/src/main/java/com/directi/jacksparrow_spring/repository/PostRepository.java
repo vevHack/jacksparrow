@@ -6,31 +6,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class PostRepository {
 
     private @Autowired JdbcTemplate jdbcTemplate;
 
-    public Post create(User user, String content) {
-        /*XXX
-        jdbcTemplate.update("" +
+    public Post create(final User user, final String content) {
+        jdbcTemplate.update(
                 "INSERT INTO post(\"user\", content) VALUES(?,?)",
-                post.getUser(), post.getContent());
+                user.getId(), content);
 
-        int post_id=jdbcTemplate.queryForInt("SELECT LASTVAL()");
+        Post post = new Post() {{
+            setId(jdbcTemplate.queryForInt("SELECT LASTVAL()"));
+            setUser(user);
+            setContent(content);
+        }};
 
-        List<Map<String, Object>> followers = jdbcTemplate.queryForList("" +
-                "SELECT follower FROM follows WHERE followee=?",
-                post.getUser());
+        List<Integer> followersIds = jdbcTemplate.queryForList(
+                "SELECT follower FROM follows WHERE following=?",
+                Integer.class, user.getId());
 
         jdbcTemplate.update("INSERT INTO feed(\"user\", post) VALUES(?,?)",
-                post.getUser(), post_id);
+                user.getId(), post.getId());
 
-        for(Map<String, Object> follower : followers)
-            jdbcTemplate.update(
-                    "INSERT INTO feed(\"user\", post) VALUES(?,?)",
-                    follower.get("follower"), post_id);
-                    */
-        return new Post() {{}};
+        jdbcTemplate.update("INSERT INTO feed(\"user\", post) " +
+                "SELECT follower as \"user\", ? as post FROM follows" +
+                "WHERE following=?", post.getId(), user.getId());
+
+        return post;
     }
 }

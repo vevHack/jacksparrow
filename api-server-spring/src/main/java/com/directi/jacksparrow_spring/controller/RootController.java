@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,9 +29,10 @@ public class RootController {
     @RequestMapping("/ping")
     @ResponseBody
     public Map<String, Object> sayHi(final HttpServletRequest request) {
+        System.out.println(baseRepository.getCurrentTimestamp());
         return new HashMap<String, Object>() {{
             put("message", "Hi!");
-            put("timestamp", new Timestamp(System.currentTimeMillis()));
+            put("timestamp", baseRepository.getCurrentTimestamp());
             put("version", new HashMap<String, Object>() {{
                 put("spring", getSpringVersion());
                 put("postgres", baseRepository.getVersion());

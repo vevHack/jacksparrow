@@ -7,8 +7,9 @@ describe("Create", function() {
 
     before(common.isServerUp.bind(common));
 
-/* XXX
+/*XXX
     it("should not accept blank content", function(done) {
+
         request(
             requestParamsFactory({content:""}),
             common.shouldBeErrorFactory(412, "Content cannot be empty", done));
