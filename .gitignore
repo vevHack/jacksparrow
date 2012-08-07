@@ -5,3 +5,4 @@ api-server-spring/.idea/misc.xml
 *.swp
 Session
 tags
+*.*~
