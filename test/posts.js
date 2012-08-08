@@ -25,7 +25,23 @@ describe("Posts", function(){
                 data.posts.should.be.instanceof(Array);
                 data.posts.should.includeEql(config.testPost);
                 data.should.have.property("now");
-                should.exist(new Date(data.now));
+                should.exist(Date.parse(data.now));
+            })
+            .fail(common.shouldNotFail)
+            .always(function(){done();});
+    });
+
+    it("should not return feeds before 'from'", function(done) {
+        $.getJSON(config.url("/api/user/posts"), {
+            user: config.testUser.id,
+            upto: config.testPost.created_on
+        })
+            .done(function(data) {
+                data.should.have.property("posts");
+                data.posts.should.be.instanceof(Array);
+                data.posts.should.be.empty;
+                Date.parse(config.testPost.created_on)
+                    .should.be.eql(Date.parse(data.from));
             })
             .fail(common.shouldNotFail)
             .always(function(){done();});

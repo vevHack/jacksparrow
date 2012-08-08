@@ -24,21 +24,6 @@ describe("Create", function() {
  
     it("should accept valid content", function(done) {
 
-        function shouldBePresentFactory(attribute, id) {
-            return function(data) {
-                var i, len;
-                data[attribute].should.be.instanceof(Array);
-                len = data[attribute].length;
-                for (i = 0; i < len; i += 1) {
-                    if (data[attribute][i].id === id) {
-                        break;  
-                    }
-                }
-                i.should.not.be.equal(len, 
-                    [id, "not present in", data[attribute]].join(" "));
-            }
-        }
-
         function shouldBePresentInPostsAndFeeds(pid, me, follower, done) {
             function checkInFeed(user) {
                 var deferred = $.Deferred();
@@ -46,7 +31,7 @@ describe("Create", function() {
                     .done(function(access_token) {
                         common.authJson(access_token, 
                             config.url("/api/user/feed"))
-                            .done(shouldBePresentFactory("feed", pid))
+                            .done(common.shouldBePresentFactory("feed", pid))
                             .done(deferred.resolve)
                             .fail(deferred.reject)
                     })
@@ -56,7 +41,7 @@ describe("Create", function() {
 
             $.when(
                 $.getJSON(config.url("/api/user/posts"), {user: me.id})
-                    .done(shouldBePresentFactory("posts", pid)),
+                    .done(common.shouldBePresentFactory("posts", pid)),
                 checkInFeed(me),
                 checkInFeed(follower)
             )
@@ -65,25 +50,41 @@ describe("Create", function() {
         }
 
         var content = "here be dragons";
-        /* testUser follows testUser2 */
-        common.createSession(config.testUser2)
-            .done(function(access_token) {
-                common.authJsonPost(access_token, {
-                    url: config.url("/api/post/create"), 
-                    data: {content: content}
-                })
-                .fail(common.shouldNotFail)
-                .done(function(data) {
-                    data.should.have.property("post");
-                    data.post.should.have.property("id");
-                    data.post.should.have.property("user");
-                    data.post.user.should.have.property("id");
-                    data.post.user.id.should.equal(config.testUser2.id);
 
-                    shouldBePresentInPostsAndFeeds(data.post.id, 
-                        config.testUser2, config.testUser, done);
+        function follow(user) {
+            var deferred = $.Deferred();
+            common.createSession(config.testUser)
+                .done(function(access_token) {
+                    common.authJsonPost(access_token, {
+                        url: config.url("/api/user/follow"),
+                        data: { user: user.id }
+                    })
+                        .always(deferred.resolve);
+                });
+            return deferred.promise();
+        }
+
+        follow(config.testUser2).done(function() {
+            common.createSession(config.testUser2)
+                .done(function(access_token) {
+                    common.authJsonPost(access_token, {
+                        url: config.url("/api/post/create"), 
+                        data: {content: content}
+                    })
+                        .fail(common.shouldNotFail)
+                        .done(function(data) {
+                            data.should.have.property("post");
+                            data.post.should.have.property("id");
+                            data.post.should.have.property("user");
+                            data.post.user.should.have.property("id");
+                            data.post.user.id.should.equal(config.testUser2.id);
+
+                            shouldBePresentInPostsAndFeeds(data.post.id, 
+                            config.testUser2, config.testUser, done);
+                        });
                 });
         });
+
     });
 
 });

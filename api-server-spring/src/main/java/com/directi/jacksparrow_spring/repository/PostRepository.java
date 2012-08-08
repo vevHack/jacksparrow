@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 public class PostRepository {
 
@@ -23,18 +21,21 @@ public class PostRepository {
             setUser(user);
         }};
 
-        List<Integer> followersIds = jdbcTemplate.queryForList(
-                "SELECT follower FROM follows WHERE following=?",
-                Integer.class, user.getId());
-
         jdbcTemplate.update("INSERT INTO feed(\"user\", post) VALUES(?,?)",
                 user.getId(), post.getId());
 
         jdbcTemplate.update("INSERT INTO feed(\"user\", post) " +
                 "SELECT follower as \"user\", ? as post FROM follows " +
-                "WHERE following=?", post.getId(), user.getId());
+                "WHERE following=? AND end_on IS NULL",
+                post.getId(), user.getId());
 
         /* XXX NOTIFY the NOTIFY SERVER */
+/*
+        List<Integer> followersIds = jdbcTemplate.queryForList(
+                "SELECT follower FROM follows WHERE following=? " +
+                        "AND end_on IS NULL",
+                Integer.class, user.getId());
+                */
 
         return post;
     }

@@ -15,6 +15,8 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,16 +80,67 @@ public class UserRepository {
                 userIdMapper, user.getId());
     }
 
-    public List<Post> feedOf(User user) {
-        return jdbcTemplate.query(
-                "SELECT id, \"user\", content, created_on FROM post where " +
-                        "id in (SELECT post FROM feed WHERE \"user\"=?)",
-                new PostMapper(), user.getId());
+
+
+    public static class PostContainer {
+        public List<Post> posts;
+        public Timestamp from;
+    };
+
+
+    public PostContainer feedOf(User user, Timestamp upto) {
+        PostContainer postContainer = new PostContainer();
+
+        try {
+            postContainer.from = jdbcTemplate.queryForObject(
+                    "SELECT added_on FROM (" +
+                        "SELECT added_on FROM feed " +
+                        "WHERE \"user\"=? AND added_on < ? " +
+                        "ORDER BY added_on DESC LIMIT 10 " +
+                    ") as added_on " +
+                    "ORDER BY added_on ASC LIMIT 1",
+                    Timestamp.class, user.getId(), upto);
+        } catch (DataAccessException ex) {
+            postContainer.from = upto;
+            postContainer.posts = new ArrayList<Post>();
+            return postContainer;
+        }
+
+        postContainer.posts = (List<Post>)jdbcTemplate.query(
+                "SELECT id, \"user\", content, created_on FROM post " +
+                "WHERE id in (" +
+                    "SELECT post as id FROM feed " +
+                    "WHERE \"user\"=? AND added_on < ? AND added_on >= ?" +
+                ")",
+                new PostMapper(), user.getId(), upto, postContainer.from);
+
+        return postContainer;
     }
 
-    public List<Post> postsOf(User user) {
-        return jdbcTemplate.query("SELECT id, \"user\", content, created_on " +
-                "FROM post WHERE \"user\"=?", new PostMapper(), user.getId());
+    public PostContainer postsOf(User user, Timestamp upto) {
+        PostContainer postContainer = new PostContainer();
+
+        try {
+            postContainer.from = jdbcTemplate.queryForObject(
+                    "SELECT created_on FROM (" +
+                        "SELECT created_on FROM post " +
+                        "WHERE \"user\"=? AND created_on < ? " +
+                        "ORDER BY created_on DESC LIMIT 10 " +
+                    ") as created_on " +
+                    "ORDER BY created_on ASC LIMIT 1",
+                    Timestamp.class, user.getId(), upto);
+        } catch (DataAccessException ex) {
+            postContainer.from = upto;
+            postContainer.posts = new ArrayList<Post>();
+            return postContainer;
+        }
+
+        postContainer.posts = (List<Post>)jdbcTemplate.query(
+                "SELECT id, \"user\", content, created_on FROM post " +
+                "WHERE \"user\"=? AND created_on < ? AND created_on >= ?",
+                new PostMapper(), user.getId(), upto, postContainer.from);
+
+        return postContainer;
     }
 
 
@@ -148,7 +201,7 @@ public class UserRepository {
             throw new PreconditionViolatedException("Not following user");
         }
         jdbcTemplate.update("UPDATE follows SET " +
-                "end_on=CURRENT_TIMESTAMP(3) AT TIME ZONE 'UTC' WHERE " +
+                "end_on=CURRENT_TIMESTAMP(3) WHERE " +
                 "follower=? AND following=? AND end_on IS NULL",
                 follower.getId(), following.getId());
     }

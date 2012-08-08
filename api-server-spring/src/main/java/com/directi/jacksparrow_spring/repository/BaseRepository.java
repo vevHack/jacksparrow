@@ -11,14 +11,13 @@ public class BaseRepository {
     private @Autowired JdbcTemplate jdbcTemplate;
 
     public String getVersion() {
-        return (String)jdbcTemplate.queryForObject("SELECT VERSION()",
-                String.class);
+        return (String)jdbcTemplate.queryForObject(
+                "SELECT VERSION()", String.class);
     }
 
     public Timestamp getCurrentTimestamp() {
         return (Timestamp)jdbcTemplate.queryForObject(
-                "SELECT CURRENT_TIMESTAMP(3) AT TIME ZONE 'UTC'",
-                Timestamp.class);
+                "SELECT CURRENT_TIMESTAMP(3)", Timestamp.class);
     }
 
 }

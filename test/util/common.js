@@ -110,7 +110,23 @@ module.exports = {
                 deferred.resolve(data.session.access_token);
             });
         return deferred.promise();
+    },
+
+    shouldBePresentFactory: function(attribute, id) {
+        return function(data) {
+            var i, len;
+            data[attribute].should.be.instanceof(Array);
+            len = data[attribute].length;
+            for (i = 0; i < len; i += 1) {
+                if (data[attribute][i].id === id) {
+                    break;  
+                }
+            }
+            i.should.not.be.equal(len, 
+                [id, "not present in", data[attribute]].join(" "));
+        }
     }
+
 
 };
 

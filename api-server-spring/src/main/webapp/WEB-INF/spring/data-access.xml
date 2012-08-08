@@ -8,6 +8,7 @@
         <property name="url" value="jdbc:postgresql://localhost/jacksparrow" />
         <property name="username" value="postgres" />
         <property name="password" value="a" />
+        <property name="connectionInitSqls" value="SET TIMEZONE='UTC'" />
     </bean>
 
 </beans>

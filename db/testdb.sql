@@ -22,7 +22,7 @@ SELECT pg_catalog.setval('unique_sequence', 8, true);
 --
 
 COPY feed ("user", post, added_on) FROM stdin;
-5	8	2012-08-04 22:58:20.730+05:30
+5	8	2012-08-04 17:28:20.73+00
 \.
 
 
@@ -31,6 +31,7 @@ COPY feed ("user", post, added_on) FROM stdin;
 --
 
 COPY follows (follower, following, start_on, end_on) FROM stdin;
+5	6	2012-07-26 19:07:18.938+00	\N
 \.
 
 
@@ -39,7 +40,7 @@ COPY follows (follower, following, start_on, end_on) FROM stdin;
 --
 
 COPY post (id, "user", created_on, content) FROM stdin;
-8	5	2012-08-04 22:56:44.472+05:30	pirates do tweet
+8	5	2012-08-04 17:26:44.472+00	pirates do tweet
 \.
 
 
@@ -48,8 +49,8 @@ COPY post (id, "user", created_on, content) FROM stdin;
 --
 
 COPY "user" (id, email, username, password, name, access_token, created_on) FROM stdin;
-6	foo2@bar.com	foo2	test	\N	6	2012-07-27 00:36:18.938+05:30
-5	foo@bar.com	foo	test	\N	4b524fb1-a326-4240-bed4-6a1169ee2a63	2012-07-25 20:24:30.119+05:30
+6	foo2@bar.com	foo2	test	\N	6	2012-07-26 19:06:18.938+00
+5	foo@bar.com	foo	test	\N	4b524fb1-a326-4240-bed4-6a1169ee2a63	2012-07-25 14:54:30.119+00
 \.
 
 

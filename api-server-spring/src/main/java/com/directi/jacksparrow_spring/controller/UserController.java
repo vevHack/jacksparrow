@@ -7,13 +7,17 @@ import com.directi.jacksparrow_spring.model.User;
 import com.directi.jacksparrow_spring.repository.BaseRepository;
 import com.directi.jacksparrow_spring.repository.UserRepository;
 import com.directi.jacksparrow_spring.service.Authorizer;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,24 +71,51 @@ public class UserController {
                 authorizer.getAuthorizedUser(), userRepository.findById(user));
     }
 
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public void getAppointmentsForDay(
+            @RequestParam @DateTimeFormat(iso= DateTimeFormat.ISO.DATE) Date day) {
+        System.out.println(day);
+    }
 
     @RequestMapping("/feed")
     @ResponseBody
-    public Map feed() throws UserAuthorizationException {
+    public Map feed(
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+            @RequestParam(required = false) DateTime upto)
+            throws UserAuthorizationException {
+
+        final Timestamp now = baseRepository.getCurrentTimestamp();
+        final UserRepository.PostContainer postContainer =
+                userRepository.feedOf(authorizer.getAuthorizedUser(),
+                        upto == null ? now : new Timestamp(upto.getMillis()));
+
         return new HashMap() {{
-            put("feed", userRepository.feedOf(authorizer.getAuthorizedUser()));
-            put("now", baseRepository.getCurrentTimestamp());
+            put("now", now);
+            put("feed", postContainer.posts);
+            put("from", postContainer.from);
         }};
+
     }
 
     @RequestMapping("/posts")
     @ResponseBody
-    public Map posts(@RequestParam final int user)
+    public Map posts(
+            @RequestParam final int user,
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+            @RequestParam(required = false) DateTime upto)
             throws EntityNotFoundException {
+
+        final Timestamp now = baseRepository.getCurrentTimestamp();
+        final UserRepository.PostContainer postContainer =
+                userRepository.postsOf(userRepository.findById(user),
+                        upto == null ? now : new Timestamp(upto.getMillis()));
+
         return new HashMap() {{
-            put("posts", userRepository.postsOf(userRepository.findById(user)));
-            put("now", baseRepository.getCurrentTimestamp());
+            put("now", now);
+            put("posts", postContainer.posts);
+            put("from", postContainer.from);
         }};
+
     }
 
 

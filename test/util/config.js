@@ -27,8 +27,13 @@ module.exports = {
     testPost: { 
         id: 8,
         user: { id: 5 },
-        content: 'pirates do tweet',
-        created_on: '2012-08-04T17:26:44.472+0000' 
-    } 
+        content: "pirates do tweet",
+        created_on: "2012-08-04T17:26:44.472+0000" 
+    },
+
+    testFeed: {
+        post: 8,
+        added_on: "2012-08-04T17:28:20.730+0000"
+    }
 
 };
