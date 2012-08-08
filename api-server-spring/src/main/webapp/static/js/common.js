@@ -36,6 +36,13 @@ jks.common = jks.common || (function() {
 
     function warn() {
         console.warn(arguments);
+        alert("Aww. Something went wrong! \n" +
+            "Jack Sparrow will not be able to fly properly");
+        try {
+            throw new Error();
+        } catch (e) {
+            console.warn(e.stack);
+        }
     }
     
     var nop = new Function("");

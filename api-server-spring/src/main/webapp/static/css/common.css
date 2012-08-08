@@ -1,7 +1,17 @@
+/*
+ * Overall Structure
+ *
+ */
+
+html {
+    overflow-y: scroll; /* always display scrollbar to avoid relayouts */
+}
+
 body {
     font-size: 120%;
     margin: 0;
     padding: 0;
+    border: 0;
 }
 
 #dashboard {
@@ -43,9 +53,35 @@ body {
 }
 
 
+/*
+ * Dashboard
+ *
+ */
+
+#dashboard .branding {
+    float: left;
+}
+
+#dashboard .controls {
+    float: right;
+}
+
+
+/*
+ * Misc
+ *
+ */
+
+/* XXX delete me */
 .hidden {
     display: none;
 }
+
+
+/*
+ * Forms
+ *
+ */
 
 form .info {
     font-style: italic;
@@ -58,6 +94,12 @@ input.unvalidated {
 input.validated {
     background-color: #adffbb;
 }
+
+
+/*
+ * Posts
+ *
+ */
 
 .post .content {
 }

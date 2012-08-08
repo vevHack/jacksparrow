@@ -50,7 +50,10 @@ jks.feed = jks.feed || (function() {
             .hide().children("a").children("img").remove();
     }
 
+    var selfDiv;
+
     function load(container) {
+        var deferred = $.Deferred();
         $.when(
             $.fetch.template("feed"),
             $.getJSON("/api/user/feed"),
@@ -70,20 +73,30 @@ jks.feed = jks.feed || (function() {
                 render.find(".timestamp").updateTimestamp();
                 render.find(".author").mapIds().done(updatePostWithUserDetails);
                 render.find(".detail").hide();
-                container.html(render);
+                container.append(
+                    selfDiv = $('<div id="feed" />').append(render));
 
                 loadArrowImages()
                     .done(function() {
                         container.on("mouseenter", ".post", mouseenterPost);
                         container.on("mouseleave", ".post", mouseleavePost);
                     });
-            });
+
+                deferred.resolve();
+            })
 
         preload();
+
+        return deferred.promise();
+    }
+
+    function toggle() {
+        selfDiv.slideToggle("slow");
     }
 
     return {
-        load: load
+        load: load,
+        toggle: toggle
     };
 }());
 
