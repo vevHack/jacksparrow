@@ -1,6 +1,47 @@
 body {
     font-size: 120%;
+    margin: 0;
+    padding: 0;
 }
+
+#dashboard {
+    background-color: rgba(0, 0, 0, 0.7);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2em;
+    color: white;
+    /*border-bottom: 1px solid white;*/
+}
+
+#root-pane {
+    position: fixed;
+    top: 2em;
+    left: 0;
+    width: 14%;
+    background-color: red;
+}
+
+#content-pane {
+    padding-top: 2em;
+    float: right;
+    width: 86%;
+    background-color: green;
+}
+
+#content {
+    background-color: grey;
+    float: left;
+    width: 55%;
+}
+
+#detail {
+    background-color: purple;
+    float: right;
+    width: 45%;
+}
+
 
 .hidden {
     display: none;
