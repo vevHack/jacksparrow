@@ -3,10 +3,10 @@ jks.register = jks.register || (function() {
     "use strict";
 
     var validated = {};
-    var trigger = {};
+    var validator = {};
     var doRegister;
 
-    function attachValidator(input, name, ensureUnique) {
+    function validatorFactory(input, name, ensureUnique) {
         var spinner, value, pendingXHR, deferred;
         var info = $('<span class="info" />').insertAfter(input);
 
@@ -111,26 +111,36 @@ jks.register = jks.register || (function() {
             if (isSpecialKey(event.which)) {
                 return;
             }
-            
+
+            abort();
+        }
+
+        input.on("focusout", onFocusOut); 
+        input.on("keydown", onKeydown); 
+
+        function abort() {
             if (pendingXHR) {
                 spinner.remove();
                 pendingXHR.abort();
                 pendingXHR = undefined;
             }
+
             input.removeClass("validated unvalidated");
             info.html("");
             delete validated[name];
             value = undefined;
         }
 
-        input.on("focusout", onFocusOut); 
-        input.on("keydown", onKeydown); 
-
-        return function() {
+        function trigger() {
             deferred = $.Deferred();
             onFocusOut();
             return deferred.promise();
         }
+
+        return {
+            abort: abort,
+            trigger: trigger
+        };
     }
 
     function prepopulateUsernameFactory(input) {
@@ -160,7 +170,7 @@ jks.register = jks.register || (function() {
                 if (value) {
                     unvalidatedCount -= 1;
                 } else {
-                    trigger[key]().done(doRegisterChecklist);
+                    validator[key].trigger().done(doRegisterChecklist);
                 }
             });
 
@@ -193,6 +203,10 @@ jks.register = jks.register || (function() {
         };
     }
 
+    var abort = function () {
+        $.each(validator, function(i, x) { x.abort() });
+    };
+
     return { 
         bindEvents: function(div) {
             var form = div.children("form");
@@ -202,7 +216,7 @@ jks.register = jks.register || (function() {
                 {name:"username"}, 
                 {name:"password", onlyValidate: true}
             ].forEach(function(field) {
-                trigger[field.name] = attachValidator(
+                validator[field.name] = validatorFactory(
                     form.find(["input[name=", field.name, "]"].join('"')),
                     field.name, !field.onlyValidate);
             });
@@ -213,7 +227,10 @@ jks.register = jks.register || (function() {
 
             form.on("submit", registerHandlerFactory(form,
                 form.find('input[type="submit"]')));
-        }
+        },
+
+        abort: abort
+
     };
 
 }());

@@ -60,7 +60,8 @@ var jks = jks || {};
         };
     }());
 
-    var onShowLogin = function() {
+    var onShowLogin = function(event) {
+        jks.register.abort();
         toggleLoginRegister();
         event.preventDefault();
     }
