@@ -188,6 +188,9 @@ public class UserRepository {
 
     public void addFollower(User follower, User following)
         throws PreconditionViolatedException {
+        if (follower.getId() == following.getId()) {
+            throw new PreconditionViolatedException("User cannot follow own-self");
+        }
         if (doesFollow(follower, following)) {
             throw new PreconditionViolatedException("Already following user");
         }

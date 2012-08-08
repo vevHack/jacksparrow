@@ -69,6 +69,14 @@ describe("Feature Follow", function(){
 
     describe("#Follow", function() {
 
+        it("should not follow own-self", function(done) { 
+            request("/api/user/follow", config.testUser)
+            .done(common.shouldNotSucceed)
+            .fail(common.shouldBeErrorFactory(412, 
+                "User cannot follow own-self"))
+            .always(function(){done()});
+        });
+
         it("should fail if already following user", function(done) { 
             request("/api/user/follow", config.testUser2)
                 .always(function() {
