@@ -6,6 +6,7 @@ jks.rootPaneSelf = jks.rootPaneSelf || (function() {
     }
 
     function load(container, triggerHandler) {
+        var dfd = $.Deferred();
         $.when(
             $.fetch.template("root-pane-self")
         )
@@ -15,9 +16,11 @@ jks.rootPaneSelf = jks.rootPaneSelf || (function() {
                 container
                     .html(Mustache.render(template))
                     .on('click', '.trigger', triggerHandler);
+                dfd.resolve();
             });
 
         preload();
+        return dfd.promise();
     }
 
     return {

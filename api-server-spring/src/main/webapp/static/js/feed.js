@@ -74,7 +74,7 @@ jks.feed = jks.feed || (function() {
                 render.find(".author").mapIds().done(updatePostWithUserDetails);
                 render.find(".detail").hide();
                 container.append(
-                    selfDiv = $('<div id="feed" />').append(render));
+                    selfDiv = $('<div id="feed" />').append(render).hide());
 
                 loadArrowImages()
                     .done(function() {
@@ -82,7 +82,7 @@ jks.feed = jks.feed || (function() {
                         container.on("mouseleave", ".post", mouseleavePost);
                     });
 
-                deferred.resolve();
+                deferred.resolve(selfDiv);
             })
 
         preload();
@@ -90,13 +90,8 @@ jks.feed = jks.feed || (function() {
         return deferred.promise();
     }
 
-    function toggle() {
-        selfDiv.slideToggle("slow");
-    }
-
     return {
         load: load,
-        toggle: toggle
     };
 }());
 

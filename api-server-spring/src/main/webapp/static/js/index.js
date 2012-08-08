@@ -6,42 +6,63 @@ jks.index = jks.index || (function() {
     }
 
     function triggerHandlerFactory(content, tabs) {
-        var currentTab, isLoading;
+        var currentTab;
+        var previousTrigger = $("<a />");
+        var action = handle;
+        var animDuration = "slow";
 
-        function currentHideAndSet(tab) {
-            if (currentTab) {
-                currentTab.toggle();
-            }
-            currentTab = tab;
-        }
+        function handle(event) {
+            var spinner;
+            var trigger = event.target;
+            var newTab = tabs[trigger.id];
 
-        return function(event) {
-            event.preventDefault();
-
-            if (isLoading) {
-                return;
-            }
-
-            var tab = tabs[event.target.id];
-            if (typeof tab === 'undefined') {
+            if (typeof newTab === 'undefined') {
                 jks.common.warn();
             }
 
-            if (typeof tab === 'string') {
-                isLoading = true;
-                $.fetch.js(tab)
+            $(trigger).toggleClass("current");
+            action = jks.common.nop;
+
+            var currentTabHidden = $.Deferred();
+            var newTabLoaded = $.Deferred();
+
+            if (currentTab) {
+                currentTab.div.slideToggle(animDuration, 
+                    currentTabHidden.resolve);
+            } else {
+                currentTabHidden.resolve();
+            }
+             
+            if (typeof newTab === 'string') {
+                spinner = $('<div id="loader-tab-parent"/>').append(
+                    $('<div id="loader-tab"/>')).prependTo(content);
+                $.fetch.js(newTab)
                     .fail(jks.common.warn)
                     .done(function() {
-                        tab = tabs[event.target.id] = jks[tab];
-                        tab.load(content).done(function() {
-                            isLoading = false;
-                            currentHideAndSet(tab);
+                        newTab = tabs[trigger.id] = jks[newTab];
+                        newTab.load(content).done(function(div) {
+                            spinner.remove();
+                            newTab.div = div;
+                            newTabLoaded.resolve();
                         });
                     });
             } else {
-                tab.toggle();
-                currentHideAndSet(tab);
+                newTabLoaded.resolve();
             }
+
+            $.when(currentTabHidden, newTabLoaded).done(function() {
+                newTab.div.slideToggle(animDuration, function() {
+                    previousTrigger.toggleClass("current");
+                    previousTrigger = $(trigger);
+                    currentTab = newTab;
+                    action = handle;
+                });
+            });
+        }
+
+        return function(event) {
+            action(event);
+            event.preventDefault();
         }
     }
 
@@ -66,9 +87,9 @@ jks.index = jks.index || (function() {
                     triggerHandlerFactory($("#content"), {
                         "feed-trigger": "feed",
                         "create-trigger": "create"
-                    }));
-
-                //$("#feed-trigger").trigger("click");
+                    })).done(function() {;
+                        $("#feed-trigger").trigger("click");
+                    });
             });
 
         preload();

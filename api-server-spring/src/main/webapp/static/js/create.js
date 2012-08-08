@@ -18,22 +18,17 @@ jks.create = jks.create || (function() {
                 var render = $(Mustache.render(template));
 
                 container.append(
-                    selfDiv = $('<div id="create" />').append(render));
+                    selfDiv = $('<div id="create" />').append(render).hide());
 
-                deferred.resolve();
+                deferred.resolve(selfDiv);
             });
 
         preload();
         return deferred.promise();
     }
 
-    function toggle() {
-        selfDiv.slideToggle("slow");
-    }
-
     return {
         load: load,
-        toggle: toggle
     };
 }());
 
