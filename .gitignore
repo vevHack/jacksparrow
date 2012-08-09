@@ -5,5 +5,5 @@ api-server-spring/.idea/misc.xml
 *.swp
 Session
 tags
-*.*~
-api-server-spring/var/*
+*~
+nginx/var/

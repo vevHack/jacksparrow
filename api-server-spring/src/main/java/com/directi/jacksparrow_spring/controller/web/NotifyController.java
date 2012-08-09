@@ -17,7 +17,7 @@ public class NotifyController {
         for (String user:users) {
             urlParameters += "users="+user+"&";
         }
-        return urlParameters.trim().substring(0,urlParameters.length()-2);
+        return urlParameters.trim().substring(0,urlParameters.length()-1);
     }
 
 
