@@ -87,7 +87,7 @@ jks.index = jks.index || (function() {
                         "feed-trigger": "feed",
                         "create-trigger": "create"
                     })).done(function() {;
-                        $("#feed-trigger").trigger("click");
+                        $("#create-trigger").trigger("click");
                     });
             });
 

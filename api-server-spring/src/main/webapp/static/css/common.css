@@ -94,7 +94,28 @@ body {
     right: 0;
 }
 
+
 /*
+ *
+ * Create post
+ *
+ */
+
+
+#create .info {
+    font-style: italic;
+}
+
+#create .info.validated {
+    color: #adffbb;
+}
+
+#create .info.unvalidated {
+    color: #FAAAAA;
+}
+
+/*
+ *
  * Misc
  *
  */

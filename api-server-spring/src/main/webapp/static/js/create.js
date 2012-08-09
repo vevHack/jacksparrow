@@ -5,6 +5,23 @@ jks.create = jks.create || (function() {
     function preload() {
     }
 
+    function attachKeyboardListener(field, output) {
+        var limit = 140;
+        var prevC = limit + 1;
+        output.addClass("unvalidated");
+        $(field).on("keyup", function() {
+            var c = field.val().trim().length;
+            output.text((c > limit) ?
+                [c - limit, "extra characters"].join(" ") :
+                [limit - c, "characters remaining"].join(" "));
+            if ((c <= limit && prevC > limit) 
+                || (c > limit && prevC <= limit)) {
+                output.toggleClass("validated").toggleClass("unvalidated");
+            }
+            prevC = c;
+        });
+    }
+
     var selfDiv;
 
     function load(container) {
@@ -19,6 +36,9 @@ jks.create = jks.create || (function() {
 
                 container.append(
                     selfDiv = $('<div id="create" />').append(render).hide());
+
+                attachKeyboardListener(selfDiv.find('textarea'), 
+                    selfDiv.find('.info'));
 
                 deferred.resolve(selfDiv);
             });
