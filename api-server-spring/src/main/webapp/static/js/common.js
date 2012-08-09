@@ -36,6 +36,9 @@ jks.common = jks.common || (function() {
 
     function warn() {
         console.warn(arguments);
+        if (arguments[2] instanceof SyntaxError) {
+            console.warn(arguments[2].message);
+        }
         alert("Aww. Something went wrong! \n" +
             "Jack Sparrow will not be able to fly properly");
         try {

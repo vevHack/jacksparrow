@@ -150,6 +150,7 @@ input.validated {
  */
 
 .post .content {
+    word-wrap: break-word;
 }
 
 .post .info {

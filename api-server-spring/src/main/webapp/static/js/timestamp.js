@@ -25,7 +25,7 @@
 
         return (
             fmt(years, 1, "y") ||
-            fmt(months, 1, "m") ||
+            fmt(months, 1, "mo") ||
             fmt(days, 2, "d") ||
             fmt(hours, 1, "h") ||
             fmt(minutes, 1.5, "m") ||

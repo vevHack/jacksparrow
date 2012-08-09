@@ -111,7 +111,7 @@ public class UserRepository {
                 "WHERE id in (" +
                     "SELECT post as id FROM feed " +
                     "WHERE \"user\"=? AND added_on < ? AND added_on >= ?" +
-                ")",
+                ") ORDER BY created_on DESC",
                 new PostMapper(), user.getId(), upto, postContainer.from);
 
         return postContainer;
@@ -137,7 +137,8 @@ public class UserRepository {
 
         postContainer.posts = (List<Post>)jdbcTemplate.query(
                 "SELECT id, \"user\", content, created_on FROM post " +
-                "WHERE \"user\"=? AND created_on < ? AND created_on >= ?",
+                "WHERE \"user\"=? AND created_on < ? AND created_on >= ? " +
+                "ORDER BY created_on DESC",
                 new PostMapper(), user.getId(), upto, postContainer.from);
 
         return postContainer;
