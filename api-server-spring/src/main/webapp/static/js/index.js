@@ -52,7 +52,7 @@ jks.index = jks.index || (function() {
             }
 
             $.when(currentTabHidden, newTabLoaded).done(function() {
-                newTab.div.slideToggle(animDuration, function() {
+                newTab.div.fadeToggle(animDuration, function() {
                     currentTab = newTab;
                     action = handle;
                 });
@@ -87,7 +87,7 @@ jks.index = jks.index || (function() {
                         "feed-trigger": "feed",
                         "create-trigger": "create"
                     })).done(function() {;
-                        $("#create-trigger").trigger("click");
+                        $("#feed-trigger").trigger("click");
                     });
             });
 

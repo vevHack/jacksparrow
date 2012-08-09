@@ -42,9 +42,8 @@ jks.create = jks.create || (function() {
             $.post("/api/post/create", {content: content.val().trim()})
                 .always(function() {spinner.remove()})
                 .done(function() {
-                    console.log(arguments);
                     form[0].reset();
-                    //$("feed-trigger").trigger();
+                    $("#feed-trigger").trigger("click");
                 })
                 .fail(function(jqXHR) {
                     var error = JSON.parse(jqXHR.responseText).error;

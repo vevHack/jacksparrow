@@ -1,12 +1,9 @@
 /* Inspired from
  * http://timeago.yarp.com/
  */
-(function($) {
+var jks = jks || {};
+jks.timestamper = jks.timestamper || (function() {
     "use strict";
-
-    if ($.updateTS) {
-        return;
-    }
 
     var slowRefresh = { threshold: 48*60*60*1000, interval: 60*1000 };
     var fastRefresh = { threshold: 90*1000, interval: 5*1000 };
@@ -35,27 +32,28 @@
 
     var serverReference, skewBetweenClientAndServer;
 
-    function update() {
+    function setReference(serverNow) {
+        serverReference = serverNow;
+        skewBetweenClientAndServer = (Date.now() - serverNow);
+    }
+
+    function update(idx, element) {
+        element = $(element);
         var ms = Math.abs(
             (Date.now() - serverReference) - skewBetweenClientAndServer);
-        ms += this.data("staleness");
-        this.text(inWords(ms));
+        ms += element.data("staleness");
+        element.text(inWords(ms));
 
         if (ms < slowRefresh.threshold) {
-            setTimeout(update.bind(this), (ms < fastRefresh.threshold) ? 
-                fastRefresh.interval : slowRefresh.interval);
+            setTimeout(update.bind(this, idx, element), 
+                (ms < fastRefresh.threshold) ? 
+                    fastRefresh.interval : slowRefresh.interval);
         }
         return this;
     };
 
-    $.updateTimestamp = {
-        setReference: function(serverNow) {
-            serverReference = serverNow;
-            skewBetweenClientAndServer = (Date.now() - serverNow);
-            return this;
-        }
-    }
-
-    $.fn.updateTimestamp = update;
-
-}(jQuery));
+    return {
+        setReference: setReference,
+        update: update
+    };
+}());

@@ -57,7 +57,7 @@ jks.feed = jks.feed || (function() {
         $.when(
             $.fetch.template("feed"),
             $.getJSON("/api/user/feed"),
-            $.fetch.js("timestamp"),
+            $.fetch.js("timestamper"),
             $.fetch.js("idMapper")
         )
             .fail(jks.common.warn)
@@ -66,12 +66,15 @@ jks.feed = jks.feed || (function() {
                 var data = arguments[1][0];
                 var now = Date.parse(data.now);
 
-                $.updateTimestamp.setReference(now);
+                jks.timestamper.setReference(now);
                 appendRelativeTime(now, data);
 
                 var render = $(Mustache.render(template, data));
-                render.find(".timestamp").updateTimestamp();
-                render.find(".author").mapIds().done(updatePostWithUserDetails);
+                render.find(".timestamp").each(jks.timestamper.update);
+                render.find(".author").each(function() {
+                    jks.idMapper.update.apply(this, arguments)
+                        .done(updatePostWithUserDetails);
+                });
                 render.find(".detail").hide();
                 container.append(
                     selfDiv = $('<div id="feed" />').append(render).hide());
