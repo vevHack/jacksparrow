@@ -6,3 +6,4 @@ api-server-spring/.idea/misc.xml
 Session
 tags
 *.*~
+api-server-spring/var/*
