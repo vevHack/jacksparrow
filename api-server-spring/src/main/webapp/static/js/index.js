@@ -67,29 +67,34 @@ jks.index = jks.index || (function() {
 
 
     function load() {
-        $.when(
-            $.fetch.template("index"),
-            $.getJSON("/api/me")
-                .fail(jks.common.handleUnauthenticated),
-            $.fetch.js("dashboard"),
-            $.fetch.js("root-pane-self")
-        )
-            .fail(jks.common.warn)
-            .done(function() {
-                var template = arguments[0][0];
-                var selfData = arguments[1][0];
+        var me;
+        $.getJSON("/api/me")
+            .fail(jks.common.handleUnauthenticated)
+            .pipe(function(data) {
+                me = data;
+                return $.when(
+                    $.fetch.template("index"),
+                    $.fetch.js("dashboard"),
+                    $.fetch.js("root-pane-self")
+                );
+            }, function() { return $.Deferred() })
+                .fail(jks.common.warn)
+                .done(function() {
+                    var template = arguments[0][0];
 
-                $("body").html(Mustache.render(template));
+                    $("body").html(Mustache.render(template));
 
-                jks.dashboard.load($("#dashboard"), selfData);
-                jks.rootPaneSelf.load($("#root-pane"), 
-                    triggerHandlerFactory($("#content"), {
-                        "feed-trigger": "feed",
-                        "create-trigger": "create"
-                    })).done(function() {;
-                        $("#feed-trigger").trigger("click");
-                    });
-            });
+                    /* XXX merge with jks.datacache ?? */
+                    jks.dashboard.load($("#dashboard"), 
+                        { name: me.name || me.username });
+                    jks.rootPaneSelf.load($("#root-pane"), 
+                        triggerHandlerFactory($("#content"), {
+                            "feed-trigger": "feed",
+                            "create-trigger": "create"
+                        })).done(function() {
+                            $("#feed-trigger").trigger("click");
+                        });
+                });
 
         preload();
     }

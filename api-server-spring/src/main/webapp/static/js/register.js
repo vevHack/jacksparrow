@@ -183,7 +183,6 @@ jks.register = jks.register || (function() {
             var spinner = jks.common.spinnerFactory().insertAfter(button);
             form.find("input").attr("disabled", true);
             $.post("/api/register", validated)
-                .fail(jks.common.throwTodo)
                 .pipe(createSession)
                     .fail(jks.common.throwTodo)
                     .done(jks.common.redirectToHome);

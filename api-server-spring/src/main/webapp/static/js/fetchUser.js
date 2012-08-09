@@ -10,20 +10,24 @@ jks.fetchUser = jks.fetchUser || (function() {
     }
 
     return function(ids) {
+
         if (!$.isArray(ids)) {
             ids = [ids];
         }
         ids = uniqueNum(ids);
+        ids = ids.filter(function(id) { return !jks.datacache.hasUser(id) });
 
-        return $.when.apply(this, ids.map(function(id) {
-            if (!jks.datacache.hasUser(id)) {
-                var params = $.param({ user: id,  field: fields }, true);
-                return $.getJSON("/api/user/details", params)
-                    .done(function(data) { 
-                        jks.datacache.setUser(id, data.user);
+        if (ids.length === 0) {
+            return $.Deferred().resolve();
+        }
+
+        return $.getJSON("/api/user/details", 
+                    $.param({ user: ids,  field: fields }, true))
+                .fail(jks.common.warn)
+                .done(function(data) { 
+                    data.users.forEach(function(user) {
+                        jks.datacache.setUser(user.id, user);
                     });
-            }
-        }))
-            .fail(jks.common.warn);
+                });
     };
 }());
