@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
@@ -23,7 +25,15 @@ import java.util.Map;
 
 @Repository
 public class UserRepository {
-    private @Autowired JdbcTemplate jdbcTemplate;
+
+    private JdbcTemplate jdbcTemplate;
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+    @Autowired
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+        namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
+    }
 
     private static final RowMapper<User> userIdMapper
             = new IdRowMapper<User>(User.class);
@@ -220,7 +230,7 @@ public class UserRepository {
     }
 
 
-    public User details(int id, List<String> fields)
+    public List<User> details(final List<Integer> users, List<String> fields)
             throws PreconditionViolatedException, EntityNotFoundException {
 
         Map<String, String> bindings = new HashMap<String, String>() {{
@@ -237,8 +247,9 @@ public class UserRepository {
         GenericRowMapper<User> mapper =
                 new GenericRowMapper<User>(User.class, bindings);
         try {
-            return jdbcTemplate.queryForObject(
-                    "SELECT * FROM \"user\" WHERE id=?", mapper, id);
+            return namedParameterJdbcTemplate.query(
+                    "SELECT * FROM \"user\" WHERE id in (:ids)",
+                    new MapSqlParameterSource("ids", users), mapper);
         } catch (DataAccessException ex) {
             throw new EntityNotFoundException("User");
         }

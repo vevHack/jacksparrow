@@ -5,7 +5,7 @@ var common = require("./util/common");
 var ajaxWithCookieFactory = require("./util/ajaxWithCookieFactory")
 
 
-describe("Authorization", function() {
+describe("Me", function() {
     
     before(common.isServerUp.bind(common));
 

@@ -29,8 +29,11 @@ public class MeController {
         try {
             return new HashMap() {{
                 put("user", userRepository.details(
-                        authorizer.getAuthorizedUser().getId(),
-                        Arrays.asList(new String[]{"username"})));
+                        Arrays.asList(new Integer[]{
+                                authorizer.getAuthorizedUser().getId()
+                        }),
+                        Arrays.asList(new String[]{"username", "email", "name"}))
+                        .get(0));
             }};
         } catch (PreconditionViolatedException ex) {
             throw new RuntimeException(ex);
