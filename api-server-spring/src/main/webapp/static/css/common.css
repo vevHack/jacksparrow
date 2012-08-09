@@ -71,7 +71,10 @@ body {
  *
  */
 .trigger.current {
-    display: none;
+    color: black;
+    /* XXX doesn't work in IE? */
+    pointer-events: none;
+    cursor: default;
 }
 
 /*XXX*/

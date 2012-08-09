@@ -20,7 +20,8 @@ jks.index = jks.index || (function() {
                 jks.common.warn();
             }
 
-            $(trigger).toggleClass("current");
+            previousTrigger.toggleClass("current");
+            previousTrigger = $(trigger).toggleClass("current");
             action = jks.common.nop;
 
             var currentTabHidden = $.Deferred();
@@ -52,8 +53,6 @@ jks.index = jks.index || (function() {
 
             $.when(currentTabHidden, newTabLoaded).done(function() {
                 newTab.div.slideToggle(animDuration, function() {
-                    previousTrigger.toggleClass("current");
-                    previousTrigger = $(trigger);
                     currentTab = newTab;
                     action = handle;
                 });
