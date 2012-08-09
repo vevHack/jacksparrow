@@ -3,6 +3,10 @@ jks.datacache = jks.datacache || (function() {
     "use strict";
     
     var cache = {user: {}, post: {}};
+    /* because it plays havoc with cache invalidation 
+     * it might be better to use etag based http caching 
+     */ 
+    var DISABLE_LOCAL = true; 
 
     function supports_html5_storage() {
         try {
@@ -54,18 +58,20 @@ jks.datacache = jks.datacache || (function() {
         };
     }
 
-    return ( supports_html5_storage() ? {
+    return ( (!DISABLE_LOCAL && supports_html5_storage()) ? {
         getUser: wrap(get5, "user"),
         setUser: set5.bind(this, "user"),
         getPost: wrap(get5, "post"),
         setPost: set5.bind(this, "post")
-        , print: print
     } : {
         getUser: wrap(get, "user"),
         setUser: set.bind(this, "user"),
         getPost: wrap(get, "post"),
         setPost: set.bind(this, "post")
-        , print: print
+        , print: print /*XXX*/
+        , hasUser: function(id) { /* XXX */
+            return !!get("user", id);
+        }
     });
 }());
 

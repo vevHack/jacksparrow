@@ -39,11 +39,9 @@ jks.timestamper = jks.timestamper || (function() {
 
     function update(idx, element) {
         element = $(element);
-
-        var post = jks.datacache.getPost(element.data("id"));
-
         var ms = Math.abs(
             (Date.now() - serverReference) - skewBetweenClientAndServer);
+        var post = jks.datacache.getPost(element.data("id"));
         ms += serverReference - Date.parse(post.created_on);
 
         element.find(".timestamp").text(inWords(ms));

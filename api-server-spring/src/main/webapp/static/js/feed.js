@@ -6,8 +6,9 @@ jks.feed = jks.feed || (function() {
         loadShowDetailTrigger();
     }
 
-    var showDetailTrigger;
 
+    var showDetailTrigger;
+    
     function loadShowDetailTrigger() {
         return $.when(
             $.fetch.img("arrow-light.png"),
@@ -26,19 +27,17 @@ jks.feed = jks.feed || (function() {
                             dark.toggle();
                         })
                         .on("click", function() {
-                            showPostDetails($(this).parents(".post").data("id"));
+                            showPostDetails(jks.datacache.getPost(
+                                $(this).parent().data("id")));
                             event.preventDefault();
                         });
             });
     }
 
-    function updatePostWithUserDetails(postElement, user) {
-        $('<a href="#"/>').appendTo(postElement).text(user.username)
-            .on("click", function() {
-                showUserDetails(user);
-                event.preventDefault();
-            });
-    }
+
+    var selfDiv;
+    var lastUpdated, fetchedTill;
+
 
     function mouseenterPost(event) {
         showDetailTrigger.appendTo(
@@ -50,23 +49,18 @@ jks.feed = jks.feed || (function() {
         showDetailTrigger.detach();
     }
 
-    function showPostDetails(postId) {
-        $("#detail").html(postId);
+
+    function showPostDetails(post) {
+        $("#detail").html(JSON.stringify(post));
     }
 
     function showUserDetails(user) {
-        $("#detail").html(user.toString());
+        $("#detail").html(JSON.stringify(user));
     }
 
-    var selfDiv;
-
-    function updateTimestamps() {
-        selfDiv.find(".post").each(jks.timestamper.update);
-    }
-
-    var lastUpdated, fetchedTill;
 
     function renderFeeds(template, data) {
+        lastUpdated = data.now;
         fetchedTill = data.from;
 
         if (data.feed.length === 0) {
@@ -75,18 +69,33 @@ jks.feed = jks.feed || (function() {
         }
 
         var render = $(Mustache.render(template, data));
-        render.find(".author").each(function() {
-            jks.idMapper.update.apply(this, arguments)
-            .done(updatePostWithUserDetails);
-        });
 
-        lastUpdated = Date.parse(data.now);
-        jks.timestamper.setReference(lastUpdated);
+        jks.fetchUser(data.feed.map(function(post) { return post.user.id }))
+            .done(function() {
+                render.find(".author").each(updatePostWithUserDetails);
+            });
+
         data.feed.forEach(function(post) {
             jks.datacache.setPost(post.id, post);
         });
 
         return render;
+    }
+
+    function updatePostWithUserDetails(idx, authorSpan) {
+        authorSpan = $(authorSpan);
+        var user = jks.datacache.getUser(authorSpan.data("id"));
+        $('<a href="#"/>').appendTo(authorSpan)
+            .text(user.name || user.username)
+            .on("click", function() {
+                showUserDetails(user);
+                event.preventDefault();
+            });
+    }
+
+    function updateTimestamps() {
+        jks.timestamper.setReference(Date.parse(lastUpdated));
+        selfDiv.find(".post").each(jks.timestamper.update);
     }
 
 
@@ -96,7 +105,7 @@ jks.feed = jks.feed || (function() {
               $.fetch.template("feed")
             , $.getJSON("/api/user/feed")
             , $.fetch.js("timestamper")
-            , $.fetch.js("idMapper")
+            , $.fetch.js("fetchUser")
             , $.fetch.js("datacache")
         )
             .fail(jks.common.warn)
@@ -129,12 +138,12 @@ jks.feed = jks.feed || (function() {
         return deferred.promise();
     }
 
+
     function update(event) {
         event.preventDefault();
     }
 
     function more(event) {
-        event.preventDefault();
         $.when(
               $.fetch.template("feed")
             , $.getJSON("/api/user/feed", {upto: fetchedTill})
@@ -144,7 +153,9 @@ jks.feed = jks.feed || (function() {
                 selfDiv.append(renderFeeds(arguments[0][0], arguments[1][0]));
                 updateTimestamps();
             });
+        event.preventDefault();
     }
+
 
     return {
         load: load,
