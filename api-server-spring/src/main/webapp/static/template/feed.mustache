@@ -1,4 +1,7 @@
-This is what you eat.
+<div>
+  <a href="#" id="update-trigger">update</a> | 
+  <a href="#" id="more-trigger">more</a>
+</div>
 
 {{#feed}}
 <div class="post" data-id="{{id}}">
@@ -6,9 +9,6 @@ This is what you eat.
   <div class="info">
     <span class="author" data-id="{{#user}}{{id}}{{/user}}" /> 
     (<span class="timestamp" data-staleness="{{staleness}}" />)
-  </div>
-  <div class="detail">
-    <a href="{{id}}" />
   </div>
 </div>
 {{/feed}}

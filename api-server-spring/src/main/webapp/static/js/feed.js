@@ -2,22 +2,34 @@ var jks = jks || {};
 jks.feed = jks.feed || (function() {
     "use strict";
 
-    var arrowLight, arrowDark; /* XXX don't need dark?? */
-    function loadArrowImages() {
-        return $.when(
-            $.fetch.img("arrow-dark.png"),
-            $.fetch.img("arrow-light.png")
-            ).done(function(dark, light) {
-                if(typeof arrowLight !== 'undefined') {
-                    return;
-                }
-                arrowLight = light;
-                arrowDark = dark;
-            });
+    function preload() {
+        loadShowDetailTrigger();
     }
 
-    function preload() {
-        loadArrowImages();
+    var showDetailTrigger;
+
+    function loadShowDetailTrigger() {
+        return $.when(
+            $.fetch.img("arrow-light.png"),
+            $.fetch.img("arrow-dark.png")
+            ).done(function(light, dark) {
+                if(typeof showDetailTrigger !== 'undefined') {
+                    return;
+                }
+
+                showDetailTrigger = 
+                    $('<div id="show-detail-trigger"/>')
+                        .append(light)
+                        .append(dark.hide())
+                        .hover(function() {
+                            light.toggle();
+                            dark.toggle();
+                        })
+                        .on("click", function() {
+                            showPostDetails($(this).parents(".post").data("id"));
+                            event.preventDefault();
+                        });
+            });
     }
 
     function appendRelativeTime(now, data) {
@@ -26,28 +38,30 @@ jks.feed = jks.feed || (function() {
         });
     }
 
-    function updatePostWithUserDetails(user) {
-        var details;
-
-        $("<a />").appendTo(this)
-            .attr("href", ["", user.username].join("/"))
-            .text(user.username);
-
-        details = this.parents().find(".detail a");
-        details.attr("href", 
-            ["", user.username, details.attr("href")].join("/"));
+    function updatePostWithUserDetails(postElement, user) {
+        $('<a href="#"/>').appendTo(postElement).text(user.username)
+            .on("click", function() {
+                showUserDetails(user);
+                event.preventDefault();
+            });
     }
 
     function mouseenterPost(event) {
-        var postDiv = $(event.currentTarget);
-        postDiv.toggleClass("current")
-            .children(".detail").show().children("a").append(arrowLight);
+        showDetailTrigger.appendTo(
+            $(event.currentTarget).toggleClass("current"));
     }
 
     function mouseleavePost(event) {
-        var postDiv = $(event.currentTarget);
-        postDiv.toggleClass("current").children(".detail")
-            .hide().children("a").children("img").remove();
+        $(event.currentTarget).toggleClass("current");
+        showDetailTrigger.detach();
+    }
+
+    function showPostDetails(postId) {
+        $("#detail").html(postId);
+    }
+
+    function showUserDetails(user) {
+        $("#detail").html(user.toString());
     }
 
     var selfDiv;
@@ -75,11 +89,11 @@ jks.feed = jks.feed || (function() {
                     jks.idMapper.update.apply(this, arguments)
                         .done(updatePostWithUserDetails);
                 });
-                render.find(".detail").hide();
+                render.find(".show-detail").hide();
                 container.append(
                     selfDiv = $('<div id="feed" />').append(render).hide());
 
-                loadArrowImages()
+                loadShowDetailTrigger()
                     .done(function() {
                         container.on("mouseenter", ".post", mouseenterPost);
                         container.on("mouseleave", ".post", mouseleavePost);

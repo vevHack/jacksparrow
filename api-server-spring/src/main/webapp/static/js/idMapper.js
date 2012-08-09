@@ -9,13 +9,19 @@ jks.idMapper = jks.idMapper || (function() {
         element = $(element);
         var deferred = $.Deferred();
         var id = element.data("id");
+
+        function resolve() {
+            deferred.resolveWith(this, [element, cached[id]]);
+        }
+
         if (id in cached) {
-            deferred.resolveWith(element, [cached[id]]);
+            resolve();
         } else {
             $.getJSON("/api/user/details", { user: id,  field: fields })
                 .fail(jks.common.warn)
                 .done(function(data) {
-                    deferred.resolveWith(element, [cached[id] = data.user]);
+                    cached[id] = data.user;
+                    resolve();
                 });
         }
         return deferred.promise();

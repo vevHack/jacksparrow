@@ -22,6 +22,7 @@ body {
     width: 100%;
     height: 2em;
     color: white;
+    z-index: 1;
     /*border-bottom: 1px solid white;*/
 }
 
@@ -149,6 +150,10 @@ input.validated {
  *
  */
 
+.post {
+    position: relative;
+}
+
 .post .content {
     word-wrap: break-word;
 }
@@ -163,4 +168,12 @@ input.validated {
 }
 
 .post.current img {
+}
+
+#show-detail-trigger {
+    position: absolute;
+    width: 100px;
+    bottom: 0;
+    right: 0;
+    background-color: blue;
 }
