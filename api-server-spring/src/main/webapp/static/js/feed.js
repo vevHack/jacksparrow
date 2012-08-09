@@ -32,12 +32,6 @@ jks.feed = jks.feed || (function() {
             });
     }
 
-    function appendRelativeTime(now, data) {
-        data.feed.forEach(function(post) {
-            post.staleness = now - Date.parse(post.created_on);
-        });
-    }
-
     function updatePostWithUserDetails(postElement, user) {
         $('<a href="#"/>').appendTo(postElement).text(user.username)
             .on("click", function() {
@@ -66,32 +60,56 @@ jks.feed = jks.feed || (function() {
 
     var selfDiv;
 
+    function updateTimestamps() {
+        selfDiv.find(".post").each(jks.timestamper.update);
+    }
+
+    var lastUpdated, fetchedTill;
+
+    function renderFeeds(template, data) {
+        fetchedTill = data.from;
+
+        if (data.feed.length === 0) {
+            $("#more-trigger").hide();
+            return $("<div />"); /*XXX*/
+        }
+
+        var render = $(Mustache.render(template, data));
+        render.find(".author").each(function() {
+            jks.idMapper.update.apply(this, arguments)
+            .done(updatePostWithUserDetails);
+        });
+
+        lastUpdated = Date.parse(data.now);
+        jks.timestamper.setReference(lastUpdated);
+        data.feed.forEach(function(post) {
+            jks.datacache.setPost(post.id, post);
+        });
+
+        return render;
+    }
+
+
     function load(container) {
         var deferred = $.Deferred();
         $.when(
-            $.fetch.template("feed"),
-            $.getJSON("/api/user/feed"),
-            $.fetch.js("timestamper"),
-            $.fetch.js("idMapper")
+              $.fetch.template("feed")
+            , $.getJSON("/api/user/feed")
+            , $.fetch.js("timestamper")
+            , $.fetch.js("idMapper")
+            , $.fetch.js("datacache")
         )
             .fail(jks.common.warn)
             .done(function() {
                 var template = arguments[0][0];
                 var data = arguments[1][0];
-                var now = Date.parse(data.now);
 
-                jks.timestamper.setReference(now);
-                appendRelativeTime(now, data);
-
-                var render = $(Mustache.render(template, data));
-                render.find(".timestamp").each(jks.timestamper.update);
-                render.find(".author").each(function() {
-                    jks.idMapper.update.apply(this, arguments)
-                        .done(updatePostWithUserDetails);
-                });
-                render.find(".show-detail").hide();
                 container.append(
-                    selfDiv = $('<div id="feed" />').append(render).hide());
+                    selfDiv = $('<div id="feed" />')
+                        .append(renderFeeds(template, data))
+                        .hide());
+
+                updateTimestamps();
 
                 loadShowDetailTrigger()
                     .done(function() {
@@ -99,12 +117,33 @@ jks.feed = jks.feed || (function() {
                         container.on("mouseleave", ".post", mouseleavePost);
                     });
 
+                /* XXX */
+                $("#update-trigger").click(update);
+                $("#more-trigger").click(more);
+
                 deferred.resolve(selfDiv);
             })
 
         preload();
 
         return deferred.promise();
+    }
+
+    function update(event) {
+        event.preventDefault();
+    }
+
+    function more(event) {
+        event.preventDefault();
+        $.when(
+              $.fetch.template("feed")
+            , $.getJSON("/api/user/feed", {upto: fetchedTill})
+        )
+            .fail(jks.common.warn)
+            .done(function() {
+                selfDiv.append(renderFeeds(arguments[0][0], arguments[1][0]));
+                updateTimestamps();
+            });
     }
 
     return {

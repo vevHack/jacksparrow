@@ -39,18 +39,21 @@ jks.timestamper = jks.timestamper || (function() {
 
     function update(idx, element) {
         element = $(element);
+
+        var post = jks.datacache.getPost(element.data("id"));
+
         var ms = Math.abs(
             (Date.now() - serverReference) - skewBetweenClientAndServer);
-        ms += element.data("staleness");
-        element.text(inWords(ms));
+        ms += serverReference - Date.parse(post.created_on);
+
+        element.find(".timestamp").text(inWords(ms));
 
         if (ms < slowRefresh.threshold) {
             setTimeout(update.bind(this, idx, element), 
                 (ms < fastRefresh.threshold) ? 
                     fastRefresh.interval : slowRefresh.interval);
         }
-        return this;
-    };
+    }
 
     return {
         setReference: setReference,

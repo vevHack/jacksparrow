@@ -42,16 +42,28 @@ jks.datacache = jks.datacache || (function() {
         console.log(localStorage);
     }
 
+    function wrap(func, firstArg) {
+        return function() {
+            var args = Array.prototype.slice.apply(arguments);
+            args.unshift(firstArg);
+            var o = func.apply(this, args);
+            if (!o) {
+                jks.common.warn();
+            }
+            return o;
+        };
+    }
+
     return ( supports_html5_storage() ? {
-        getUser: get5.bind(this, "user"),
+        getUser: wrap(get5, "user"),
         setUser: set5.bind(this, "user"),
-        getPost: get5.bind(this, "post"),
+        getPost: wrap(get5, "post"),
         setPost: set5.bind(this, "post")
         , print: print
     } : {
-        getUser: get.bind(this, "user"),
+        getUser: wrap(get, "user"),
         setUser: set.bind(this, "user"),
-        getPost: get.bind(this, "post"),
+        getPost: wrap(get, "post"),
         setPost: set.bind(this, "post")
         , print: print
     });
