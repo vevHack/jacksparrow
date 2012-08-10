@@ -31,29 +31,29 @@ describe("Posts", function(){
             .always(function(){done();});
     });
 
-    it("should not return posts previous to 'start'", function(done) {
+    it("should not return posts older than 'olderThan'", function(done) {
         $.getJSON(config.url("/api/user/posts"), {
             user: config.testUser.id,
-            start: config.testPost.created_on
+            olderThan: config.testPost.created_on
         })
             .done(function(data) {
                 data.should.have.property("posts");
                 data.posts.should.be.instanceof(Array);
                 data.posts.should.be.empty;
                 data.should.have.property("now");
-                data.should.not.have.property("start");
-                data.should.not.have.property("end");
+                data.should.not.have.property("newest");
+                data.should.not.have.property("oldest");
             })
             .fail(common.shouldNotFail)
             .always(function(){done();});
     });
 
-    it("should return posts just previous to 'start'", function(done) {
-        var start = new Date(Date.parse(config.testFeed.added_on) + 1)
+    it("should return posts older than perturbed 'olderThan'", function(done) {
+        var olderThan = new Date(Date.parse(config.testFeed.added_on) + 1)
                         .toISOString();
         $.getJSON(config.url("/api/user/posts"), {
             user: config.testUser.id,
-            data: { start: start }
+            data: { olderThan: olderThan }
         })
             .done(function(data) {
                 data.should.have.property("posts");
@@ -62,4 +62,5 @@ describe("Posts", function(){
             .fail(common.shouldNotFail)
             .always(function(){done();});
     });
+
 });

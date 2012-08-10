@@ -134,6 +134,13 @@ ALTER TABLE ONLY "user"
 
 
 --
+-- Name: feed_added_on_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX feed_added_on_idx ON feed USING btree (added_on);
+
+
+--
 -- Name: feed_user_index; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -152,6 +159,13 @@ CREATE INDEX follows_follower_idx ON follows USING btree (follower);
 --
 
 CREATE INDEX follows_following_idx ON follows USING btree (following);
+
+
+--
+-- Name: post_created_on_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX post_created_on_idx ON post USING btree (created_on);
 
 
 --

@@ -85,7 +85,7 @@ public class UserController {
 
     private static interface PostFetcher {
         abstract public PostRepository.PostContainer fetch(
-                User user, Timestamp now, Timestamp start, Timestamp end)
+                User user, Timestamp now, Timestamp olderThan, Timestamp newerThan)
                 throws EntityNotFoundException;
     }
 
@@ -94,24 +94,24 @@ public class UserController {
     }
 
     private Map genericPostListFetcher(
-            DateTime start, DateTime end,
+            DateTime olderThan, DateTime newerThan,
             final String label, User user, PostFetcher postFetcher)
             throws PreconditionViolatedException {
 
-        if (start != null && end != null) {
+        if (olderThan != null && newerThan != null) {
             throw new PreconditionViolatedException(
-                    "Cannot filter on both start and end timestamps");
+                    "Cannot filter on both olderThan and newerThan timestamps");
         }
 
         final Timestamp now = baseRepository.getCurrentTimestamp();
         try {
             final PostRepository.PostContainer postContainer =
-                    postFetcher.fetch(
-                            user, now, argOrNull(start), argOrNull(end));
+                    postFetcher.fetch(user, now,
+                            argOrNull(olderThan), argOrNull(newerThan));
             return new HashMap() {{
                 put("now", now);
-                put("start", postContainer.start);
-                put("end", postContainer.end);
+                put("newest", postContainer.newest);
+                put("oldest", postContainer.oldest);
                 put(label, postContainer.posts);
             }};
 
@@ -124,22 +124,25 @@ public class UserController {
 
     }
 
+    /* Older --> (NewerThan -->  Included Posts --> OlderThan) --> Newer */
+    /* open interval */
     @RequestMapping("/feed")
     @ResponseBody
     public Map feed(
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-            @RequestParam(required = false) DateTime start,
+            @RequestParam(required = false) DateTime olderThan,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-            @RequestParam(required = false) DateTime end)
+            @RequestParam(required = false) DateTime newerThan)
             throws UserAuthorizationException, PreconditionViolatedException {
 
-        return genericPostListFetcher(start, end, "feed",
+        return genericPostListFetcher(olderThan, newerThan, "feed",
                 authorizer.getAuthorizedUser(), new PostFetcher() {
             @Override
             public PostRepository.PostContainer fetch(
-                    User user, Timestamp now, Timestamp start, Timestamp end)
+                    User user, Timestamp now,
+                    Timestamp olderThan, Timestamp newerThan)
                     throws EntityNotFoundException {
-                return postRepository.feedOf(user, now, start, end);
+                return postRepository.feedOf(user, now, olderThan, newerThan);
             }
         });
 
@@ -150,18 +153,19 @@ public class UserController {
     public Map posts(
             @RequestParam final int user,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-            @RequestParam(required = false) DateTime start,
+            @RequestParam(required = false) DateTime olderThan,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-            @RequestParam(required = false) DateTime end)
+            @RequestParam(required = false) DateTime newerThan)
             throws EntityNotFoundException, PreconditionViolatedException {
 
-        return genericPostListFetcher(start, end, "posts",
+        return genericPostListFetcher(olderThan, newerThan, "posts",
                 userRepository.findById(user), new PostFetcher() {
             @Override
             public PostRepository.PostContainer fetch(
-                    User user, Timestamp now, Timestamp start, Timestamp end)
+                    User user, Timestamp now,
+                    Timestamp olderThan, Timestamp newerThan)
                     throws EntityNotFoundException {
-                return postRepository.postsOf(user, now, start, end);
+                return postRepository.postsOf(user, now, olderThan, newerThan);
             }
         });
 

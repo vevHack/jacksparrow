@@ -42,13 +42,13 @@ public class PostRepository {
 
     public static class PostContainer {
         public List<Post> posts;
-        public Timestamp start, end;
+        public Timestamp oldest, newest;
 
         public PostContainer(List<Post> posts,
                              MapSqlParameterSource parameterSource) {
             this.posts = posts;
-            start = (Timestamp)parameterSource.getValue("start");
-            end = (Timestamp)parameterSource.getValue("end");
+            newest = (Timestamp)parameterSource.getValue("olderThan");
+            oldest = (Timestamp)parameterSource.getValue("newerThan");
         }
     };
 
@@ -59,40 +59,40 @@ public class PostRepository {
         }};
     }
 
-    private MapSqlParameterSource subsequentParameters(
-            String query, User user, Timestamp end) {
+    private MapSqlParameterSource olderThanParameters(
+            String query, User user, Timestamp olderThan) {
         MapSqlParameterSource parameterSource = defaultTimestampParameters(user);
-        parameterSource.addValue("end", end);
-        parameterSource.addValue("start",
-                namedParameterJdbcTemplate.queryForObject(query,
-                        parameterSource, Timestamp.class));
-        return parameterSource;
-    }
-
-    private MapSqlParameterSource previousParameters(
-            String query, User user, Timestamp start) {
-        MapSqlParameterSource parameterSource = defaultTimestampParameters(user);
-        parameterSource.addValue("start", start);
-        parameterSource.addValue("end",
+        parameterSource.addValue("olderThan", olderThan);
+        parameterSource.addValue("newerThan",
                 namedParameterJdbcTemplate.queryForObject(
                         query, parameterSource, Timestamp.class));
         return parameterSource;
     }
 
+    private MapSqlParameterSource newerThanParameters(
+            String query, User user, Timestamp newerThan) {
+        MapSqlParameterSource parameterSource = defaultTimestampParameters(user);
+        parameterSource.addValue("newerThan", newerThan);
+        parameterSource.addValue("olderThan",
+                namedParameterJdbcTemplate.queryForObject(query,
+                        parameterSource, Timestamp.class));
+        return parameterSource;
+    }
+
     private PostContainer postContainerFor(
-            User user, Timestamp now ,Timestamp start, Timestamp end,
-            String subsequentTimestampsQuery, String previousTimestampsQuery,
+            User user, Timestamp now ,Timestamp olderThan, Timestamp newerThan,
+            String olderThanTimestampsQuery, String newerThanTimestampsQuery,
             String dataQuery)
             throws EntityNotFoundException {
         MapSqlParameterSource parameterSource;
         try {
-            if (end != null) {
-                parameterSource = subsequentParameters(
-                        subsequentTimestampsQuery, user, end);
+            if (newerThan != null) {
+                parameterSource = newerThanParameters(
+                        newerThanTimestampsQuery, user, newerThan);
             } else {
-                parameterSource = previousParameters(
-                        previousTimestampsQuery, user,
-                        start == null ? now : start);
+                parameterSource = olderThanParameters(
+                        olderThanTimestampsQuery, user,
+                        olderThan == null ? now : olderThan);
             }
         } catch (DataAccessException ex) {
             throw new EntityNotFoundException("Post");
@@ -104,17 +104,17 @@ public class PostRepository {
     }
 
 
-    private static final String subsequentFeedTimestampsQuery =
+    private static final String feedNewerThanTimestampsQuery =
             "SELECT added_on FROM (" +
                     "SELECT added_on FROM feed WHERE \"user\"=(:user) " +
-                    "AND added_on > (:end) " +
+                    "AND added_on > (:newerThan) " +
                     "ORDER BY added_on ASC LIMIT (:tsCount) " +
                     ") as added_on ORDER BY added_on DESC LIMIT 1";
 
-    private static final String previousFeedTimestampsQuery =
+    private static final String feedOlderThanTimestampsQuery =
             "SELECT added_on FROM (" +
                     "SELECT added_on FROM feed WHERE \"user\"=(:user) " +
-                    "AND added_on < (:start) " +
+                    "AND added_on < (:olderThan) " +
                     "ORDER BY added_on DESC LIMIT (:tsCount) " +
                     ") as added_on ORDER BY added_on ASC LIMIT 1";
 
@@ -123,43 +123,43 @@ public class PostRepository {
                     "WHERE id in (" +
                     "SELECT post as id FROM feed " +
                     "WHERE \"user\"=(:user) " +
-                    "AND added_on < (:start) AND added_on >= (:end)" +
+                    "AND added_on < (:olderThan) AND added_on >= (:newerThan)" +
                     ") ORDER BY created_on DESC";
 
     public PostContainer feedOf(
-            User user, Timestamp now ,Timestamp start, Timestamp end)
+            User user, Timestamp now ,Timestamp olderThan, Timestamp newerThan)
             throws EntityNotFoundException {
-        return postContainerFor(user, now, start, end,
-                subsequentFeedTimestampsQuery, previousFeedTimestampsQuery,
+        return postContainerFor(user, now, olderThan, newerThan,
+                feedOlderThanTimestampsQuery, feedNewerThanTimestampsQuery,
                 feedQuery);
     }
 
 
-    private static final String subsequentPostsTimestampsQuery =
-            "SELECT created_on FROM (" +
-                    "SELECT created_on FROM feed WHERE \"user\"=(:user) " +
-                    "AND created_on > (:end) " +
-                    "ORDER BY created_on ASC LIMIT (:tsCount) " +
-                    ") as created_on ORDER BY created_on DESC LIMIT 1";
-
-    private static final String previousPostsTimestampsQuery =
+    private static final String postsOlderThanTimestampsQuery =
             "SELECT created_on FROM (" +
                     "SELECT created_on FROM post WHERE \"user\"=(:user) " +
-                    "AND created_on < (:start) " +
+                    "AND created_on < (:olderThan) " +
                     "ORDER BY created_on DESC LIMIT (:tsCount) " +
                     ") as created_on ORDER BY created_on ASC LIMIT 1";
+
+    private static final String postsNewerThanTimestampsQuery =
+            "SELECT created_on FROM (" +
+                    "SELECT created_on FROM feed WHERE \"user\"=(:user) " +
+                    "AND created_on > (:newerThan) " +
+                    "ORDER BY created_on ASC LIMIT (:tsCount) " +
+                    ") as created_on ORDER BY created_on DESC LIMIT 1";
 
     private static final String postsQuery =
             "SELECT id, \"user\", content, created_on FROM post " +
                     "WHERE \"user\"=(:user) " +
-                    "AND created_on < (:start) AND created_on >= (:end) " +
+                    "AND created_on < (:olderThan) AND created_on >= (:newerThan) " +
                     "ORDER BY created_on DESC";
 
     public PostContainer postsOf(
-            User user, Timestamp now ,Timestamp start, Timestamp end)
+            User user, Timestamp now ,Timestamp olderThan, Timestamp newerThan)
             throws EntityNotFoundException {
-        return postContainerFor(user, now, start, end,
-                subsequentPostsTimestampsQuery, previousPostsTimestampsQuery,
+        return postContainerFor(user, now, olderThan, newerThan,
+                postsOlderThanTimestampsQuery, postsNewerThanTimestampsQuery,
                 postsQuery);
     }
 
