@@ -5,7 +5,6 @@ import com.directi.jacksparrow_spring.exception.PreconditionViolatedException;
 import com.directi.jacksparrow_spring.exception.UserAuthorizationException;
 import com.directi.jacksparrow_spring.model.GenericRowMapper;
 import com.directi.jacksparrow_spring.model.IdRowMapper;
-import com.directi.jacksparrow_spring.model.Post;
 import com.directi.jacksparrow_spring.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -15,10 +14,6 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,14 +21,8 @@ import java.util.Map;
 @Repository
 public class UserRepository {
 
-    private JdbcTemplate jdbcTemplate;
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
-    @Autowired
-    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-        namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
-    }
+    private @Autowired JdbcTemplate jdbcTemplate;
+    private @Autowired NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     private static final RowMapper<User> userIdMapper
             = new IdRowMapper<User>(User.class);
@@ -44,20 +33,6 @@ public class UserRepository {
                 put("email", "email");
                 put("name", "name");
             }};
-
-    public static class PostMapper implements RowMapper<Post> {
-        @Override
-        public Post mapRow(final ResultSet rs, int rowNum) throws SQLException {
-            return new Post() {{
-                setId(rs.getInt("id"));
-                setUser(new User() {{
-                    setId(rs.getInt("user"));
-                }});
-                setContent(rs.getString("content"));
-                setCreatedOn(rs.getTimestamp("created_on"));
-            }};
-        }
-    }
 
 
     public User verifyCredentials(User user, String password)
@@ -88,70 +63,6 @@ public class UserRepository {
         return jdbcTemplate.query(
                 "SELECT following as id FROM follows WHERE follower=?",
                 userIdMapper, user.getId());
-    }
-
-
-
-    public static class PostContainer {
-        public List<Post> posts;
-        public Timestamp from;
-    };
-
-
-    public PostContainer feedOf(User user, Timestamp upto) {
-        PostContainer postContainer = new PostContainer();
-
-        try {
-            postContainer.from = jdbcTemplate.queryForObject(
-                    "SELECT added_on FROM (" +
-                        "SELECT added_on FROM feed " +
-                        "WHERE \"user\"=? AND added_on < ? " +
-                        "ORDER BY added_on DESC LIMIT 10 " +
-                    ") as added_on " +
-                    "ORDER BY added_on ASC LIMIT 1",
-                    Timestamp.class, user.getId(), upto);
-        } catch (DataAccessException ex) {
-            postContainer.from = upto;
-            postContainer.posts = new ArrayList<Post>();
-            return postContainer;
-        }
-
-        postContainer.posts = (List<Post>)jdbcTemplate.query(
-                "SELECT id, \"user\", content, created_on FROM post " +
-                "WHERE id in (" +
-                    "SELECT post as id FROM feed " +
-                    "WHERE \"user\"=? AND added_on < ? AND added_on >= ?" +
-                ") ORDER BY created_on DESC",
-                new PostMapper(), user.getId(), upto, postContainer.from);
-
-        return postContainer;
-    }
-
-    public PostContainer postsOf(User user, Timestamp upto) {
-        PostContainer postContainer = new PostContainer();
-
-        try {
-            postContainer.from = jdbcTemplate.queryForObject(
-                    "SELECT created_on FROM (" +
-                        "SELECT created_on FROM post " +
-                        "WHERE \"user\"=? AND created_on < ? " +
-                        "ORDER BY created_on DESC LIMIT 10 " +
-                    ") as created_on " +
-                    "ORDER BY created_on ASC LIMIT 1",
-                    Timestamp.class, user.getId(), upto);
-        } catch (DataAccessException ex) {
-            postContainer.from = upto;
-            postContainer.posts = new ArrayList<Post>();
-            return postContainer;
-        }
-
-        postContainer.posts = (List<Post>)jdbcTemplate.query(
-                "SELECT id, \"user\", content, created_on FROM post " +
-                "WHERE \"user\"=? AND created_on < ? AND created_on >= ? " +
-                "ORDER BY created_on DESC",
-                new PostMapper(), user.getId(), upto, postContainer.from);
-
-        return postContainer;
     }
 
 

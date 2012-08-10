@@ -3,8 +3,10 @@ package com.directi.jacksparrow_spring.controller;
 import com.directi.jacksparrow_spring.exception.EntityNotFoundException;
 import com.directi.jacksparrow_spring.exception.PreconditionViolatedException;
 import com.directi.jacksparrow_spring.exception.UserAuthorizationException;
+import com.directi.jacksparrow_spring.model.Post;
 import com.directi.jacksparrow_spring.model.User;
 import com.directi.jacksparrow_spring.repository.BaseRepository;
+import com.directi.jacksparrow_spring.repository.PostRepository;
 import com.directi.jacksparrow_spring.repository.UserRepository;
 import com.directi.jacksparrow_spring.service.Authorizer;
 import org.joda.time.DateTime;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +32,7 @@ public class UserController {
 
     private @Autowired Authorizer authorizer;
     private @Autowired UserRepository userRepository;
+    private @Autowired PostRepository postRepository;
     private @Autowired BaseRepository baseRepository;
 
 
@@ -77,23 +81,67 @@ public class UserController {
         System.out.println(day);
     }
 
+
+
+    private static interface PostFetcher {
+        abstract public PostRepository.PostContainer fetch(
+                User user, Timestamp now, Timestamp start, Timestamp end)
+                throws EntityNotFoundException;
+    }
+
+    private Timestamp argOrNull(DateTime arg) {
+        return arg == null ? null : new Timestamp(arg.getMillis());
+    }
+
+    private Map genericPostListFetcher(
+            DateTime start, DateTime end,
+            final String label, User user, PostFetcher postFetcher)
+            throws PreconditionViolatedException {
+
+        if (start != null && end != null) {
+            throw new PreconditionViolatedException(
+                    "Cannot filter on both start and end timestamps");
+        }
+
+        final Timestamp now = baseRepository.getCurrentTimestamp();
+        try {
+            final PostRepository.PostContainer postContainer =
+                    postFetcher.fetch(
+                            user, now, argOrNull(start), argOrNull(end));
+            return new HashMap() {{
+                put("now", now);
+                put("start", postContainer.start);
+                put("end", postContainer.end);
+                put(label, postContainer.posts);
+            }};
+
+        } catch (EntityNotFoundException ex) {
+            return new HashMap() {{
+                put("now", now);
+                put(label, new ArrayList<Post>());
+            }};
+        }
+
+    }
+
     @RequestMapping("/feed")
     @ResponseBody
     public Map feed(
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-            @RequestParam(required = false) DateTime upto)
-            throws UserAuthorizationException {
+            @RequestParam(required = false) DateTime start,
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+            @RequestParam(required = false) DateTime end)
+            throws UserAuthorizationException, PreconditionViolatedException {
 
-        final Timestamp now = baseRepository.getCurrentTimestamp();
-        final UserRepository.PostContainer postContainer =
-                userRepository.feedOf(authorizer.getAuthorizedUser(),
-                        upto == null ? now : new Timestamp(upto.getMillis()));
-
-        return new HashMap() {{
-            put("now", now);
-            put("feed", postContainer.posts);
-            put("from", postContainer.from);
-        }};
+        return genericPostListFetcher(start, end, "feed",
+                authorizer.getAuthorizedUser(), new PostFetcher() {
+            @Override
+            public PostRepository.PostContainer fetch(
+                    User user, Timestamp now, Timestamp start, Timestamp end)
+                    throws EntityNotFoundException {
+                return postRepository.feedOf(user, now, start, end);
+            }
+        });
 
     }
 
@@ -102,21 +150,23 @@ public class UserController {
     public Map posts(
             @RequestParam final int user,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-            @RequestParam(required = false) DateTime upto)
-            throws EntityNotFoundException {
+            @RequestParam(required = false) DateTime start,
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+            @RequestParam(required = false) DateTime end)
+            throws EntityNotFoundException, PreconditionViolatedException {
 
-        final Timestamp now = baseRepository.getCurrentTimestamp();
-        final UserRepository.PostContainer postContainer =
-                userRepository.postsOf(userRepository.findById(user),
-                        upto == null ? now : new Timestamp(upto.getMillis()));
-
-        return new HashMap() {{
-            put("now", now);
-            put("posts", postContainer.posts);
-            put("from", postContainer.from);
-        }};
+        return genericPostListFetcher(start, end, "posts",
+                userRepository.findById(user), new PostFetcher() {
+            @Override
+            public PostRepository.PostContainer fetch(
+                    User user, Timestamp now, Timestamp start, Timestamp end)
+                    throws EntityNotFoundException {
+                return postRepository.postsOf(user, now, start, end);
+            }
+        });
 
     }
+
 
 
     @RequestMapping("/find")

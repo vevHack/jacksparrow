@@ -10,7 +10,7 @@ describe("Feed", function(){
     it("should return feed of authenticated user", function(done) {
         common.createSession(config.testUser)
             .done(function(access_token) {
-                function keepFetchingTillFound(feed, id, from) {
+                function keepFetchingTillFound(feed, id, start) {
                     var i;
                     for (i = 0; i < feed.length; i += 1) {
                         if (feed[i].id === id) {
@@ -20,11 +20,11 @@ describe("Feed", function(){
                     }
                     common.authJson(access_token, {
                         url: config.url("/api/user/feed"),
-                        data: { upto: from }
+                        data: { start: start }
                     })
                         .done(function(data) {
                             data.feed.should.not.be.empty; 
-                            keepFetchingTillFound(data.feed, id, data.from);
+                            keepFetchingTillFound(data.feed, id, data.end);
                         })
                         .fail(function() {
                             common.shouldNotFail.apply(arguments);
@@ -39,43 +39,45 @@ describe("Feed", function(){
                         data.feed.should.be.instanceof(Array);
                         data.should.have.property("now");
                         should.exist(Date.parse(data.now));
-                        data.should.have.property("from");
-                        should.exist(Date.parse(data.from));
+                        data.should.have.property("start");
+                        should.exist(Date.parse(data.start));
+                        data.should.have.property("end");
+                        should.exist(Date.parse(data.end));
 
                         keepFetchingTillFound(data.feed, 
-                            config.testPost.id, data.from);
+                            config.testPost.id, data.end);
                     })
             });
     });
 
-    it("should not return feeds before 'from'", function(done) {
+    it("should not return feeds previous to 'start'", function(done) {
         common.createSession(config.testUser)
             .done(function(access_token) {
                 common.authJson(access_token, {
                     url: config.url("/api/user/feed"),
-                    data: { upto: config.testPost.created_on }
+                    data: { start: config.testPost.created_on }
                 })
                     .done(function(data) {
                         data.should.have.property("feed");
                         data.feed.should.be.instanceof(Array);
                         data.feed.should.be.empty;
-                        data.should.have.property("from");
-                        Date.parse(config.testPost.created_on)
-                            .should.be.eql(Date.parse(data.from));
+                        data.should.have.property("now");
+                        data.should.not.have.property("start");
+                        data.should.not.have.property("end");
                     })
                     .fail(common.shouldNotFail)
                     .always(function(){done();});
             });
     });
 
-    it("should return feeds just before 'from'", function(done) {
-        var from = new Date(Date.parse(config.testFeed.added_on) + 1)
+    it("should return feeds just previous to 'start'", function(done) {
+        var start = new Date(Date.parse(config.testFeed.added_on) + 1)
                         .toISOString();
         common.createSession(config.testUser)
             .done(function(access_token) {
                 common.authJson(access_token, {
                     url: config.url("/api/user/feed"), 
-                    data: { upto: from }
+                    data: { start: start }
                 })
                     .done(function(data) {
                         data.should.have.property("feed");

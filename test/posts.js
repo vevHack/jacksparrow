@@ -31,20 +31,35 @@ describe("Posts", function(){
             .always(function(){done();});
     });
 
-    it("should not return feeds before 'from'", function(done) {
+    it("should not return posts previous to 'start'", function(done) {
         $.getJSON(config.url("/api/user/posts"), {
             user: config.testUser.id,
-            upto: config.testPost.created_on
+            start: config.testPost.created_on
         })
             .done(function(data) {
                 data.should.have.property("posts");
                 data.posts.should.be.instanceof(Array);
                 data.posts.should.be.empty;
-                Date.parse(config.testPost.created_on)
-                    .should.be.eql(Date.parse(data.from));
+                data.should.have.property("now");
+                data.should.not.have.property("start");
+                data.should.not.have.property("end");
             })
             .fail(common.shouldNotFail)
             .always(function(){done();});
     });
 
+    it("should return posts just previous to 'start'", function(done) {
+        var start = new Date(Date.parse(config.testFeed.added_on) + 1)
+                        .toISOString();
+        $.getJSON(config.url("/api/user/posts"), {
+            user: config.testUser.id,
+            data: { start: start }
+        })
+            .done(function(data) {
+                data.should.have.property("posts");
+                data.posts.should.includeEql(config.testPost);
+            })
+            .fail(common.shouldNotFail)
+            .always(function(){done();});
+    });
 });
