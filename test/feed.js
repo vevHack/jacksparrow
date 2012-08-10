@@ -72,7 +72,7 @@ describe("Feed", function(){
             .done(function(access_token) {
                 common.authJson(access_token, {
                     url: config.url("/api/user/feed"),
-                    data: { olderThan: config.testPost.created_on }
+                    data: { olderThan: config.testFeed.added_on }
                 })
                     .done(function(data) {
                         data.should.have.property("feed");
@@ -104,5 +104,40 @@ describe("Feed", function(){
                     .always(function(){done();});
             });
     });
+
+    it("should not return feed if newerThan = added_on", function(done) {
+        common.createSession(config.testUser)
+            .done(function(access_token) {
+                common.authJson(access_token, {
+                    url: config.url("/api/user/feed"),
+                    data: { newerThan: config.testFeed.added_on }
+                })
+                    .done(function(data) {
+                        data.should.have.property("feed");
+                        data.feed.should.not.includeEql(config.testPost);
+                    })
+                    .fail(common.shouldNotFail)
+                    .always(function(){done();});
+            });
+    });
+
+    it("should return feed for newerThan < created_on", function(done) {
+        var newerThan = new Date(Date.parse(config.testFeed.added_on) - 1)
+                        .toISOString();
+        common.createSession(config.testUser)
+            .done(function(access_token) {
+                common.authJson(access_token, {
+                    url: config.url("/api/user/feed"), 
+                    data: { newerThan: newerThan }
+                })
+                    .done(function(data) {
+                        data.should.have.property("feed");
+                        data.feed.should.includeEql(config.testPost);
+                    })
+                    .fail(common.shouldNotFail)
+                    .always(function(){done();});
+            });
+    });
+
 
 });

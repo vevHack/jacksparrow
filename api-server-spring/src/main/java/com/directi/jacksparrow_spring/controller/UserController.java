@@ -124,8 +124,11 @@ public class UserController {
 
     }
 
-    /* Older --> (NewerThan -->  Included Posts --> OlderThan) --> Newer */
-    /* open interval */
+    /* Older --> NewerThan -->  Included Posts --> OlderThan --> Newer
+     *
+     * The specified end of the Included Posts interval is open, while the
+     * other end is closed.
+     */
     @RequestMapping("/feed")
     @ResponseBody
     public Map feed(

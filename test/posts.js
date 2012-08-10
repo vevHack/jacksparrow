@@ -7,8 +7,9 @@ describe("Posts", function(){
 
     before(common.isServerUp.bind(common));
 
-    function request(user) {
-        return $.getJSON(config.url("/api/user/posts"), {user: user.id});
+    function request(user, data) {
+        return $.getJSON(config.url("/api/user/posts"), 
+            $.extend({user: user.id}, data));
     }
 
     it("should expect existing user", function(done) { 
@@ -32,10 +33,7 @@ describe("Posts", function(){
     });
 
     it("should not return posts older than 'olderThan'", function(done) {
-        $.getJSON(config.url("/api/user/posts"), {
-            user: config.testUser.id,
-            olderThan: config.testPost.created_on
-        })
+        request(config.testUser, { olderThan: config.testPost.created_on })
             .done(function(data) {
                 data.should.have.property("posts");
                 data.posts.should.be.instanceof(Array);
@@ -49,12 +47,31 @@ describe("Posts", function(){
     });
 
     it("should return posts older than perturbed 'olderThan'", function(done) {
-        var olderThan = new Date(Date.parse(config.testFeed.added_on) + 1)
+        var olderThan = new Date(Date.parse(config.testPost.created_on) + 1)
                         .toISOString();
-        $.getJSON(config.url("/api/user/posts"), {
-            user: config.testUser.id,
-            data: { olderThan: olderThan }
-        })
+        request(config.testUser, { olderThan: olderThan })
+            .done(function(data) {
+                data.should.have.property("posts");
+                data.posts.should.includeEql(config.testPost);
+            })
+            .fail(common.shouldNotFail)
+            .always(function(){done();});
+    });
+
+    it("should not return post if newerThan = created_on", function(done) {
+        request(config.testUser, { newerThan: config.testPost.created_on })
+            .done(function(data) {
+                data.should.have.property("posts");
+                data.posts.should.not.includeEql(config.testPost);
+            })
+            .fail(common.shouldNotFail)
+            .always(function(){done();});
+    });
+
+    it("should return post if newerThan < created_on", function(done) {
+        var newerThan = new Date(Date.parse(config.testPost.created_on) - 10)
+                        .toISOString();
+        request(config.testUser, { newerThan: newerThan })
             .done(function(data) {
                 data.should.have.property("posts");
                 data.posts.should.includeEql(config.testPost);
