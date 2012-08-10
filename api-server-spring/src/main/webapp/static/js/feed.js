@@ -35,10 +35,6 @@ jks.feed = jks.feed || (function() {
     }
 
 
-    var selfDiv;
-    var lastUpdated, fetchedTill;
-
-
     function mouseenterPost(event) {
         showDetailTrigger.appendTo(
             $(event.currentTarget).toggleClass("current"));
@@ -59,16 +55,29 @@ jks.feed = jks.feed || (function() {
     }
 
 
-    function renderFeeds(template, data) {
-        lastUpdated = data.now;
-        fetchedTill = data.from;
+    var selfDiv, feedTemplate;
+    var serverTimestamp, newestTimestamp, oldestTimestamp;
 
-        if (data.feed.length === 0) {
-            $("#more-trigger").hide();
-            return $("<div />"); /*XXX*/
+    function updateSyncStatus(data) {
+        if (typeof newestTimestamp === "undefined") {
+            newestTimestamp = data.newest;
+            oldestTimestamp = data.oldest;
+        } else {
+            if (newestTimestamp.localeCompare(data.newest) < 0) {
+                newestTimestamp = data.newest;
+            }
+            if (oldestTimestamp.localeCompare(data.oldest) > 0) {
+                oldestTimestamp = data.oldest;
+            }
         }
+    }
 
+
+    function renderFeeds(template, data) {
         var render = $(Mustache.render(template, data));
+
+        serverTimestamp = data.now;
+        updateSyncStatus(data);
 
         jks.fetchUser(data.feed.map(function(post) { return post.user.id }))
             .done(function() {
@@ -94,7 +103,7 @@ jks.feed = jks.feed || (function() {
     }
 
     function updateTimestamps() {
-        jks.timestamper.setReference(Date.parse(lastUpdated));
+        jks.timestamper.setReference(Date.parse(serverTimestamp));
         selfDiv.find(".post").each(jks.timestamper.update);
     }
 
@@ -110,12 +119,12 @@ jks.feed = jks.feed || (function() {
         )
             .fail(jks.common.warn)
             .done(function() {
-                var template = arguments[0][0];
+                feedTemplate = arguments[0][0];
                 var data = arguments[1][0];
 
                 container.append(
                     selfDiv = $('<div id="feed" />')
-                        .append(renderFeeds(template, data))
+                        .append(renderFeeds(feedTemplate, data))
                         .hide());
 
                 updateTimestamps();
@@ -140,18 +149,27 @@ jks.feed = jks.feed || (function() {
 
 
     function update(event) {
+        $.getJSON("/api/user/feed", {newerThan: newestTimestamp})
+            .fail(jks.common.warn)
+            .done(function(data) {
+                if (data.feed.length !== 0) {
+                    selfDiv.prepend(renderFeeds(feedTemplate, data));
+                    updateTimestamps();
+                }
+            });
         event.preventDefault();
     }
 
     function more(event) {
-        $.when(
-              $.fetch.template("feed")
-            , $.getJSON("/api/user/feed", {upto: fetchedTill})
-        )
+        $.getJSON("/api/user/feed", {olderThan: oldestTimestamp})
             .fail(jks.common.warn)
-            .done(function() {
-                selfDiv.append(renderFeeds(arguments[0][0], arguments[1][0]));
-                updateTimestamps();
+            .done(function(data) {
+                if (data.feed.length !== 0) {
+                    selfDiv.append(renderFeeds(feedTemplate, data));
+                    updateTimestamps();
+                } else {
+                    $("#more-trigger").hide(); /*XXX*/
+                }
             });
         event.preventDefault();
     }
