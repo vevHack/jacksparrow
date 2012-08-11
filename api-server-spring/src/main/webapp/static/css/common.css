@@ -89,6 +89,24 @@ fieldset {
 }
 
 /*
+ * Triggers
+ */
+.trigger {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background-position: 0px 0px;
+}
+
+.trigger:hover {
+    background-position: 0px -32px;
+}
+
+#create-submit-trigger { background-image: url("/static/img/check.png"); }
+#create-cancel-trigger { background-image: url("/static/img/stop.png"); }
+#create-trigger { background-image: url("/static/img/notepencil.png"); }
+
+/*
  *
  */
 .trigger.current {
