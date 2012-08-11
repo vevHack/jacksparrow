@@ -30,8 +30,17 @@ db-restore-test:
 		psql ${dbparams} -f db/schema.sql && \
 		psql ${dbparams} jacksparrow -f db/testdb.sql
 
+lo-slow:
+	@tc qdisc add dev lo root handle 1: htb default 12 && \
+		tc class add dev lo parent 1:1 classid 1:12 htb rate 56kbps ceil 64kbps && \
+		tc qdisc add dev lo parent 1:12 netem delay 200ms
+
+lo-reset:
+	@tc qdisc del dev lo root
 
 
 .PHONY: test \
 	npm-restore-links \
-	db-backup-schema db-backup-test db-restore-schema db-restore-test
+	db-backup-schema db-backup-test db-restore-schema db-restore-test \
+	lo-slow lo-reset
+
