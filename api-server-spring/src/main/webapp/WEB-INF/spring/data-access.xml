@@ -9,5 +9,9 @@
         <property name="username" value="postgres" />
         <property name="password" value="a" />
     </bean>
+    <!-- LobHandler for well-behaved JDBC drivers -->
+    <!-- (simply delegating to corresponding PreparedStatement and ResultSet methods) -->
+    <bean id="defaultLobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler" lazy-init="true"/>
+
 
 </beans>

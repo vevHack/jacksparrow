@@ -9,7 +9,7 @@
     <mvc:annotation-driven />
 
     <mvc:default-servlet-handler />
-
+    <import resource="file-config.xml" />
     <import resource="data-access.xml" />
     <import resource="view-resolver.xml" />
 

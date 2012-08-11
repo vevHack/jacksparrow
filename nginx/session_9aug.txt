@@ -386,4 +386,17 @@ nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" 
 nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
 2012/08/09 13:36:54 [notice] 5010#0: signal process started
 ]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx  -p /home/harsh/nginx_config/ -s reload -c localhost.conf
-nginx: [alert] could not open
+nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
+2012/08/09 13:38:00 [notice] 5037#0: signal process started
+]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx  -p /home/harsh/nginx_config/ -s reload -c localhost.conf
+nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
+2012/08/09 13:42:11 [notice] 5222#0: signal process started
+2012/08/09 13:42:11 [error] 5222#0: open() "/home/harsh/nginx_config/var/log/nginx.pid" failed (2: No such file or directory)
+]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx  -p /home/harsh/nginx_config/ -s reload -c localhost.conf
+nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
+2012/08/09 13:42:34 [notice] 5232#0: signal process started
+]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx  -p /home/harsh/nginx_config/ -s reload -c localhost.conf[1@f[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[5Pc /home/harsh/nginx_config/localhost.conf -s reload[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cp /home/harsh/nginx_config/f -s reload -c localhost.confexit
+nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
+2012/08/10 01:25:21 [emerg] 14407#0: open() "/home/harsh/nginx_config/flocalhost.confexit" failed (2: No such file or directory)
+]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ exit
+exit
