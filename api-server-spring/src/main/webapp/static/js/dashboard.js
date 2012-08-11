@@ -3,16 +3,43 @@ jks.dashboard = jks.dashboard || (function() {
     "use strict";
 
     function logout() {
-        $.post("/api/session/destroy").done(jks.common.redirectToHome);
+        return $.post("/api/session/destroy").done(jks.common.redirectToHome);
     }
 
-    function createPost() {
-    /*
-        return $.fetch.template("create")
-        .done(function() {
-            
-        $("body").append(
-        */
+    function createPostFactory() {
+        var postDiv;
+        var action = firstTime;
+
+        function firstTime() {
+            var dfd = $.Deferred();
+            $.fetch.js("create").done(function() {
+                jks.create.fetch(onSubmit, subsequently).done(function(render) {
+                    postDiv = render;
+                    $("body").prepend(render.hide());
+                    subsequently().done(function() {
+                        action = subsequently;
+                        dfd.resolve();
+                    });
+                });
+            });
+            return dfd;
+        }
+
+        function onSubmit() {
+            subsequently().done(function() {
+                console.log("XXX SHOW FEED");
+            });
+        }
+
+        function subsequently() {
+            var dfd = $.Deferred();
+            postDiv.slideToggle("slow", dfd.resolve);
+            return dfd;
+        }
+
+        return function() { 
+            return action();
+        };
     }
 
     function load(container, selfDisplayData) {
@@ -20,10 +47,12 @@ jks.dashboard = jks.dashboard || (function() {
             var render = Mustache.render(template, selfDisplayData);
             container.html(render);
 
-            $.each({"#logout-trigger": logout, "#create-trigger": createPost},
-                function(key, value) {
-                    $(render).find(key).click(jks.common.wrapTrigger(value));
-                });
+            $.each({ 
+                  "#logout-trigger": logout
+                , "#create-trigger": createPostFactory()
+            }, function(key, value) {
+                container.find(key).click(jks.common.wrapTrigger(value));
+            });
         });
     }
 

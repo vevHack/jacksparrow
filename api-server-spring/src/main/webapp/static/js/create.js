@@ -28,55 +28,50 @@ jks.create = jks.create || (function() {
         });
     }
 
-    function attachSubmitListener(form, trigger, content, info) {
-        form.on("submit", function() {
+    function onSubmit(form, trigger, content, info) {
+        var spinner = jks.common.spinnerFactory().insertBefore(trigger);
+        content.attr("disabled", true);
+        resetInfo(info);
 
-            var spinner = jks.common.spinnerFactory().insertAfter(trigger);
-            trigger.attr("disabled", true);
-            content.attr("disabled", true);
-            resetInfo(info);
-            
-            $.post("/api/post/create", {content: content.val().trim()})
-                .always(function() {spinner.remove()})
-                .done(function() {
-                    form[0].reset();
-                    $("#feed-trigger").trigger("click");
-                })
-                .fail(function(jqXHR) {
-                    var error = JSON.parse(jqXHR.responseText).error;
-                    if (error.code !== 412) {
-                        jks.common.warn();
-                    }
-                    info.text(error.message);
-                    content.attr("disabled", false);
-                    trigger.attr("disabled", false);
-                });
-
-            event.preventDefault();
-        });
+        return $.post("/api/post/create", {content: content.val().trim()})
+            .always(function() {spinner.remove()})
+            .done(function() {
+                form[0].reset();
+            })
+            .fail(function(jqXHR) {
+                var error = JSON.parse(jqXHR.responseText).error;
+                if (error.code !== 412) {
+                    jks.common.warn();
+                }
+                info.text(error.message);
+                content.attr("disabled", false);
+            });
     }
 
-    var selfDiv;
-
-    function load(container) {
-        return $.fetch.template("create").done(function(template) {
+    function fetch(submitDone, cancelDone) {
+        var dfd = $.Deferred();
+        $.fetch.template("create").done(function(template) {
             var render = $(Mustache.render(template));
-
-            container.append(
-                selfDiv = $('<div id="create" />').append(render).hide());
-
-            var form = selfDiv.find("form");
+            var form = render.find("form");
             var content = form.find("textarea");
-            var trigger = form.find('input[type="submit"]');
             var info = form.find(".info");
+            var submitTrigger = render.find("#create-submit-trigger");
+            var cancelTrigger = render.find("#create-cancel-trigger");
 
             attachKeyboardListener(content, info);
-            attachSubmitListener(form, trigger, content, info);
+            submitTrigger.click(jks.common.wrapTrigger(function() {
+                return onSubmit(form, submitTrigger, content, info)
+                    .done(submitDone);
+            }));
+            cancelTrigger.click(cancelDone);
+
+            dfd.resolve(render);
         });
+        return dfd.promise();
     }
 
     return {
-        load: load,
+        fetch: fetch
     };
 }());
 

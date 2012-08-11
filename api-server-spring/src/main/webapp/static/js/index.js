@@ -91,13 +91,12 @@ jks.index = jks.index || (function() {
                     jks.dashboard.load($("#dashboard"), userDisplayData);
 
                     var triggerHandler = triggerHandlerFactory($("#content"), {
-                        "feed-trigger": "feed",
-                        "create-trigger": "create"
+                        "feed-trigger": "feed"
                     });
                     jks.rootPane.load(
                         $("#root-pane"), userDisplayData, triggerHandler)
                         .done(function() {
-                            $("#feed-trigger").trigger("click");
+                //XXX            $("#feed-trigger").trigger("click");
                         });
                 });
 
