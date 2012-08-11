@@ -71,11 +71,11 @@ jks.index = jks.index || (function() {
         $.getJSON("/api/me")
             .fail(jks.common.handleUnauthenticated)
             .pipe(function(data) {
-                me = data;
+                me = data.user;
                 return $.when(
                     $.fetch.template("index"),
                     $.fetch.js("dashboard"),
-                    $.fetch.js("root-pane-self")
+                    $.fetch.js("root-pane")
                 );
             }, function() { return $.Deferred() })
                 .fail(jks.common.warn)
@@ -83,15 +83,21 @@ jks.index = jks.index || (function() {
                     var template = arguments[0][0];
 
                     $("body").html(Mustache.render(template));
-
+                    
                     /* XXX merge with jks.datacache ?? */
-                    jks.dashboard.load($("#dashboard"), 
-                        { name: me.name || me.username });
-                    jks.rootPaneSelf.load($("#root-pane"), 
-                        triggerHandlerFactory($("#content"), {
-                            "feed-trigger": "feed",
-                            "create-trigger": "create"
-                        })).done(function() {
+                    console.log(me);
+                    var userDisplayData = 
+                        { displayName: me.name || me.username };
+
+                    jks.dashboard.load($("#dashboard"), userDisplayData);
+
+                    var triggerHandler = triggerHandlerFactory($("#content"), {
+                        "feed-trigger": "feed",
+                        "create-trigger": "create"
+                    });
+                    jks.rootPane.load(
+                        $("#root-pane"), userDisplayData, triggerHandler)
+                        .done(function() {
                             $("#feed-trigger").trigger("click");
                         });
                 });

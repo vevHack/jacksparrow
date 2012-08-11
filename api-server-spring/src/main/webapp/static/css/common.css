@@ -23,6 +23,7 @@ body {
     height: 2em;
     color: white;
     z-index: 1;
+    min-height: 32px;
     /*border-bottom: 1px solid white;*/
 }
 
@@ -30,28 +31,31 @@ body {
     position: fixed;
     top: 2em;
     left: 0;
-    width: 14%;
+    width: 25%;
+    min-width: 128px;
     background-color: red;
 }
 
 #content-pane {
     padding-top: 2em;
     float: right;
-    width: 86%;
+    width: 75%;
     background-color: green;
 }
 
 #content {
-    background-color: grey;
     float: left;
-    width: 55%;
+    width: 75%;
     min-height: 200px;
+    word-wrap: break-word;
+    background-color: grey;
 }
 
 #detail {
-    background-color: purple;
     float: right;
-    width: 45%;
+    width: 25%;
+    word-wrap: break-word;
+    background-color: purple;
 }
 
 
@@ -155,7 +159,6 @@ input.validated {
 }
 
 .post .content {
-    word-wrap: break-word;
 }
 
 .post .info {
