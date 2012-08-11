@@ -2,11 +2,6 @@ var jks = jks || {};
 jks.feed = jks.feed || (function() {
     "use strict";
 
-    function preload() {
-        loadShowDetailTrigger();
-    }
-
-
     var showDetailTrigger;
     
     function loadShowDetailTrigger() {
@@ -109,42 +104,33 @@ jks.feed = jks.feed || (function() {
 
 
     function load(container) {
-        var deferred = $.Deferred();
-        $.when(
+        return $.when(
               $.fetch.template("feed")
             , $.getJSON("/api/user/feed")
             , $.fetch.js("timestamper")
             , $.fetch.js("fetchUser")
             , $.fetch.js("datacache")
-        )
-            .fail(jks.common.warn)
-            .done(function() {
-                feedTemplate = arguments[0][0];
-                var data = arguments[1][0];
+        ).done(function() {
+            feedTemplate = arguments[0][0];
+            var data = arguments[1][0];
 
-                container.append(
-                    selfDiv = $('<div id="feed" />')
-                        .append(renderFeeds(feedTemplate, data))
-                        .hide());
+            container.append(
+                selfDiv = $('<div id="feed" />')
+                .append(renderFeeds(feedTemplate, data))
+                .hide());
 
                 updateTimestamps();
 
                 loadShowDetailTrigger()
-                    .done(function() {
-                        container.on("mouseenter", ".post", mouseenterPost);
-                        container.on("mouseleave", ".post", mouseleavePost);
-                    });
+                .done(function() {
+                    container.on("mouseenter", ".post", mouseenterPost);
+                    container.on("mouseleave", ".post", mouseleavePost);
+                });
 
                 /* XXX */
                 $("#update-trigger").click(update);
                 $("#more-trigger").click(more);
-
-                deferred.resolve(selfDiv);
-            })
-
-        preload();
-
-        return deferred.promise();
+        });
     }
 
 

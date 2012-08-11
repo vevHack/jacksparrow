@@ -27,13 +27,6 @@ jks.common = jks.common || (function() {
         };
     }
 
-    function throwTodo() {
-        throw {
-            name: "todoException",
-            message: "XXX"
-        };
-    }
-
     function warn() {
         console.warn(arguments);
         if (arguments[2] instanceof SyntaxError) {
@@ -47,8 +40,34 @@ jks.common = jks.common || (function() {
             console.warn(e.stack);
         }
     }
+
+    function attachWarnToFetchFailure() {
+        /* Just to save some typing. XXX A real solution will handle
+         * case specific retries */
+        function wrap(actual) {
+            return function() {
+                return actual.apply(this, arguments).fail(warn);
+            };
+        }
+        $.fetch.template = wrap($.fetch.template);
+        $.fetch.js = wrap($.fetch.js);
+        $.fetch.img = wrap($.fetch.img);
+    }
     
     var nop = new Function("");
+
+    function wrapTrigger(actual) {
+        var action = actual;
+        return function (event) {
+            if (action) {
+                action.apply(this, arguments).always(function() {
+                    action = actual;
+                });
+                action = false;
+            }
+            event.preventDefault();
+        };
+    }
 
     function redirectToHome() {
         window.location.replace("/");
@@ -67,12 +86,13 @@ jks.common = jks.common || (function() {
     }
 
     return {
-        handleUnauthenticated: handleUnauthenticated,
-        redirectToHome: redirectToHome,
-        nop: nop,
-        throwTodo: throwTodo,
-        warn: warn,
-        spinnerFactory: spinnerFactoryFactory("ajax-loader.gif")
+          handleUnauthenticated: handleUnauthenticated
+        , redirectToHome: redirectToHome
+        , nop: nop
+        , warn: warn
+        , wrapTrigger: wrapTrigger
+        , attachWarnToFetchFailure: attachWarnToFetchFailure
+        , spinnerFactory: spinnerFactoryFactory("ajax-loader.gif")
     };
 
 }());

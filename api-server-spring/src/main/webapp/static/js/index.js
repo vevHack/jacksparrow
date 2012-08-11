@@ -85,7 +85,6 @@ jks.index = jks.index || (function() {
                     $("body").html(Mustache.render(template));
                     
                     /* XXX merge with jks.datacache ?? */
-                    console.log(me);
                     var userDisplayData = 
                         { displayName: me.name || me.username };
 
@@ -111,5 +110,6 @@ jks.index = jks.index || (function() {
 }());
 
 $(function() {
+    jks.common.attachWarnToFetchFailure();
     jks.index.load();
 });

@@ -36,9 +36,8 @@ jks.register = jks.register || (function() {
         }
 
         function ignoreAbortElseTodo(jqXHR, errorText) {
-            console.warn(arguments);
             if ("abort".localeCompare(errorText) !== 0) {
-                jks.common.throwTodo.apply(this, arguments);
+                jks.common.warn.apply(this, arguments);
             }
         }
 
@@ -184,7 +183,7 @@ jks.register = jks.register || (function() {
             form.find("input").attr("disabled", true);
             $.post("/api/register", validated)
                 .pipe(createSession)
-                    .fail(jks.common.throwTodo)
+                    .fail(jks.common.warn)
                     .done(jks.common.redirectToHome);
         }
 
@@ -192,8 +191,7 @@ jks.register = jks.register || (function() {
             return $.post("/api/session/create", {
                 user: data.user.id,
                 password: validated["password"]
-            }, "json")
-                .fail(jks.common.throwTodo)
+            }, "json");
         }
 
         return function (event) {
@@ -206,30 +204,29 @@ jks.register = jks.register || (function() {
         $.each(validator, function(i, x) { x.abort() });
     };
 
+    function bindEvents(div) {
+        var form = div.children("form");
+
+        [
+            {name: "email"}, 
+            {name:"username"}, 
+            {name:"password", onlyValidate: true}
+        ].forEach(function(field) {
+            validator[field.name] = validatorFactory(
+                form.find(["input[name=", field.name, "]"].join('"')),
+            field.name, !field.onlyValidate);
+        });
+
+        form.find('input[name="email"]').one("focusout", 
+            prepopulateUsernameFactory(form.find('input[name="username"]')));
+
+        form.on("submit", registerHandlerFactory(form,
+            form.find('input[type="submit"]')));
+    }
+
     return { 
-        bindEvents: function(div) {
-            var form = div.children("form");
-
-            [
-                {name: "email"}, 
-                {name:"username"}, 
-                {name:"password", onlyValidate: true}
-            ].forEach(function(field) {
-                validator[field.name] = validatorFactory(
-                    form.find(["input[name=", field.name, "]"].join('"')),
-                    field.name, !field.onlyValidate);
-            });
-
-            form.find('input[name="email"]').one("focusout", 
-                prepopulateUsernameFactory(
-                    form.find('input[name="username"]')));
-
-            form.on("submit", registerHandlerFactory(form,
-                form.find('input[type="submit"]')));
-        },
-
-        abort: abort
-
+          bindEvents: bindEvents,
+        , abort: abort
     };
 
 }());

@@ -1,6 +1,5 @@
 var jks = jks || {};
-
-(function() {
+jks.authenticate = jks.authenticate || (function() {
     "use strict";
 
     function preload() {
@@ -11,15 +10,10 @@ var jks = jks || {};
 
     function fadeReplaceFactory(selector, withSelector) {
         return function() {
-            var temp;
-            /* XXX
-            $(selector).fadeOut("fast", function() {
-                $(withSelector).fadeIn("fast");
-            });
-            */
             $(selector).hide();
             $(withSelector).show();
 
+            var temp;
             temp = selector;
             selector = withSelector;
             withSelector = temp;
@@ -34,7 +28,6 @@ var jks = jks || {};
                 $.fetch.template("register"),
                 $.fetch.js("register")
             )
-            .fail(jks.common.warn)
             .done(function() {
                 var template = arguments[0][0];
                 var registerDiv = $("#register");
@@ -66,35 +59,37 @@ var jks = jks || {};
         event.preventDefault();
     }
 
-    $(function() {
-        var authFetched;
-
-        authFetched = $.fetch.template("authenticate")
-            .fail(jks.common.warn)
+    function load() {
+        var authFetched = $.fetch.template("authenticate")
             .done(function(template) {
                 $("body").html($(Mustache.render(template))
                     .filter("#register").hide().end());
-                $("#login").on("click", ".trigger", onShowRegister);
+                    $("#login").on("click", ".trigger", onShowRegister);
             })
-
 
         $.when(
             authFetched,
             $.fetch.template("login"),
             $.fetch.js("login")
-        )
-            .fail(jks.common.warn)
-            .done(function(){
-                var template = arguments[1][0];
-                var loginDiv = $("#login");
+        ).done(function(){
+            var template = arguments[1][0];
+            var loginDiv = $("#login");
 
-                loginDiv
-                    .prepend(Mustache.render(template))
-                    .find('input[name="email_or_username"]').focus();
-                jks.login.bindEvents(loginDiv);
-            });
+            loginDiv
+                .prepend(Mustache.render(template))
+                .find('input[name="email_or_username"]').focus();
+            jks.login.bindEvents(loginDiv);
+        });
 
         preload();
-    });
+    };
+
+    return {
+        load: load
+    };
 }());
 
+$(function() {
+    jks.common.attachWarnToFetchFailure();
+    jks.authenticate.load();
+});

@@ -2,9 +2,6 @@ var jks = jks || {};
 jks.create = jks.create || (function() {
     "use strict";
 
-    function preload() {
-    }
-
     var prevC;
 
     function resetInfo(info) {
@@ -48,7 +45,7 @@ jks.create = jks.create || (function() {
                 .fail(function(jqXHR) {
                     var error = JSON.parse(jqXHR.responseText).error;
                     if (error.code !== 412) {
-                        jks.common.throwTodo();
+                        jks.common.warn();
                     }
                     info.text(error.message);
                     content.attr("disabled", false);
@@ -62,31 +59,20 @@ jks.create = jks.create || (function() {
     var selfDiv;
 
     function load(container) {
-        var deferred = $.Deferred();
-        $.when(
-            $.fetch.template("create")
-        )
-            .fail(jks.common.warn)
-            .done(function() {
-                var template = arguments[0];
-                var render = $(Mustache.render(template));
+        return $.fetch.template("create").done(function(template) {
+            var render = $(Mustache.render(template));
 
-                container.append(
-                    selfDiv = $('<div id="create" />').append(render).hide());
+            container.append(
+                selfDiv = $('<div id="create" />').append(render).hide());
 
-                var form = selfDiv.find("form");
-                var content = form.find("textarea");
-                var trigger = form.find('input[type="submit"]');
-                var info = form.find(".info");
+            var form = selfDiv.find("form");
+            var content = form.find("textarea");
+            var trigger = form.find('input[type="submit"]');
+            var info = form.find(".info");
 
-                attachKeyboardListener(content, info);
-                attachSubmitListener(form, trigger, content, info);
-
-                deferred.resolve(selfDiv);
-            });
-
-        preload();
-        return deferred.promise();
+            attachKeyboardListener(content, info);
+            attachSubmitListener(form, trigger, content, info);
+        });
     }
 
     return {
