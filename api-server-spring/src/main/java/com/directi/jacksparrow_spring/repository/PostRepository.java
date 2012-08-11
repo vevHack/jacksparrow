@@ -9,6 +9,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
@@ -20,6 +22,8 @@ import java.util.List;
 public class PostRepository {
 
     private static final int POSTS_PER_QUERY = 10;
+
+    private @Autowired FeedUpdater feedUpdater;
 
     private @Autowired JdbcTemplate jdbcTemplate;
     private @Autowired NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -180,6 +184,17 @@ public class PostRepository {
                 postsOlderThanQuery, postsNewerThanQuery);
     }
 
+/*
+    public void process() {
+        System.out.println("processing next 10 at " + new Date());
+        for (int i = 0; i < 10; i++) {
+            worker.work(counter.incrementAndGet());
+        }
+    }
+    */
+
+
+
 
 
     public Post create(final User user, final String content) {
@@ -195,19 +210,31 @@ public class PostRepository {
         jdbcTemplate.update("INSERT INTO feed(\"user\", post) VALUES(?,?)",
                 user.getId(), post.getId());
 
-        jdbcTemplate.update("INSERT INTO feed(\"user\", post) " +
-                "SELECT follower as \"user\", ? as post FROM follows " +
-                "WHERE following=? AND end_on IS NULL",
-                post.getId(), user.getId());
+        feedUpdater.add(user, post);
 
-        /* XXX NOTIFY the NOTIFY SERVER */
+        return post;
+    }
+
+    @Component
+    public static class FeedUpdater {
+
+        private @Autowired JdbcTemplate jdbcTemplate;
+
+        @Async
+        public void add(User user, Post post) {
+            jdbcTemplate.update("INSERT INTO feed(\"user\", post) " +
+            "SELECT follower as \"user\", ? as post FROM follows " +
+            "WHERE following=? AND end_on IS NULL",
+            post.getId(), user.getId());
+
+            /* XXX NOTIFY the NOTIFY SERVER */
 /*
         List<Integer> followersIds = jdbcTemplate.queryForList(
                 "SELECT follower FROM follows WHERE following=? " +
                         "AND end_on IS NULL",
                 Integer.class, user.getId());
                 */
+        }
 
-        return post;
-    }
+    };
 }

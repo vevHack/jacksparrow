@@ -24,7 +24,6 @@ describe("Posts", function(){
             .done(function(data) {
                 data.should.have.property("posts");
                 data.posts.should.be.instanceof(Array);
-                data.posts.should.includeEql(config.testPost);
                 data.should.have.property("now");
                 should.exist(Date.parse(data.now));
             })

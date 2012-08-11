@@ -21,8 +21,28 @@ describe("Create", function() {
                     });
     });
 
- 
     it("should accept valid content", function(done) {
+        var content = "Testing async";
+        common.createSession()
+            .done(function(access_token) {
+                common.authJsonPost(access_token, {
+                    url: config.url("/api/post/create"), 
+                    data: {content: content}
+                })
+                    .done(function(data) {
+                        data.should.have.property("post");
+                        data.post.should.have.property("id");
+                        data.post.should.have.property("user");
+                        data.post.user.should.have.property("id");
+                        data.post.user.id.should.equal(config.testUser.id);
+                    })
+                    .fail(common.shouldNotFail)
+                    .always(function(){done();});
+            });
+    });
+
+ 
+    it("should update user's and follower's feed", function(done) {
 
         function shouldBePresentInPostsAndFeeds(pid, me, follower, done) {
             function checkInFeed(user) {
