@@ -1,17 +1,35 @@
 <html>
 
+
+
 <head>
+
+    <script defer src="/static/js/lib/jquery-1.7.2.js"></script>
+	<script defer src = "/static/js/lib/jquery.color.js"></script>
+	<script defer src = "/static/js/lib/jquery.Jcrop.min.js"></script>
+	<script defer src = "/static/js/crop.js"></script>
+
+    <link rel="stylesheet" href="/static/css/lib/jquery.Jcrop.css" type="text/css" />
+
 </head>
+
+
 
 
 <body>
 	<form id="imgUploadForm" method="POST" enctype="multipart/form-data" action="/imageupload/insert"  >
 		<p>
-			Please specify a file to upload:<br>
+			Please specify ddddddddda file to upload:<br>
 			<input type="file" name="uploadedFile"
 				id="uploadedFile" size="40">
 		</p>
            user <input type="text" id="user" name="user"/>
+           <div id="parentTarget" style = "border:1px solid black;width:400px;height:400px;overflow:hidden">
+                <img src=""  id="target" alt="Flowers" />
+           </div>
+           <div style="border:1px solid black;width:100px;height:100px;overflow:hidden;">
+             <img src="" id="preview" alt="Preview" />
+           </div>
 
 			<input type="submit" value="Send">
 

@@ -43,7 +43,9 @@ public class ImageController {
     @ResponseBody
     protected HttpEntity<byte[]> onSubmit(
             @RequestParam final CommonsMultipartFile uploadedFile,
-            @RequestParam int user) {
+            @RequestParam int user/*,@RequestParam int x,@RequestParam int y,
+            @RequestParam int width,@RequestParam int height */
+            ) {
 
 
         if(uploadedFile!=null){
@@ -51,7 +53,7 @@ public class ImageController {
                 BufferedImage image  = ImageIO.read(
                         new ByteArrayInputStream(uploadedFile.getBytes()));
                 BufferedImage resizedImage =
-                        imageResizer.resizeImage(image,0,0,100,100);
+                        imageResizer.resizeImage(image,1, 1, 100, 100);
                 byte[] imgBytes = imageResizer.getBytes(resizedImage);
 
                 jdbcTemplate.update("INSERT INTO profile_pics(" +
