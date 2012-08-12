@@ -35,14 +35,14 @@ jks.index = jks.index || (function() {
             }
              
             if (typeof newTab === 'string') {
-                spinner = $('<div id="loader-tab-parent"/>').append(
-                    $('<div id="loader-tab"/>')).prependTo(content);
+                spinner = jks.common.loaderAnimation().prependTo(content);
                 $.fetch.js(newTab)
                     .fail(jks.common.warn)
                     .done(function() {
                         newTab = tabs[trigger.id] = jks[newTab];
-                        newTab.load(content).done(function(div) {
+                        newTab.fetch().done(function(div) {
                             spinner.remove();
+                            content.append(div.hide());
                             newTab.div = div;
                             newTabLoaded.resolve();
                         });

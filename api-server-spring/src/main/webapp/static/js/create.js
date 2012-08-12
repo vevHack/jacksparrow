@@ -59,7 +59,7 @@ jks.create = jks.create || (function() {
             var cancelTrigger = render.find("#create-cancel-trigger");
 
             attachKeyboardListener(content, info);
-            submitTrigger.click(jks.common.wrapTrigger(function() {
+            submitTrigger.click(jks.common.oneExecTrigger(function() {
                 return onSubmit(form, submitTrigger, content, info)
                     .done(submitDone);
             }));

@@ -27,6 +27,11 @@ jks.common = jks.common || (function() {
         };
     }
 
+    function loaderAnimation() {
+        return $('<div id="loader-tab-parent"/>').append(
+            $('<div id="loader-tab"/>'));
+    }
+
     function warn() {
         console.warn(arguments);
         if (arguments[2] instanceof SyntaxError) {
@@ -56,7 +61,19 @@ jks.common = jks.common || (function() {
     
     var nop = new Function("");
 
-    function wrapTrigger(actual) {
+    function oneExec(actual) {
+        var action = actual;
+        return function () {
+            if (action) {
+                action.apply(this, arguments).always(function() {
+                    action = actual;
+                });
+                action = false;
+            }
+        };
+    }
+
+    function oneExecTrigger(actual) {
         var action = actual;
         return function (event) {
             if (action) {
@@ -85,14 +102,57 @@ jks.common = jks.common || (function() {
         }
     }
 
+    function notifyOnScrollToBottomFactory() {
+        function nearBottomFactory(threshold) {
+            var doc = $(document);
+            var win = $(window);
+            return function() {
+                return (doc.height() - win.height() - win.scrollTop() 
+                - threshold < 0);
+            }
+        }
+        var nearBottom = nearBottomFactory(200), pending = true;
+        var observers = [], enabled = [];
+
+        function execObserver(key, observer) { 
+            if (enabled[key]) {
+                enabled[key] = false;
+                observer().always(function() {
+                    enabled[key] = true;
+                });
+            }
+        }
+
+        function notifyIfNearBottom() {
+            if (pending && nearBottom()) {
+                pending = false;
+                $.each(observers, execObserver);
+            } else {
+                pending = true;
+            }
+        }
+
+        $(window).scroll(notifyIfNearBottom);
+        setInterval(notifyIfNearBottom, 1000);
+        notifyIfNearBottom();
+
+        return function(observer) {
+            enabled[observers.push(observer) - 1] = true;
+        };
+    }
+
+
     return {
           handleUnauthenticated: handleUnauthenticated
         , redirectToHome: redirectToHome
         , nop: nop
         , warn: warn
-        , wrapTrigger: wrapTrigger
+        , oneExec: oneExec
+        , oneExecTrigger: oneExecTrigger
         , attachWarnToFetchFailure: attachWarnToFetchFailure
         , spinnerFactory: spinnerFactoryFactory("ajax-loader.gif")
+        , loaderAnimation: loaderAnimation
+        , notifyOnScrollToBottom: notifyOnScrollToBottomFactory(200)
     };
 
 }());

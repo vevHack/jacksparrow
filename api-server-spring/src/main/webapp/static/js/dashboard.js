@@ -51,7 +51,7 @@ jks.dashboard = jks.dashboard || (function() {
                   "#logout-trigger": logout
                 , "#create-trigger": createPostFactory()
             }, function(key, value) {
-                container.find(key).click(jks.common.wrapTrigger(value));
+                container.find(key).click(jks.common.oneExecTrigger(value));
             });
         });
     }

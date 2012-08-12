@@ -9,12 +9,8 @@ jks.feed = jks.feed || (function() {
             $.fetch.img("arrow-light.png"),
             $.fetch.img("arrow-dark.png")
             ).done(function(light, dark) {
-                if(typeof showDetailTrigger !== 'undefined') {
-                    return;
-                }
-
-                showDetailTrigger = 
-                    $('<div id="show-detail-trigger"/>')
+                if(typeof showDetailTrigger === 'undefined') {
+                    showDetailTrigger = $('<div id="show-detail-trigger"/>')
                         .append(light)
                         .append(dark.hide())
                         .hover(function() {
@@ -26,6 +22,7 @@ jks.feed = jks.feed || (function() {
                                 $(this).parent().data("id")));
                             event.preventDefault();
                         });
+                }
             });
     }
 
@@ -50,7 +47,7 @@ jks.feed = jks.feed || (function() {
     }
 
 
-    var selfDiv, feedTemplate;
+    var root, feedTemplate;
     var serverTimestamp, newestTimestamp, oldestTimestamp;
 
     function updateSyncStatus(data) {
@@ -66,7 +63,6 @@ jks.feed = jks.feed || (function() {
             }
         }
     }
-
 
     function renderFeeds(template, data) {
         var render = $(Mustache.render(template, data));
@@ -86,6 +82,7 @@ jks.feed = jks.feed || (function() {
         return render;
     }
 
+
     function updatePostWithUserDetails(idx, authorSpan) {
         authorSpan = $(authorSpan);
         var user = jks.datacache.getUser(authorSpan.data("id"));
@@ -99,70 +96,84 @@ jks.feed = jks.feed || (function() {
 
     function updateTimestamps() {
         jks.timestamper.setReference(Date.parse(serverTimestamp));
-        selfDiv.find(".post").each(jks.timestamper.update);
+        root.find(".post").each(jks.timestamper.update);
     }
 
-
-    function load(container) {
-        return $.when(
+    function fetch() {
+        var dfd = $.Deferred();
+        $.when(
               $.fetch.template("feed")
             , $.getJSON("/api/user/feed")
             , $.fetch.js("timestamper")
             , $.fetch.js("fetchUser")
             , $.fetch.js("datacache")
         ).done(function() {
+
             feedTemplate = arguments[0][0];
             var data = arguments[1][0];
+            root = $('<div id="feed" />')
+                .append(renderFeeds(feedTemplate, data));
 
-            container.append(
-                selfDiv = $('<div id="feed" />')
-                .append(renderFeeds(feedTemplate, data))
-                .hide());
+            updateTimestamps();
 
-                updateTimestamps();
-
-                loadShowDetailTrigger()
+            loadShowDetailTrigger()
                 .done(function() {
-                    container.on("mouseenter", ".post", mouseenterPost);
-                    container.on("mouseleave", ".post", mouseleavePost);
+                    root.on("mouseenter", ".post", mouseenterPost);
+                    root.on("mouseleave", ".post", mouseleavePost);
                 });
 
-                /* XXX */
-                $("#update-trigger").click(update);
-                $("#more-trigger").click(more);
+            /* XXX */
+            root.find("#update-trigger").click(update);
+
+            jks.common.notifyOnScrollToBottom(more)
+
+            dfd.resolve(root);
         });
+        return dfd.promise();
     }
 
 
-    function update(event) {
+    function update() {
         $.getJSON("/api/user/feed", {newerThan: newestTimestamp})
             .fail(jks.common.warn)
             .done(function(data) {
                 if (data.feed.length !== 0) {
-                    selfDiv.prepend(renderFeeds(feedTemplate, data));
+                    root.prepend(renderFeeds(feedTemplate, data));
                     updateTimestamps();
                 }
             });
         event.preventDefault();
     }
 
-    function more(event) {
-        $.getJSON("/api/user/feed", {olderThan: oldestTimestamp})
-            .fail(jks.common.warn)
-            .done(function(data) {
-                if (data.feed.length !== 0) {
-                    selfDiv.append(renderFeeds(feedTemplate, data));
-                    updateTimestamps();
-                } else {
-                    $("#more-trigger").hide(); /*XXX*/
-                }
-            });
-        event.preventDefault();
-    }
+    var more = (function() {
+        var action = function () {
+            var spinner = jks.common.loaderAnimation().appendTo(root);
+            return $.getJSON("/api/user/feed", {olderThan: oldestTimestamp})
+                .fail(jks.common.warn)
+                .done(function(data) {
+                    spinner.remove();
+                    if (data.feed.length !== 0) {
+                        root.append(renderFeeds(feedTemplate, data));
+                        updateTimestamps();
+                    } else {
+                        action = noMore;
+                    }
+                });
+        }
+
+        function noMore() {
+            return $.Deferred().resolve();
+        }
+
+        return function() {
+            return action();
+        }
+    }());
 
 
     return {
-        load: load,
+          fetch: fetch
+        , update: update
     };
 }());
 
