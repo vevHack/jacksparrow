@@ -61,7 +61,7 @@ fieldset {
 
 #content {
     float: left;
-    width: 75%;
+    width: 55%;
     min-height: 200px;
     word-wrap: break-word;
     background-color: grey;
@@ -69,7 +69,7 @@ fieldset {
 
 #detail {
     float: right;
-    width: 25%;
+    width: 45%;
     word-wrap: break-word;
     background-color: purple;
 }
@@ -105,6 +105,19 @@ fieldset {
 #create-submit-trigger { background-image: url("/static/img/check.png"); }
 #create-cancel-trigger { background-image: url("/static/img/stop.png"); }
 #create-trigger { background-image: url("/static/img/notepencil.png"); }
+#zoom-trigger { background-image: url("/static/img/slide.png"); }
+#close-detail-trigger { 
+    background-image: url("/static/img/cross.png"); 
+    float: right;
+}
+
+#show-detail-trigger {
+    background-image: url("/static/img/arrow.png");
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: blue;
+}
 
 /*
  *
@@ -225,12 +238,4 @@ input.validated {
 }
 
 .post.current img {
-}
-
-#show-detail-trigger {
-    position: absolute;
-    width: 100px;
-    bottom: 0;
-    right: 0;
-    background-color: blue;
 }

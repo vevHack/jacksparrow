@@ -1,36 +1,26 @@
 var jks = jks || {};
-jks.postList = jks.postList || (function() {
+jks.userList = jks.userList || (function() {
     "use strict";
 
-    function fetchDetailTab(type) {
-        var type = [type, "Details"].join("");
-        return $.when(
-              $.fetch.js(type)
-            , $.fetch.template("postDetails")
-            , $.fetch.js("datacache")
-            ).done(function() {
-                jks[type].setTemplate(arguments[1][0]);
-            });
-    }
-
-    return function(postListType, fetchData, onRender) {
+    return function(userListType, fetchData, onRender) {
 
         var showDetailTrigger;
-        var root, postListTemplate;
+        var root, userListTemplate;
         var serverTimestamp, newestTimestamp, oldestTimestamp;
 
         function loadShowDetailTrigger() {
             showDetailTrigger = 
                 $('<a id="show-detail-trigger" class="trigger"/>');
             showDetailTrigger.on("click", function() {
-                var postId = $(this).parent().data("id");
-                jks.postDetails.show(postId);
-                event.preventDefault();
+                showPostDetails(jks.datacache.getPost(
+                    $(this).parent().data("id")));
+                    event.preventDefault();
             });
 
             root.on("mouseenter", ".post", mouseenterPost);
             root.on("mouseleave", ".post", mouseleavePost);
         }
+
 
         function mouseenterPost(event) {
             showDetailTrigger.appendTo(
@@ -42,6 +32,10 @@ jks.postList = jks.postList || (function() {
             showDetailTrigger.detach();
         }
 
+
+        function showUserDetails(user) {
+            $("#detail").html(JSON.stringify(user));
+        }
 
         function updateSyncStatus(data) {
             if (typeof newestTimestamp === "undefined") {
@@ -57,13 +51,13 @@ jks.postList = jks.postList || (function() {
             }
         }
 
-        function renderPostList(data) {
-            var render = $(Mustache.render(postListTemplate, data));
+        function renderUserList(data) {
+            var render = $(Mustache.render(userListTemplate, data));
 
             serverTimestamp = data.now;
             updateSyncStatus(data);
 
-            data[postListType].forEach(function(post) {
+            data[userListType].forEach(function(post) {
                 jks.datacache.setPost(post.id, post);
             });
 
@@ -80,23 +74,23 @@ jks.postList = jks.postList || (function() {
         function fetch() {
             var dfd = $.Deferred();
             $.when(
-                  $.fetch.template(postListType)
+                  $.fetch.template(userListType)
                 , fetchData()
                 , $.fetch.js("timestamper")
                 , $.fetch.js("fetchUser")
                 , $.fetch.js("datacache")
                 ).done(function() {
-                    postListTemplate = arguments[0][0];
+                    userListTemplate = arguments[0][0];
                     var data = arguments[1][0];
-                    root = $('<div id="' + postListType + '" />');
+                    root = $('<div id="' + userListType + '" />');
 
-                    if (data[postListType].length === 0) {
+                    if (data[userListType].length === 0) {
                         root.append('<span class="info">Nothing Yet</span>');
                         newestTimestamp = oldestTimestamp = serverTimestamp;
                         more = noMore;
                     } else {
-                        root.append(renderPostList(data));
-                        updateTimestamps();
+                        root.append(renderUserList(data));
+            //XXX            updateTimestamps();
                     }
 
                     $.when(fetchDetailTab("user"), fetchDetailTab("post"))
@@ -112,8 +106,8 @@ jks.postList = jks.postList || (function() {
             return fetchData({newerThan: newestTimestamp})
                 .fail(jks.common.warn)
                 .done(function(data) {
-                    if (data[postListType].length !== 0) {
-                        renderPostList(data).hide()
+                    if (data[userListType].length !== 0) {
+                        renderUserList(data).hide()
                             .prependTo(root).slideDown("slow");
                         updateTimestamps();
                     }
@@ -130,8 +124,8 @@ jks.postList = jks.postList || (function() {
                 .fail(jks.common.warn)
                 .done(function(data) {
                     spinner.remove();
-                    if (data[postListType].length !== 0) {
-                        renderPostList(data).hide()
+                    if (data[userListType].length !== 0) {
+                        renderUserList(data).hide()
                             .appendTo(root).slideDown("slow");
                             updateTimestamps();
                     } else {

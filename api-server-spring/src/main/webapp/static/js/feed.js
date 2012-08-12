@@ -9,14 +9,14 @@ jks.feed = jks.feed || (function() {
     function onRender(render, data) {
         jks.fetchUser(data.feed.map(function(post) { return post.user.id; }))
             .done(function() {
-                render.find(".author").each(updatePostWithUserDetails);
+                render.find(".user").each(updatePostWithUserDetails);
             });
     }
 
-    function updatePostWithUserDetails(idx, authorSpan) {
-        authorSpan = $(authorSpan);
-        var user = jks.datacache.getUser(authorSpan.data("id"));
-        $('<a href="#"/>').appendTo(authorSpan)
+    function updatePostWithUserDetails(idx, userSpan) {
+        userSpan = $(userSpan);
+        var user = jks.datacache.getUser(userSpan.data("id"));
+        $('<a href="#"/>').appendTo(userSpan)
             .text(user.name || user.username)
             .on("click", function() {
                 showUserDetails(user);
@@ -24,9 +24,17 @@ jks.feed = jks.feed || (function() {
             });
     }
 
-    function showUserDetails(user) {
-        $("#detail").html(JSON.stringify(user));
+    function userForDisplay(user) {
+        return $.extend({name: user.username}, user);
     }
 
-    return jks.postList("feed", fetchData, onRender);
+    function showUserDetails(user) {
+        $.fetch.template("userDetails").done(function(template) {
+            $("#detail").html(Mustache.render(template, userForDisplay(user)));
+        });
+    }
+
+    return function() {
+        return jks.postList("feed", fetchData, onRender);
+    };
 }());

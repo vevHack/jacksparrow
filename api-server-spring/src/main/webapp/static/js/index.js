@@ -5,7 +5,7 @@ jks.index = jks.index || (function() {
     function preload() {
     }
 
-    function triggerHandlerFactory(content, tabs) {
+    function contentTabManager(content, tabs) {
         var currentTab;
         var previousTrigger = $("<a />");
         var action = handle;
@@ -65,8 +65,26 @@ jks.index = jks.index || (function() {
         }
     }
 
+    function detailTabManager(root) {
+        root.on("click", "#close-detail-trigger", function() {
+            root.html("");
+        });
+    }
+
     function load() {
         var me;
+
+        function tabsFactory() {
+            var tabs = {};
+            ["feed", "posts", "followers", "following"].forEach(function(js) {
+                tabs[[js, "trigger"].join("-")] = {
+                    js: js, 
+                    factory: function() { return jks[js](me.id); }
+                };
+            });
+            return tabs;
+        }
+
         $.getJSON("/api/me")
             .fail(jks.common.handleUnauthenticated)
             .pipe(function(data) {
@@ -90,24 +108,14 @@ jks.index = jks.index || (function() {
 
                     jks.dashboard.load($("#dashboard"), userDisplayData);
 
-                    var tabs = {
-                        "feed-trigger": { 
-                            js: "feed", 
-                            factory: function() { return jks.feed; }
-                        }
-                        ,
-                        "posts-trigger": {
-                            js: "posts",
-                            factory: function() { return jks.posts(me.id); }
-                        }
-                    };
-                    jks.rootPane.load(
-                        $("#root-pane"), userDisplayData, 
-                            triggerHandlerFactory($("#content"), tabs)
+                    jks.rootPane.load($("#root-pane"), userDisplayData, 
+                        contentTabManager($("#content"), tabsFactory())
                     )
                         .done(function() {
                             $("#feed-trigger").trigger("click");
                         });
+
+                    detailTabManager($("#detail"));
                 });
 
         preload();

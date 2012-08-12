@@ -55,13 +55,15 @@ public class UserRepository {
 
     public List<User> followers(User user) {
         return jdbcTemplate.query(
-                "SELECT follower as id FROM follows WHERE following=?",
+                "SELECT follower as id FROM follows WHERE following=? " +
+                        "AND end_on IS NULL",
                 userIdMapper, user.getId());
     }
 
     public List<User> following(User user) {
         return jdbcTemplate.query(
-                "SELECT following as id FROM follows WHERE follower=?",
+                "SELECT following as id FROM follows WHERE follower=?" +
+                        "AND end_on IS NULL",
                 userIdMapper, user.getId());
     }
 
