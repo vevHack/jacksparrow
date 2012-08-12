@@ -43,6 +43,10 @@ jks.dashboard = jks.dashboard || (function() {
     }
 
     function load(container, selfDisplayData) {
+        if (typeof selfDisplayData === "undefined") {
+            return loadVanilla(container);
+        }
+
         return $.fetch.template("dashboard").done(function(template) {
             var render = Mustache.render(template, selfDisplayData);
             container.html(render);
@@ -56,8 +60,14 @@ jks.dashboard = jks.dashboard || (function() {
         });
     }
 
+    function loadVanilla(container) {
+        return $.fetch.template("dashboard-vanilla").done(function(template) {
+            container.html(Mustache.render(template));
+        });
+    }
+
     return {
-        load: load
+          load: load
     };
 }());
 

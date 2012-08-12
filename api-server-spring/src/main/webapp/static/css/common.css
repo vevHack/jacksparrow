@@ -52,6 +52,11 @@ fieldset {
     background-color: red;
 }
 
+#full-content-pane {
+    padding-top: 2em;
+    background-color: green;
+}
+
 #content-pane {
     padding-top: 2em;
     float: right;

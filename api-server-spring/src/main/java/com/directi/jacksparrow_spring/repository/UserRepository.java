@@ -144,7 +144,7 @@ public class UserRepository {
 
 
     public List<User> details(final List<Integer> users, List<String> fields)
-            throws PreconditionViolatedException, EntityNotFoundException {
+            throws PreconditionViolatedException {
 
         Map<String, String> bindings = new HashMap<String, String>() {{
             put("id", "id");
@@ -159,13 +159,8 @@ public class UserRepository {
 
         GenericRowMapper<User> mapper =
                 new GenericRowMapper<User>(User.class, bindings);
-        try {
-            return namedParameterJdbcTemplate.query(
-                    "SELECT * FROM \"user\" WHERE id in (:ids)",
-                    new MapSqlParameterSource("ids", users), mapper);
-        } catch (DataAccessException ex) {
-            throw new EntityNotFoundException("User");
-        }
-
+        return namedParameterJdbcTemplate.query(
+                "SELECT * FROM \"user\" WHERE id in (:ids)",
+                new MapSqlParameterSource("ids", users), mapper);
     }
 }

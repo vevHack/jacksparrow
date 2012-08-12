@@ -31,6 +31,10 @@ module.exports = {
         created_on: "2012-08-04T17:26:44.472+0000" 
     },
 
+    invalidPost: {
+        id: 0
+    },
+
     testFeed: {
         post: 8,
         added_on: "2012-08-04T17:28:20.730+0000"

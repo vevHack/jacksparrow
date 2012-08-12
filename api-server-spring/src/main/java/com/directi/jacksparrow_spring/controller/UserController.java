@@ -210,7 +210,7 @@ public class UserController {
     @ResponseBody
     public Map details(@RequestParam("user") final List<Integer> users,
                        @RequestParam("field") final List<String> fields)
-        throws PreconditionViolatedException, EntityNotFoundException {
+        throws PreconditionViolatedException {
         return new HashMap() {{
             put("users", userRepository.details(users, fields));
         }};

@@ -225,7 +225,7 @@ jks.register = jks.register || (function() {
     }
 
     return { 
-          bindEvents: bindEvents,
+          bindEvents: bindEvents
         , abort: abort
     };
 

@@ -11,3 +11,5 @@
 * HTTPS.
 * sharding
 * feed options: promiscuous, introvert(?), outgoing, voyueur.
+
+make cookie secure and http only

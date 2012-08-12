@@ -28,7 +28,7 @@ public class PostRepository {
     private @Autowired JdbcTemplate jdbcTemplate;
     private @Autowired NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    public static class PostMapper implements RowMapper<Post> {
+    private static class PostMapper implements RowMapper<Post> {
         @Override
         public Post mapRow(final ResultSet rs, int rowNum) throws SQLException {
             return new Post() {{
@@ -41,6 +41,8 @@ public class PostRepository {
             }};
         }
     }
+
+    private static final PostMapper postMapper = new PostMapper();
 
 
 
@@ -106,7 +108,7 @@ public class PostRepository {
         }
 
         List<Post> posts = namedParameterJdbcTemplate.query(
-                query, parameterSource, new PostMapper());
+                query, parameterSource, postMapper);
         return new PostContainer(posts, parameterSource);
     }
 
@@ -184,16 +186,12 @@ public class PostRepository {
                 postsOlderThanQuery, postsNewerThanQuery);
     }
 
-/*
-    public void process() {
-        System.out.println("processing next 10 at " + new Date());
-        for (int i = 0; i < 10; i++) {
-            worker.work(counter.incrementAndGet());
-        }
+
+    public List<Post> details(final List<Integer> posts) {
+        return namedParameterJdbcTemplate.query(
+                "SELECT * FROM post WHERE id in (:ids)",
+                new MapSqlParameterSource("ids", posts), postMapper);
     }
-    */
-
-
 
 
 
@@ -223,9 +221,9 @@ public class PostRepository {
         @Async
         public void add(User user, Post post) {
             jdbcTemplate.update("INSERT INTO feed(\"user\", post) " +
-            "SELECT follower as \"user\", ? as post FROM follows " +
-            "WHERE following=? AND end_on IS NULL",
-            post.getId(), user.getId());
+                "SELECT follower as \"user\", ? as post FROM follows " +
+                "WHERE following=? AND end_on IS NULL",
+                post.getId(), user.getId());
 
             /* XXX NOTIFY the NOTIFY SERVER */
 /*

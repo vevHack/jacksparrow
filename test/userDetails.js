@@ -12,7 +12,7 @@ describe("User Details", function(){
             $.param({user: users, field: fields}, true));
     }
 
-    it("should return blank if no existing user", function(done) { 
+    it("should ignore blank if no valid user", function(done) { 
         request([config.invalidUser.id], ["username"])
             .done(function(data) { 
                 data.should.have.property("users");
