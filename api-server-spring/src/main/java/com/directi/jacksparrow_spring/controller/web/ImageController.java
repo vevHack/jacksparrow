@@ -1,5 +1,6 @@
 package com.directi.jacksparrow_spring.controller.web;
 
+import com.directi.jacksparrow_spring.ImageResizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -14,6 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -24,6 +28,8 @@ import java.util.Map;
 public class ImageController {
 
     private @Autowired JdbcTemplate jdbcTemplate;
+
+    ImageResizer imageResizer = new ImageResizer();
 
     @RequestMapping("/display")
     @ResponseBody
@@ -42,11 +48,15 @@ public class ImageController {
 
         if(uploadedFile!=null){
             try {
-//                BufferedImage image  = ImageIO.read(new ByteArrayInputStream(uploadedFile.getBytes()));
+                BufferedImage image  = ImageIO.read(
+                        new ByteArrayInputStream(uploadedFile.getBytes()));
+                BufferedImage resizedImage =
+                        imageResizer.resizeImage(image,0,0,100,100);
+                byte[] imgBytes = imageResizer.getBytes(resizedImage);
 
                 jdbcTemplate.update("INSERT INTO profile_pics(" +
                         "\"user\", original_image) VALUES(?, ?)"
-                        ,user , uploadedFile.getBytes());
+                        ,user , imgBytes);
 
             } catch (Exception ex) {
                 System.out.println("Error :"+ex);
