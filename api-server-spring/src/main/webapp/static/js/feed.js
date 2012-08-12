@@ -122,9 +122,6 @@ jks.feed = jks.feed || (function() {
                     root.on("mouseleave", ".post", mouseleavePost);
                 });
 
-            /* XXX */
-            root.find("#update-trigger").click(update);
-
             jks.common.notifyOnScrollToBottom(more)
 
             dfd.resolve(root);
@@ -138,11 +135,11 @@ jks.feed = jks.feed || (function() {
             .fail(jks.common.warn)
             .done(function(data) {
                 if (data.feed.length !== 0) {
-                    root.prepend(renderFeeds(feedTemplate, data));
+                    renderFeeds(feedTemplate, data).hide()
+                        .prependTo(root).slideDown("slow");
                     updateTimestamps();
                 }
             });
-        event.preventDefault();
     }
 
     var more = (function() {
@@ -153,7 +150,8 @@ jks.feed = jks.feed || (function() {
                 .done(function(data) {
                     spinner.remove();
                     if (data.feed.length !== 0) {
-                        root.append(renderFeeds(feedTemplate, data));
+                        renderFeeds(feedTemplate, data).hide()
+                            .appendTo(root).slideDown("slow");
                         updateTimestamps();
                     } else {
                         action = noMore;
