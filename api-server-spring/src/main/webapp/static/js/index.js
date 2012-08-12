@@ -16,10 +16,6 @@ jks.index = jks.index || (function() {
             var trigger = event.target;
             var newTab = tabs[trigger.id];
 
-            if (typeof newTab === 'undefined') {
-                jks.common.warn();
-            }
-
             previousTrigger.toggleClass("current");
             previousTrigger = $(trigger).toggleClass("current");
             action = jks.common.nop;
@@ -34,12 +30,14 @@ jks.index = jks.index || (function() {
                 currentTabHidden.resolve();
             }
              
-            if (typeof newTab === 'string') {
+            if (newTab.div) {
+                newTabLoaded.resolve();
+            } else {
                 spinner = jks.common.loaderAnimation().prependTo(content);
-                $.fetch.js(newTab)
+                $.fetch.js(newTab.js)
                     .fail(jks.common.warn)
                     .done(function() {
-                        newTab = tabs[trigger.id] = jks[newTab];
+                        $.extend(newTab, newTab.factory());
                         newTab.fetch().done(function(div) {
                             spinner.remove();
                             content.append(div.hide());
@@ -47,9 +45,7 @@ jks.index = jks.index || (function() {
                             newTabLoaded.resolve();
                         });
                     });
-            } else {
-                newTabLoaded.resolve();
-            }
+            } 
 
             $.when(currentTabHidden, newTabLoaded).done(function() {
                 newTab.div.fadeToggle(animDuration, function() {
@@ -59,12 +55,15 @@ jks.index = jks.index || (function() {
             });
         }
 
+        jks.common.notifyOnScrollToBottom(function() {
+            return currentTab && currentTab.more();
+        });
+
         return function(event) {
             action(event);
             event.preventDefault();
         }
     }
-
 
     function load() {
         var me;
@@ -73,9 +72,10 @@ jks.index = jks.index || (function() {
             .pipe(function(data) {
                 me = data.user;
                 return $.when(
-                    $.fetch.template("index"),
-                    $.fetch.js("dashboard"),
-                    $.fetch.js("root-pane")
+                      $.fetch.template("index")
+                    , $.fetch.js("dashboard")
+                    , $.fetch.js("root-pane")
+                    , $.fetch.js("postList")
                 );
             }, function() { return $.Deferred() })
                 .fail(jks.common.warn)
@@ -90,13 +90,23 @@ jks.index = jks.index || (function() {
 
                     jks.dashboard.load($("#dashboard"), userDisplayData);
 
-                    var triggerHandler = triggerHandlerFactory($("#content"), {
-                        "feed-trigger": "feed"
-                    });
+                    var tabs = {
+                        "feed-trigger": { 
+                            js: "feed", 
+                            factory: function() { return jks.feed; }
+                        }
+                        ,
+                        "posts-trigger": {
+                            js: "posts",
+                            factory: function() { return jks.posts(me.id); }
+                        }
+                    };
                     jks.rootPane.load(
-                        $("#root-pane"), userDisplayData, triggerHandler)
+                        $("#root-pane"), userDisplayData, 
+                            triggerHandlerFactory($("#content"), tabs)
+                    )
                         .done(function() {
-                //XXX            $("#feed-trigger").trigger("click");
+                            $("#feed-trigger").trigger("click");
                         });
                 });
 

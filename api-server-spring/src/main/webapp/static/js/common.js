@@ -61,18 +61,6 @@ jks.common = jks.common || (function() {
     
     var nop = new Function("");
 
-    function oneExec(actual) {
-        var action = actual;
-        return function () {
-            if (action) {
-                action.apply(this, arguments).always(function() {
-                    action = actual;
-                });
-                action = false;
-            }
-        };
-    }
-
     function oneExecTrigger(actual) {
         var action = actual;
         return function (event) {
@@ -134,7 +122,6 @@ jks.common = jks.common || (function() {
 
         $(window).scroll(notifyIfNearBottom);
         setInterval(notifyIfNearBottom, 1000);
-        notifyIfNearBottom();
 
         return function(observer) {
             enabled[observers.push(observer) - 1] = true;
@@ -147,7 +134,6 @@ jks.common = jks.common || (function() {
         , redirectToHome: redirectToHome
         , nop: nop
         , warn: warn
-        , oneExec: oneExec
         , oneExecTrigger: oneExecTrigger
         , attachWarnToFetchFailure: attachWarnToFetchFailure
         , spinnerFactory: spinnerFactoryFactory("ajax-loader.gif")
