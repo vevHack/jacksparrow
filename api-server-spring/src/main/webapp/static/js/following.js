@@ -8,6 +8,6 @@ jks.following = jks.following || (function() {
                 $.extend({user:user}, params));
         }
 
-        return jks.postList("following", fetchData, jks.common.nop);
+        return jks.userList("following", fetchData);
     };
 }());

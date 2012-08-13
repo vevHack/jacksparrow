@@ -2,29 +2,40 @@ var jks = jks || {};
 jks.postList = jks.postList || (function() {
     "use strict";
 
-    function fetchDetailTab(type) {
-        var type = [type, "Details"].join("");
-        return $.when(
-              $.fetch.js(type)
-            , $.fetch.template("postDetails")
-            , $.fetch.js("datacache")
-            ).done(function() {
-                jks[type].setTemplate(arguments[1][0]);
-            });
-    }
-
-    return function(postListType, fetchData, onRender) {
+    return function(postListType, fetchDataActual) {
 
         var showDetailTrigger;
         var root, postListTemplate;
         var serverTimestamp, newestTimestamp, oldestTimestamp;
+
+        function fetchData(params) {
+
+            function authors(posts) {
+                return posts.map(function(post) { return post.user.id });
+            }
+
+            var dfd = $.Deferred();
+
+            fetchDataActual(params).done(function(data) {
+                var posts = data[postListType];
+                jks.fetchUser(authors(posts)).done(function() {
+                    posts.forEach(function(post) {
+                        post.user = jks.datacache.getUser(post.user.id);
+                        jks.datacache.setPost(jks.formatter.formatPost(post));
+                    });
+                    dfd.resolve(data);
+                });
+            });
+
+            return dfd.promise();
+        }
 
         function loadShowDetailTrigger() {
             showDetailTrigger = 
                 $('<a id="show-detail-trigger" class="trigger"/>');
             showDetailTrigger.on("click", function() {
                 var postId = $(this).parent().data("id");
-                jks.postDetails.show(postId);
+                jks.detailView.show(postId);
                 event.preventDefault();
             });
 
@@ -63,12 +74,6 @@ jks.postList = jks.postList || (function() {
             serverTimestamp = data.now;
             updateSyncStatus(data);
 
-            data[postListType].forEach(function(post) {
-                jks.datacache.setPost(post.id, post);
-            });
-
-            onRender(render, data);
-
             return render;
         }
 
@@ -83,11 +88,9 @@ jks.postList = jks.postList || (function() {
                   $.fetch.template(postListType)
                 , fetchData()
                 , $.fetch.js("timestamper")
-                , $.fetch.js("fetchUser")
-                , $.fetch.js("datacache")
                 ).done(function() {
                     postListTemplate = arguments[0][0];
-                    var data = arguments[1][0];
+                    var data = arguments[1];
                     root = $('<div id="' + postListType + '" />');
 
                     if (data[postListType].length === 0) {
@@ -99,12 +102,11 @@ jks.postList = jks.postList || (function() {
                         updateTimestamps();
                     }
 
-                    $.when(fetchDetailTab("user"), fetchDetailTab("post"))
-                        .done(loadShowDetailTrigger);
+                    loadShowDetailTrigger();
 
                     dfd.resolve(root);
                 });
-                return dfd.promise();
+            return dfd.promise();
         }
 
 

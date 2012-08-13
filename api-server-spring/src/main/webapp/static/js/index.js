@@ -2,9 +2,6 @@ var jks = jks || {};
 jks.index = jks.index || (function() {
     "use strict";
 
-    function preload() {
-    }
-
     function contentTabManager(content, tabs) {
         var currentTab;
         var previousTrigger = $("<a />");
@@ -65,12 +62,6 @@ jks.index = jks.index || (function() {
         }
     }
 
-    function detailTabManager(root) {
-        root.on("click", "#close-detail-trigger", function() {
-            root.html("");
-        });
-    }
-
     function load() {
         var me;
 
@@ -85,40 +76,39 @@ jks.index = jks.index || (function() {
             return tabs;
         }
 
-        $.getJSON("/api/me")
+        return $.getJSON("/api/me")
             .fail(jks.common.handleUnauthenticated)
             .pipe(function(data) {
                 me = data.user;
                 return $.when(
+                /* XXX Bad way to manage dependencies */
                       $.fetch.template("index")
-                    , $.fetch.js("dashboard")
-                    , $.fetch.js("root-pane")
+                    , $.fetch.js("fetchUser")
                     , $.fetch.js("postList")
+                    , $.fetch.js("userList")
+                    , $.fetch.js("formatter")
+                    , $.fetch.js("datacache")
+                    , $.fetch.js("dashboard")
+                    , $.fetch.js("rootPane")
+                    , $.fetch.js("detailView")
                 );
             }, function() { return $.Deferred() })
                 .fail(jks.common.warn)
                 .done(function() {
                     var template = arguments[0][0];
-
                     $("body").html(Mustache.render(template));
-                    
-                    /* XXX merge with jks.datacache ?? */
-                    var userDisplayData = 
-                        { displayName: me.name || me.username };
 
-                    jks.dashboard.load($("#dashboard"), userDisplayData);
+                    jks.datacache.setUser(me = jks.formatter.formatUser(me));
+                    var tabs = contentTabManager($("#content"), tabsFactory());
 
-                    jks.rootPane.load($("#root-pane"), userDisplayData, 
-                        contentTabManager($("#content"), tabsFactory())
-                    )
-                        .done(function() {
-                            $("#feed-trigger").trigger("click");
-                        });
-
-                    detailTabManager($("#detail"));
+                    $.when(
+                            jks.dashboard.load($("#dashboard"), me)
+                          , jks.rootPane.load($("#root-pane"), me, tabs)
+                          , jks.detailView.load($("#detail"))
+                    ).done(function() {
+                        $("#feed-trigger").trigger("click");
+                    });
                 });
-
-        preload();
     }
 
     return {

@@ -2,19 +2,34 @@ var jks = jks || {};
 jks.userList = jks.userList || (function() {
     "use strict";
 
-    return function(userListType, fetchData, onRender) {
+    return function(userListType, fetchDataActual) {
 
         var showDetailTrigger;
         var root, userListTemplate;
         var serverTimestamp, newestTimestamp, oldestTimestamp;
 
+        function fetchData(params) {
+            var dfd = $.Deferred();
+            fetchDataActual(params).done(function(data) {
+                var userList = data[userListType];
+                jks.fetchUser(userList.map(function(user) {return user.id}))
+                    .done(function() {
+                        data[userListType] = userList.map(jks.datacache.getUser);
+                        dfd.resolve(data);
+                    });
+            });
+            return dfd.promise();
+        }
+
         function loadShowDetailTrigger() {
             showDetailTrigger = 
                 $('<a id="show-detail-trigger" class="trigger"/>');
             showDetailTrigger.on("click", function() {
+            /* XXX Show USer details
                 showPostDetails(jks.datacache.getPost(
                     $(this).parent().data("id")));
                     event.preventDefault();
+                    */
             });
 
             root.on("mouseenter", ".post", mouseenterPost);
@@ -57,12 +72,6 @@ jks.userList = jks.userList || (function() {
             serverTimestamp = data.now;
             updateSyncStatus(data);
 
-            data[userListType].forEach(function(post) {
-                jks.datacache.setPost(post.id, post);
-            });
-
-            onRender(render, data);
-
             return render;
         }
 
@@ -81,7 +90,7 @@ jks.userList = jks.userList || (function() {
                 , $.fetch.js("datacache")
                 ).done(function() {
                     userListTemplate = arguments[0][0];
-                    var data = arguments[1][0];
+                    var data = arguments[1];
                     root = $('<div id="' + userListType + '" />');
 
                     if (data[userListType].length === 0) {
@@ -93,8 +102,7 @@ jks.userList = jks.userList || (function() {
             //XXX            updateTimestamps();
                     }
 
-                    $.when(fetchDetailTab("user"), fetchDetailTab("post"))
-                        .done(loadShowDetailTrigger);
+                    loadShowDetailTrigger();
 
                     dfd.resolve(root);
                 });

@@ -10,7 +10,6 @@ jks.fetchUser = jks.fetchUser || (function() {
     }
 
     return function(ids) {
-
         if (!$.isArray(ids)) {
             ids = [ids];
         }
@@ -26,7 +25,7 @@ jks.fetchUser = jks.fetchUser || (function() {
                 .fail(jks.common.warn)
                 .done(function(data) { 
                     data.users.forEach(function(user) {
-                        jks.datacache.setUser(user.id, user);
+                        jks.datacache.setUser(jks.formatter.formatUser(user));
                     });
                 });
     };

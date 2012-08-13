@@ -58,16 +58,22 @@ jks.datacache = jks.datacache || (function() {
         };
     }
 
+    function entitySetter(func, type) {
+        return function(val) {
+            return func(type, val.id, val);
+        }
+    }
+
     return ( (!DISABLE_LOCAL && supports_html5_storage()) ? {
         getUser: wrap(get5, "user"),
-        setUser: set5.bind(this, "user"),
+        setUser: entitySetter(set5, "user"),
         getPost: wrap(get5, "post"),
-        setPost: set5.bind(this, "post")
+        setPost: entitySetter(set5, "post")
     } : {
         getUser: wrap(get, "user"),
-        setUser: set.bind(this, "user"),
+        setUser: entitySetter(set, "user"),
         getPost: wrap(get, "post"),
-        setPost: set.bind(this, "post")
+        setPost: entitySetter(set, "post")
         , print: print /*XXX*/
         , hasUser: function(id) { /* XXX */
             return !!get("user", id);

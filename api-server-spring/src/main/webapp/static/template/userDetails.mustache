@@ -1,7 +1,11 @@
-<div class="userDetail" data-id="{{id}}">
+<a href="#" id="close-detail-trigger" class="trigger" title="Hide" />
+<div class="userDetail">
   <div class="userDetail-Name">{{name}}</div>
+  <a href="{{permalink}}">Go to 
+    the full profile of {{#user}}{{username}}{{/user}}</a>
   <div class="info">
-    (<span class="timestamp" />lastSeen)
+    (<span class="timestamp" />Online Now?!)
   </div>
-  <a href="#" id="follow-trigger" class="trigger" title="Post" />
+  <a href="#" id="follow-trigger" class="trigger" title="Follow" />
+  <a href="#" id="unfollow-trigger" class="trigger" title="Unfollow" />
 </div>

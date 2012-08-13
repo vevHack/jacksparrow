@@ -61,7 +61,7 @@ jks.dashboard = jks.dashboard || (function() {
     }
 
     function loadVanilla(container) {
-        return $.fetch.template("dashboard-vanilla").done(function(template) {
+        return $.fetch.template("dashboardVanilla").done(function(template) {
             container.html(Mustache.render(template));
         });
     }

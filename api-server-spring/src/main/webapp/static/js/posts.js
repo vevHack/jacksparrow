@@ -7,6 +7,6 @@ jks.posts = jks.posts || (function() {
             return $.getJSON("/api/user/posts", $.extend({user:user}, params));
         }
 
-        return jks.postList("posts", fetchData, jks.common.nop);
+        return jks.postList("posts", fetchData);
     };
 }());

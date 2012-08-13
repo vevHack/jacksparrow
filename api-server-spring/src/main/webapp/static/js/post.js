@@ -24,7 +24,7 @@ jks.post = jks.post || (function() {
                         console.log(post);
 
                         jks.fetchUser(post.user.id).done(function() {
-                            post.user = jks.datacache.getUser(post.user.id);/**XXX DISPLAYABEL NAME CERATED DATE*/
+                            post.user = jks.datacache.getUser(post.user.id);
                             $("body").html(Mustache.render(template, post));
                     
                             /* XXX merge with jks.datacache ?? */
