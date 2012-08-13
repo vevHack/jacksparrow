@@ -20,6 +20,8 @@ jks.index = jks.index || (function() {
             var currentTabHidden = $.Deferred();
             var newTabLoaded = $.Deferred();
 
+            jks.detailView.hide();
+
             if (currentTab) {
                 currentTab.div.slideToggle(animDuration, 
                     currentTabHidden.resolve);

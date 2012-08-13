@@ -2,14 +2,55 @@ var jks = jks || {};
 jks.postList = jks.postList || (function() {
     "use strict";
 
-    function isMouseOver(e) {
-        var underneathMouse = $(document.elementFromPoint(e.pageX, e.pageY));
-        return (underneathMouse.parents(".details")) /*XXX*/
+    function attachDetailTrigger(root, type, detailView) {
+        var currentDiv, trigger;
+
+        function cancelDetail() {
+            currentDiv.removeClass("current");
+            currentDiv = undefined;
+        }
+
+        function expandDetail(event) {
+            var targetDiv = $(event.currentTarget).parent();
+            if (currentDiv) {
+                var lastId = currentDiv.data("id");
+                cancelDetail();
+                if (lastId === targetDiv.data("id")) {
+                    detailView.hide();
+                    return;
+                }
+            } 
+            currentDiv = targetDiv;
+            currentDiv.addClass("current");
+            detailView.show(type, currentDiv, cancelDetail);
+        }
+
+        function mouseenterPost(event) {
+            var targetDiv = $(event.currentTarget);
+            trigger.appendTo(targetDiv);
+            if (!currentDiv) {
+                targetDiv.addClass("current");
+            }
+        }
+
+        function mouseleavePost(event) {
+            var targetDiv = $(event.currentTarget);
+            if (!currentDiv) {
+                targetDiv.removeClass("current");
+            }
+            trigger.detach();
+        }
+
+        trigger = $('<a id="show-detail-trigger" class="trigger"/>');
+        trigger.click(expandDetail);
+
+        root.on("mouseenter", ".post", mouseenterPost);
+        root.on("mouseleave", ".post", mouseleavePost);
     }
+
 
     return function(postListType, fetchDataActual) {
 
-        var showDetailTrigger;
         var root, postListTemplate;
         var serverTimestamp, newestTimestamp, oldestTimestamp;
 
@@ -34,69 +75,6 @@ jks.postList = jks.postList || (function() {
 
             return dfd.promise();
         }
-
-        var permanentDiv, currentDiv;
-
-        function loadShowDetailTrigger() {
-            showDetailTrigger = 
-                $('<a id="show-detail-trigger" class="trigger"/>')
-                .click(clickArrow);
-                ;
-        /*
-                .hover(function() {
-                    if (!permanentDiv) {
-                        jks.detailView.show("post", $(this).parent().data("id"));
-                    }
-                }, function(e) {
-                    if (!isMouseOver(e)) {
-                        jks.detailView.hide();
-                    }
-                })
-                .click(function(){
-                    if (permanentDiv) {
-                        permanantDiv = undefined;
-                    } else {
-                        permanentDiv = currentDiv;
-                    }
-                });
-
-*/
-            root.on("mouseenter", ".post", mouseenterPost);
-            root.on("mouseleave", ".post", mouseleavePost);
-            //root.on("click", ".post", clickPost);
-            $("#detail").on("detail-closed", cancelDetail);
-        }
-
-        function cancelDetail() {
-            permanentDiv.removeClass("current");
-            permanentDiv = undefined;
-        }
-
-        function clickArrow(event) {
-            if (permanentDiv) {
-                cancelDetail();
-            } 
-            permanentDiv = $(event.currentTarget).parent();
-            jks.detailView.show("post", permanentDiv.data("id"));
-            permanentDiv.addClass("current");
-        }
-
-        function mouseenterPost(event) {
-            currentDiv = $(event.currentTarget);
-            showDetailTrigger.appendTo(currentDiv);
-            if (!permanentDiv) {
-                $(event.currentTarget).addClass("current");
-            }
-        }
-
-        function mouseleavePost(event) {
-            if (!permanentDiv) {
-                $(event.currentTarget).removeClass("current");
-            }
-            showDetailTrigger.detach();
-            currentDiv = undefined;
-        }
-
 
         function updateSyncStatus(data) {
             if (typeof newestTimestamp === "undefined") {
@@ -146,7 +124,7 @@ jks.postList = jks.postList || (function() {
                         updateTimestamps();
                     }
 
-                    loadShowDetailTrigger();
+                    attachDetailTrigger(root, "post", jks.detailView);
 
                     dfd.resolve(root);
                 });
