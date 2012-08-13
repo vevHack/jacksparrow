@@ -16,21 +16,20 @@ jks.post = jks.post || (function() {
                     , $.fetch.js("fetchUser")
                     , $.fetch.js("datacache")
                     , $.fetch.js("formatter")
-                )
-                    .done(function() {
-                        var template = arguments[0][0];
-                        var data = arguments[1][0];
+                ).done(function() {
+                    var template = arguments[0][0];
+                    var data = arguments[1][0];
 
-                        var post = jks.formatter.formatPost(data.posts[0]);
-                        me = jks.formatter.formatUser(me);
+                    var post = jks.formatter.formatPost(data.posts[0]);
+                    me = me && jks.formatter.formatUser(me);
 
-                        jks.fetchUser(post.user.id).done(function() {
-                            post.user = jks.datacache.getUser(post.user.id);
-                            $("body").html(Mustache.render(template, post));
-                    
-                            jks.dashboard.load($("#dashboard"), me);
-                        });
+                    jks.fetchUser(post.user.id).done(function() {
+                        post.user = jks.datacache.getUser(post.user.id);
+                        $("body").html(Mustache.render(template, post));
+
+                        jks.dashboard.load($("#dashboard"), me);
                     });
+                });
             });
     }
 
