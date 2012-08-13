@@ -93,6 +93,7 @@ jks.index = jks.index || (function() {
                     , $.fetch.js("dashboard")
                     , $.fetch.js("rootPane")
                     , $.fetch.js("detailView")
+                    , $.fetch.js("follow")
                 );
             }, function() { return $.Deferred() })
                 .fail(jks.common.warn)
@@ -106,6 +107,7 @@ jks.index = jks.index || (function() {
                     $.when(
                             jks.dashboard.load($("#dashboard"), me)
                           , jks.rootPane.load($("#root-pane"), me, tabs)
+                          , jks.follow.load(me)
                           , jks.detailView.load($("#detail"))
                     ).done(function() {
                         $("#feed-trigger").trigger("click");

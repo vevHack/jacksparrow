@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,13 +73,6 @@ public class UserController {
         userRepository.removeFollower(
                 authorizer.getAuthorizedUser(), userRepository.findById(user));
     }
-
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    public void getAppointmentsForDay(
-            @RequestParam @DateTimeFormat(iso= DateTimeFormat.ISO.DATE) Date day) {
-        System.out.println(day);
-    }
-
 
 
     private static interface PostFetcher {

@@ -3,6 +3,7 @@ jks.detailView = jks.detailView || (function() {
     "use strict";
 
     var template = {};
+    var me;
     var root, closeListener, paddingTop;
 
     function load(container) {
@@ -41,9 +42,9 @@ jks.detailView = jks.detailView || (function() {
 
     function show(type, div, closeListener_) {
         closeListener = closeListener_;
-        var id = div.data("id");
+        var entity = jks.datacache.get(type, div.data("id"));
         root.hide()
-            .html(Mustache.render(template[type], jks.datacache.get(type, id)))
+            .html(Mustache.render(template[type], entity))
             .fadeIn();
         alignTo(div);
     }

@@ -8,6 +8,9 @@ jks.datacache = jks.datacache || (function() {
      */ 
     var DISABLE_LOCAL = true; 
 
+    /* XXX hacky */
+    var setUserListener;
+
     function supports_html5_storage() {
         try {
             return 'localStorage' in window && window['localStorage'] !== null;
@@ -58,8 +61,18 @@ jks.datacache = jks.datacache || (function() {
         };
     }
 
+    function doSetUser(user) {
+        if (setUserListener) {
+            setUserListener(user);
+        }
+        return set("user", user.id, user);
+    }
+
     function entitySetter(func, type) {
         return function(val) {
+            if (setUserListener && type.localeCompare("user") === 0) {
+                setUserListener(val);
+            }
             return func(type, val.id, val);
         }
     }
@@ -72,7 +85,7 @@ jks.datacache = jks.datacache || (function() {
         setPost: entitySetter(set5, "post")
     } : {
         getUser: wrap(get, "user"),
-        setUser: entitySetter(set, "user"),
+        setUser: doSetUser,
         getPost: wrap(get, "post"),
         setPost: entitySetter(set, "post")
         , print: print /*XXX*/
@@ -80,6 +93,9 @@ jks.datacache = jks.datacache || (function() {
             return !!get("user", id);
         }
         , get: get
+        , addSetUserListener: function(listener) {
+            setUserListener = listener;
+        }
     });
 }());
 

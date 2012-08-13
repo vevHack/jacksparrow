@@ -10,6 +10,16 @@
     (<span class="timestamp" />Online Now?!)
   </div>
   <a href="{{permalink}}" id="zoom-trigger" class="trigger" title="Zoom" />
-  <a href="#" id="follow-trigger" class="trigger" title="Follow" />
-  <a href="#" id="unfollow-trigger" class="trigger" title="Unfollow" />
+
+  {{#user}}
+    {{#doesNotFollow}}
+      <a href="#" id="follow-trigger" class="trigger" title="Follow" 
+        data-id="{{id}}" />
+    {{/doesNotFollow}}
+    {{#doesFollow}}
+      <a href="#" id="unfollow-trigger" class="trigger" title="Unfollow"
+        data-id="{{id}}" />
+    {{/doesFollow}}
+  {{/user}}
+
 </div>
