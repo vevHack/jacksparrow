@@ -236,21 +236,21 @@ input.validated {
  *
  */
 
-.post {
+.entity {
     position: relative;
 }
 
-.post .content {
+.entity .content {
 }
 
-.post .info {
+.entity .info {
     font-style: italic;
     font-size: 80%;
 }
 
-.post.current {
+.entity.current {
     background-color: yellow;
 }
 
-.post.current img {
+.entity.current img {
 }

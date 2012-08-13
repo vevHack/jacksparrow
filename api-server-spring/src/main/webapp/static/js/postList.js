@@ -2,53 +2,6 @@ var jks = jks || {};
 jks.postList = jks.postList || (function() {
     "use strict";
 
-    function attachDetailTrigger(root, type, detailView) {
-        var currentDiv, trigger;
-
-        function cancelDetail() {
-            currentDiv.removeClass("current");
-            currentDiv = undefined;
-        }
-
-        function expandDetail(event) {
-            var targetDiv = $(event.currentTarget).parent();
-            if (currentDiv) {
-                var lastId = currentDiv.data("id");
-                cancelDetail();
-                if (lastId === targetDiv.data("id")) {
-                    detailView.hide();
-                    return;
-                }
-            } 
-            currentDiv = targetDiv;
-            currentDiv.addClass("current");
-            detailView.show(type, currentDiv, cancelDetail);
-        }
-
-        function mouseenterPost(event) {
-            var targetDiv = $(event.currentTarget);
-            trigger.appendTo(targetDiv);
-            if (!currentDiv) {
-                targetDiv.addClass("current");
-            }
-        }
-
-        function mouseleavePost(event) {
-            var targetDiv = $(event.currentTarget);
-            if (!currentDiv) {
-                targetDiv.removeClass("current");
-            }
-            trigger.detach();
-        }
-
-        trigger = $('<a id="show-detail-trigger" class="trigger"/>');
-        trigger.click(expandDetail);
-
-        root.on("mouseenter", ".post", mouseenterPost);
-        root.on("mouseleave", ".post", mouseleavePost);
-    }
-
-
     return function(postListType, fetchDataActual) {
 
         var root, postListTemplate;
@@ -101,7 +54,7 @@ jks.postList = jks.postList || (function() {
 
         function updateTimestamps() {
             jks.timestamper.setReference(Date.parse(serverTimestamp));
-            root.find(".post").each(jks.timestamper.update);
+            root.find(".entity").each(jks.timestamper.update);
         }
 
         function fetch() {
@@ -124,7 +77,7 @@ jks.postList = jks.postList || (function() {
                         updateTimestamps();
                     }
 
-                    attachDetailTrigger(root, "post", jks.detailView);
+                    jks.detailTrigger.attach(root, "post", jks.detailView);
 
                     dfd.resolve(root);
                 });

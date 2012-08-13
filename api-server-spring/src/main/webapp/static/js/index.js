@@ -55,7 +55,8 @@ jks.index = jks.index || (function() {
         }
 
         jks.common.notifyOnScrollToBottom(function() {
-            return currentTab && currentTab.more();
+            var dfd = currentTab && currentTab.more && currentTab.more();
+            return dfd || $.Deferred().resolve();
         });
 
         return function(event) {
@@ -93,6 +94,7 @@ jks.index = jks.index || (function() {
                     , $.fetch.js("dashboard")
                     , $.fetch.js("rootPane")
                     , $.fetch.js("detailView")
+                    , $.fetch.js("detailTrigger")
                     , $.fetch.js("follow")
                 );
             }, function() { return $.Deferred() })
