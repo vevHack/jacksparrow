@@ -5,6 +5,7 @@ import com.directi.jacksparrow_spring.exception.PreconditionViolatedException;
 import com.directi.jacksparrow_spring.exception.UserAuthorizationException;
 import com.directi.jacksparrow_spring.model.GenericRowMapper;
 import com.directi.jacksparrow_spring.model.IdRowMapper;
+import com.directi.jacksparrow_spring.model.Stats;
 import com.directi.jacksparrow_spring.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -34,6 +35,14 @@ public class UserRepository {
                 put("name", "name");
             }};
 
+    private final GenericRowMapper<Stats> statsMapper =
+            new GenericRowMapper<Stats>(Stats.class,
+                    new HashMap<String, String>() {{
+                        put("user", "user");
+                        put("posts", "posts");
+                        put("following", "following");
+                        put("followers", "followers");
+                    }});
 
     public User verifyCredentials(User user, String password)
             throws UserAuthorizationException, EntityNotFoundException {
@@ -120,6 +129,11 @@ public class UserRepository {
         }
         jdbcTemplate.update("INSERT INTO follows (follower, following) " +
                 "VALUES(?,?)", follower.getId(), following.getId());
+
+        jdbcTemplate.update("UPDATE stats SET followers=followers+1 " +
+                "WHERE \"user\"=?", following.getId());
+        jdbcTemplate.update("UPDATE stats SET following=following+1 " +
+                "WHERE \"user\"=?", follower.getId());
     }
 
     public void removeFollower(User follower, User following)
@@ -131,6 +145,11 @@ public class UserRepository {
                 "end_on=CURRENT_TIMESTAMP(3) WHERE " +
                 "follower=? AND following=? AND end_on IS NULL",
                 follower.getId(), following.getId());
+
+        jdbcTemplate.update("UPDATE stats SET followers=followers-1 " +
+                "WHERE \"user\"=?", following.getId());
+        jdbcTemplate.update("UPDATE stats SET following=following-1 " +
+                "WHERE \"user\"=?", follower.getId());
     }
 
 
@@ -162,5 +181,11 @@ public class UserRepository {
         return namedParameterJdbcTemplate.query(
                 "SELECT * FROM \"user\" WHERE id in (:ids)",
                 new MapSqlParameterSource("ids", users), mapper);
+    }
+
+    public Stats stats(User user) {
+        return jdbcTemplate.queryForObject(
+                "SELECT * FROM stats WHERE \"user\"=?",
+                statsMapper, user.getId());
     }
 }

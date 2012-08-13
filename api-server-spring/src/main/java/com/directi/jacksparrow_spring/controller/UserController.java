@@ -208,4 +208,14 @@ public class UserController {
         }};
     }
 
+
+    @RequestMapping("/stats")
+    @ResponseBody
+    public Map stats(@RequestParam final int user)
+        throws EntityNotFoundException {
+        return new HashMap() {{
+            put("stats", userRepository.stats(userRepository.findById(user)));
+        }};
+    }
+
 }

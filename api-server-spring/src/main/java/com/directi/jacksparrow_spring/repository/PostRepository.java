@@ -200,6 +200,9 @@ public class PostRepository {
                 "INSERT INTO post(\"user\", content) VALUES(?,?)",
                 user.getId(), content);
 
+        jdbcTemplate.update("UPDATE stats SET posts=posts+1 " +
+                "WHERE \"user\"=?", user.getId());
+
         Post post = new Post() {{
             setId(jdbcTemplate.queryForInt("SELECT LASTVAL()"));
             setUser(user);

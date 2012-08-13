@@ -90,6 +90,10 @@ jks.common = jks.common || (function() {
         }
     }
 
+    function incrementValue(span, by) {
+        span.text(parseInt(span.text()) + (by || 1));
+    }
+
     function notifyOnScrollToBottomFactory() {
         function nearBottomFactory(threshold) {
             var doc = $(document);
@@ -139,6 +143,7 @@ jks.common = jks.common || (function() {
         , spinnerFactory: spinnerFactoryFactory("ajax-loader.gif")
         , loaderAnimation: loaderAnimation
         , notifyOnScrollToBottom: notifyOnScrollToBottomFactory(200)
+        , incrementValue: incrementValue
     };
 
 }());

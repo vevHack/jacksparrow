@@ -7,8 +7,12 @@ jks.follow = jks.follow || (function() {
     var handler = (function() {
         var API = {"follow-trigger": "follow", "unfollow-trigger": "unfollow"};
         var opposite = {
-              "follow-trigger": {id: "unfollow-trigger", title: "Unfollow"}
-            , "unfollow-trigger": {id: "follow-trigger", title: "Follow"}
+              "follow-trigger": {
+                id: "unfollow-trigger", title: "Unfollow", incr: 1
+              }
+            , "unfollow-trigger": {
+                id: "follow-trigger", title: "Follow", incr: -1
+            }
         };
 
         return function() {
@@ -21,6 +25,7 @@ jks.follow = jks.follow || (function() {
                 that.replaceWith(
                     $("<a />").attr("id", other.id).attr("title", other.title)
                     .addClass("trigger").data("id", userId));
+                jks.common.incrementValue($("#stats-following"), other.incr);
             });
 
             event.preventDefault();

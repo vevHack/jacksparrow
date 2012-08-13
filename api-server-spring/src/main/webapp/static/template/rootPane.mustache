@@ -8,7 +8,11 @@
 </div>
 
 <div>
-  XXX Stats
+  <ul>{{#stats}}
+    <li><span id="stats-posts">{{posts}}</span> Posts</li>
+    <li><span id="stats-posts">{{followers}}</span> Followers</li>
+    <li>Following <span id="stats-following">{{following}}</span></li>
+  </ul>{{/stats}}
 </div>
 
 <ul>

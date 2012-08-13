@@ -55,6 +55,16 @@ COPY "user" (id, email, username, password, name, access_token, created_on) FROM
 
 
 --
+-- Data for Name: stats; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY stats ("user", posts, followers, following) FROM stdin;
+5	1	0	0
+6	0	0	0
+\.
+
+
+--
 -- PostgreSQL database dump complete
 --
 

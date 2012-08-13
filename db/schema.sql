@@ -101,6 +101,20 @@ CREATE TABLE post (
 ALTER TABLE public.post OWNER TO postgres;
 
 --
+-- Name: stats; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE stats (
+    "user" integer NOT NULL,
+    posts integer DEFAULT 0 NOT NULL,
+    followers integer DEFAULT 0 NOT NULL,
+    following integer DEFAULT 0 NOT NULL
+);
+
+
+ALTER TABLE public.stats OWNER TO postgres;
+
+--
 -- Name: user; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -116,6 +130,14 @@ CREATE TABLE "user" (
 
 
 ALTER TABLE public."user" OWNER TO postgres;
+
+--
+-- Name: stats_user_key; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY stats
+    ADD CONSTRAINT stats_user_key UNIQUE ("user");
+
 
 --
 -- Name: user_email_key; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
@@ -166,6 +188,13 @@ CREATE INDEX follows_following_idx ON follows USING btree (following);
 --
 
 CREATE INDEX post_created_on_idx ON post USING btree (created_on);
+
+
+--
+-- Name: stats_user_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX stats_user_idx ON stats USING btree ("user");
 
 
 --
