@@ -2,29 +2,39 @@ var jks = jks || {};
 jks.detailView = jks.detailView || (function() {
     "use strict";
 
-    var postTemplate, userTemplate;
+    var template = {};
+    var root;
 
-    function load(root) {
+    function load(container) {
+        root = container;
         return $.when(
-              $.fetch.template("userDetails")
-            , $.fetch.template("postDetails")
-            , $.fetch.js("datacache")
+            ["user", "post"].map(function(type) {
+                return $.fetch.template([type, "Details"].join(""))
+                    .done(function(template_) {
+                        template[type] = template_;
+                    });
+            })
+            , 
+            $.fetch.js("datacache")
             ).done(function() {
-                userTemplate = arguments[0][0];
-                postTemplate = arguments[1][0];
-                root.on("click", "#close-detail-trigger", function() {
-                    root.html("");
-                });
+                root.on("click", "#close-detail-trigger", hide);
             });
     }
 
-    function show(postId) {
-        var post = jks.datacache.getPost(postId);
-        $("#detail").html(Mustache.render(postTemplate, post));
+    function show(type, id) {
+        root.hide()
+            .html(Mustache.render(template[type], jks.datacache.get(type, id)))
+            .fadeIn();
+    }
+
+    function hide() {
+        root.fadeOut(function() {root.html("")});
+        root.trigger("detail-closed");
     }
 
     return {
           load: load
         , show: show
+        , hide: hide
     };
 }());

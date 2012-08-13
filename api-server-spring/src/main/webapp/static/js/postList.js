@@ -2,6 +2,11 @@ var jks = jks || {};
 jks.postList = jks.postList || (function() {
     "use strict";
 
+    function isMouseOver(e) {
+        var underneathMouse = $(document.elementFromPoint(e.pageX, e.pageY));
+        return (underneathMouse.parents(".details")) /*XXX*/
+    }
+
     return function(postListType, fetchDataActual) {
 
         var showDetailTrigger;
@@ -30,27 +35,66 @@ jks.postList = jks.postList || (function() {
             return dfd.promise();
         }
 
+        var permanentDiv, currentDiv;
+
         function loadShowDetailTrigger() {
             showDetailTrigger = 
-                $('<a id="show-detail-trigger" class="trigger"/>');
-            showDetailTrigger.on("click", function() {
-                var postId = $(this).parent().data("id");
-                jks.detailView.show(postId);
-                event.preventDefault();
-            });
+                $('<a id="show-detail-trigger" class="trigger"/>')
+                .click(clickArrow);
+                ;
+        /*
+                .hover(function() {
+                    if (!permanentDiv) {
+                        jks.detailView.show("post", $(this).parent().data("id"));
+                    }
+                }, function(e) {
+                    if (!isMouseOver(e)) {
+                        jks.detailView.hide();
+                    }
+                })
+                .click(function(){
+                    if (permanentDiv) {
+                        permanantDiv = undefined;
+                    } else {
+                        permanentDiv = currentDiv;
+                    }
+                });
 
+*/
             root.on("mouseenter", ".post", mouseenterPost);
             root.on("mouseleave", ".post", mouseleavePost);
+            //root.on("click", ".post", clickPost);
+            $("#detail").on("detail-closed", cancelDetail);
+        }
+
+        function cancelDetail() {
+            permanentDiv.removeClass("current");
+            permanentDiv = undefined;
+        }
+
+        function clickArrow(event) {
+            if (permanentDiv) {
+                cancelDetail();
+            } 
+            permanentDiv = $(event.currentTarget).parent();
+            jks.detailView.show("post", permanentDiv.data("id"));
+            permanentDiv.addClass("current");
         }
 
         function mouseenterPost(event) {
-            showDetailTrigger.appendTo(
-                $(event.currentTarget).toggleClass("current"));
+            currentDiv = $(event.currentTarget);
+            showDetailTrigger.appendTo(currentDiv);
+            if (!permanentDiv) {
+                $(event.currentTarget).addClass("current");
+            }
         }
 
         function mouseleavePost(event) {
-            $(event.currentTarget).toggleClass("current");
+            if (!permanentDiv) {
+                $(event.currentTarget).removeClass("current");
+            }
             showDetailTrigger.detach();
+            currentDiv = undefined;
         }
 
 

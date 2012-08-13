@@ -64,6 +64,7 @@ jks.datacache = jks.datacache || (function() {
         }
     }
 
+/* XXX this file requires vaccuming  */
     return ( (!DISABLE_LOCAL && supports_html5_storage()) ? {
         getUser: wrap(get5, "user"),
         setUser: entitySetter(set5, "user"),
@@ -78,6 +79,7 @@ jks.datacache = jks.datacache || (function() {
         , hasUser: function(id) { /* XXX */
             return !!get("user", id);
         }
+        , get: get
     });
 }());
 
