@@ -91,7 +91,7 @@ jks.common = jks.common || (function() {
     }
 
     function incrementValue(span, by) {
-        span.text(parseInt(span.text()) + (by || 1));
+        span && span.text(parseInt(span.text()) + (by || 1));
     }
 
     function notifyOnScrollToBottomFactory() {

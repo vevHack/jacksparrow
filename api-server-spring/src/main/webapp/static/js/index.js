@@ -2,46 +2,38 @@ var jks = jks || {};
 jks.index = jks.index || (function() {
     "use strict";
 
-    function load() {
-        var me;
+    var dependencies = ["fetchUser", "postList", "userList", "formatter",
+        "datacache", "dashboard", "rootPane", "detailView", "detailTrigger",
+        "follow", "contentTabManager"];
+    var me;
 
+    function load() {
         $.getJSON("/api/me")
             .fail(jks.common.handleUnauthenticated)
-            .pipe(function(data) {
+            .done(function(data) {
                 me = data.user;
-                return $.when(
-                      $.fetch.template("index")
-                    , $.fetch.js("fetchUser")
-                    , $.fetch.js("postList")
-                    , $.fetch.js("userList")
-                    , $.fetch.js("formatter")
-                    , $.fetch.js("datacache")
-                    , $.fetch.js("dashboard")
-                    , $.fetch.js("rootPane")
-                    , $.fetch.js("detailView")
-                    , $.fetch.js("detailTrigger")
-                    , $.fetch.js("follow")
-                    , $.fetch.js("contentTabManager")
-                );
-            }, function() { return $.Deferred() })
-                .fail(jks.common.warn)
-                .done(function() {
-                    var template = arguments[0][0];
-                    $("body").html(Mustache.render(template));
-
-                    jks.datacache.setUser(me = jks.formatter.formatUser(me));
-                    var tabs = jks.contentTabManager($("#content"), 
-                        ["feed", "posts", "followers", "following"], me.id);
-
-                    $.when(
-                            jks.dashboard.load($("#dashboard"), me)
-                          , jks.rootPane.load($("#root-pane"), me, tabs)
-                          , jks.follow.load(me)
-                          , jks.detailView.load($("#detail"))
-                    ).done(function() {
-                        $("#feed-trigger").trigger("click");
+                $.when.apply(this, [$.fetch.template("index")].concat(
+                    dependencies.map($.fetch.js))).done(function() {
+                        loadAfterAuthentication(arguments[0][0]);
                     });
-                });
+            });
+    }
+
+    function loadAfterAuthentication(template) {
+        $("body").html(Mustache.render(template));
+
+        jks.datacache.setUser(me = jks.formatter.formatUser(me));
+        var tabs = jks.contentTabManager($("#content"), 
+            ["feed", "posts", "followers", "following"], me.id);
+
+        $.when(
+              jks.dashboard.load($("#dashboard"), me)
+            , jks.rootPane.load($("#root-pane"), me, tabs, "rootPaneIndex")
+            , jks.follow.load(me)
+            , jks.detailView.load($("#detail"))
+        ).done(function() {
+            $("#feed-trigger").trigger("click");
+        });
     }
 
     return {

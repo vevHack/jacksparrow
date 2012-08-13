@@ -1,0 +1,21 @@
+
+<div>
+  {{name}}
+  <br />
+  <img class="profile" width="128" height="128" src="/static/img/anon.png" 
+    alt="{{name}}" title="{{name}}" />
+</div>
+
+<div>
+  <ul>{{#stats}}
+    <li>{{posts}} Posts</li>
+    <li>{{followers}} Followers</li>
+    <li>Following {{following}}</li>
+  </ul>{{/stats}}
+</div>
+
+<ul>
+  <li><a href="#" id="posts-trigger" class="trigger">Posts</a></li>
+  <li><a href="#" id="followers-trigger" class="trigger">Followers</a></li>
+  <li><a href="#" id="following-trigger" class="trigger">Following</a></li>
+</ul>

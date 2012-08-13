@@ -2,14 +2,18 @@ var jks = jks || {};
 jks.rootPane = jks.rootPane || (function() {
     "use strict";
 
-    function load(container, userDisplayData, triggerHandler) {
+    function load(container, user, triggerHandler, template, hideFeed) {
         return $.when(
-              $.fetch.template("rootPane")
-            , $.getJSON("/api/user/stats", {user: userDisplayData.id})
+              $.fetch.template(template)
+            , $.getJSON("/api/user/stats", {user: user.id})
             ).done(function() {
                 var template = arguments[0][0];
-                userDisplayData.stats = arguments[1][0].stats;
-                container.html(Mustache.render(template, userDisplayData))
+                user.stats = arguments[1][0].stats;
+                var render = $(Mustache.render(template, user));
+                if (hideFeed) {
+                    render.find("#feed-trigger").hide();
+                }
+                container.html(render)
                     .on('click', '.trigger', triggerHandler);
             });
     }

@@ -2,55 +2,60 @@ var jks = jks || {};
 jks.user = jks.user || (function() {
     "use strict";
 
-    function load() {
-        var me;
-        var profileUserId = document.URL.match(".*/([^/]*)$")[1];
+    var dependencies = ["fetchUser", "postList", "userList", "formatter",
+        "datacache", "dashboard", "rootPane", "detailView", "detailTrigger",
+        "follow", "contentTabManager"];
+    var username = document.URL.match(".*/([^/]*)$")[1];
+    var me;
 
+    function load() {
         $.getJSON("/api/me")
             .done(function(data) { me = data.user; })
-            .always(function() {
-                $.when(
-                      $.fetch.template("index")
-                    , $.fetch.js("fetchUser")
-                    , $.fetch.js("postList")
-                    , $.fetch.js("userList")
-                    , $.fetch.js("formatter")
-                    , $.fetch.js("datacache")
-                    , $.fetch.js("dashboard")
-                    , $.fetch.js("rootPane")
-                    , $.fetch.js("detailView")
-                    , $.fetch.js("detailTrigger")
-                    , $.fetch.js("follow")
-                    , $.fetch.js("contentTabManager")
-                ).done(function() {
-                    var template = arguments[0][0];
-                    $("body").html(Mustache.render(template));
+            .always(function(data) {
 
-                    var followersDfd;
-                    if (me) {
-                        me = jks.formatter.formatUser(me);
-                        jks.datacache.setUser(me);
-                        followersDfd = jks.follow.load(me);
-                    } else {
-                        followersDfd = $.Deferred().resolve();
-                    }
-                    jks.dashboard.load($("#dashboard"), me);
+                var fetchList = [
+                      $.fetch.template("index") 
+                    , $.getJSON("/api/user/find", {username: username})
+                    ].concat(dependencies.map($.fetch.js));
 
-                    jks.fetchUser(profileUserId).done(function() {
-                        var user = jks.datacache.getUser(profileUserId);
-                        var tabs = jks.contentTabManager($("#content"), 
-                            ["posts", "followers", "following"], profileUserId);
-
-                        $.when(
-                              jks.rootPane.load($("#root-pane"), user, tabs)
-                            , followersDfd
-                            , jks.detailView.load($("#detail"))
-                        ).done(function() {
-                            $("#post-trigger").trigger("click");
-                        });
-                    });
+                $.when.apply(this, fetchList).done(function() {
+                    loadAfterAuthentication(arguments[0][0], arguments[1][0]);
                 });
             });
+    }
+
+    function loadAfterAuthentication(template, data) {
+        var user = data.user;
+        $("body").html(Mustache.render(template));
+
+        var followersDfd;
+        if (me) {
+            me = jks.formatter.formatUser(me);
+            jks.datacache.setUser(me);
+            followersDfd = jks.follow.load(me);
+        } else {
+            followersDfd = $.Deferred().resolve();
+        }
+
+        jks.dashboard.load($("#dashboard"), me);
+
+        jks.fetchUser(user.id).done(function() {
+            user = jks.datacache.getUser(user.id);
+            var tabs = jks.contentTabManager($("#content"), 
+                ["posts", "followers", "following"], user.id);
+              
+            var rootPaneTemplate = ["rootPane",
+                (me && (user.id === me.id)) ? "Index" : "User"].join("");
+
+            $.when(
+                  jks.rootPane.load($("#root-pane"), user, 
+                      tabs, rootPaneTemplate, true)
+                , followersDfd
+                , jks.detailView.load($("#detail"))
+            ).done(function() {
+                $("#posts-trigger").trigger("click");
+            });
+        });
     }
 
     return {

@@ -27,10 +27,7 @@ jks.dashboard = jks.dashboard || (function() {
 
         function onSubmit() {
             subsequently().done(function() {
-                var postCount = $("#stats-posts");
-                if (postCount) {
-                    jks.common.incrementValue(postCount);
-                }
+                jks.common.incrementValue($("#stats-posts"));
             });
         }
 

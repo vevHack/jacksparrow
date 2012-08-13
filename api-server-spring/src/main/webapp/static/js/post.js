@@ -2,35 +2,36 @@ var jks = jks || {};
 jks.post = jks.post || (function() {
     "use strict";
 
-    function load() {
-        var me;
-        var postId = document.URL.match(".*/([^/]*)$")[1];
+    var dependencies = ["fetchUser", "datacache", "dashboard", "formatter"];
+    var postId = document.URL.match(".*/([^/]*)$")[1];
+    var me;
 
+    function load() {
         $.getJSON("/api/me")
             .done(function(data) { me = data.user; })
             .always(function() {
-                $.when(
-                      $.fetch.template("post")
+
+                var fetchList = [
+                      $.fetch.template("post") 
                     , $.getJSON("/api/post/details", {post: postId})
-                    , $.fetch.js("dashboard")
-                    , $.fetch.js("fetchUser")
-                    , $.fetch.js("datacache")
-                    , $.fetch.js("formatter")
-                ).done(function() {
-                    var template = arguments[0][0];
-                    var data = arguments[1][0];
+                    ].concat(dependencies.map($.fetch.js));
 
-                    var post = jks.formatter.formatPost(data.posts[0]);
-                    me = me && jks.formatter.formatUser(me);
-
-                    jks.fetchUser(post.user.id).done(function() {
-                        post.user = jks.datacache.getUser(post.user.id);
-                        $("body").html(Mustache.render(template, post));
-
-                        jks.dashboard.load($("#dashboard"), me);
-                    });
+                $.when.apply(this, fetchList).done(function() {
+                    loadAfterAuthentication(arguments[0][0], arguments[1][0]);
                 });
+
             });
+    }
+
+    function loadAfterAuthentication(template, data) {
+        var post = jks.formatter.formatPost(data.posts[0]);
+        me = me && jks.formatter.formatUser(me);
+
+        jks.fetchUser(post.user.id).done(function() {
+            post.user = jks.datacache.getUser(post.user.id);
+            $("body").html(Mustache.render(template, post));
+            jks.dashboard.load($("#dashboard"), me);
+        });
     }
 
     return {
