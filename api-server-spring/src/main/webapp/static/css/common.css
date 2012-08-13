@@ -172,12 +172,18 @@ fieldset {
     height: 100%;
 }
 
+#create h2 {
+    color: white;
+    text-align: left;
+}
+
 #create .content {
     float: right;
     background-color: rgba(0, 0, 0, 0.8);
     width: 36ex; 
     height: 100%;
     padding: 3ex;
+    padding-top: 0;
     margin: auto;
     text-align: right;
 }
