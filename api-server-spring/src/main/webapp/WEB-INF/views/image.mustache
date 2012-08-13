@@ -19,7 +19,7 @@
 <body>
 	<form id="imgUploadForm" method="POST" enctype="multipart/form-data" action="/imageupload/insert"  >
 		<p>
-			Please specify ddddddddda file to upload:<br>
+			Please specify file to upload:<br>
 			<input type="file" name="uploadedFile"
 				id="uploadedFile" size="40">
 		</p>
@@ -30,6 +30,12 @@
            <div style="border:1px solid black;width:100px;height:100px;overflow:hidden;">
              <img src="" id="preview" alt="Preview" />
            </div>
+				<input type="hidden" id="x" name="x" />
+            	<input type="hidden" id="y" name="y" />
+            	<input type="hidden" id="width" name="width" />
+            	<input type="hidden" id="height" name="height" />
+            	<input type="hidden" id="boundx" name="boundx" />
+            	<input type="hidden" id="boundy" name="boundy" />
 
 			<input type="submit" value="Send">
 
