@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/api/session")
+@RequestMapping("/session")
 @SuppressWarnings("unchecked")
 public class SessionController {
 

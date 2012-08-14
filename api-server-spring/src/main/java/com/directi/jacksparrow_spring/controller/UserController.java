@@ -24,7 +24,7 @@ import java.sql.Timestamp;
 import java.util.*;
 
 @Controller
-@RequestMapping("/api/user/")
+@RequestMapping("/user/")
 @SuppressWarnings("unchecked")
 public class UserController {
 

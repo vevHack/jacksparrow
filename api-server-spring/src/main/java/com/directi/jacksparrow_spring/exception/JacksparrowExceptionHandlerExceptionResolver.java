@@ -45,7 +45,7 @@ public class JacksparrowExceptionHandlerExceptionResolver
 
     protected boolean shouldApplyTo(HttpServletRequest request,
                                     Object handler) {
-        return request.getRequestURI().startsWith("/api/");
+        return request.getRequestURI().startsWith("/");
     }
 
 }

@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/api")
+@RequestMapping("/")
 public class RootController {
 
     private @Autowired BaseRepository baseRepository;

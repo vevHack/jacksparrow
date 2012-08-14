@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/api/register")
+@RequestMapping("/register")
 @SuppressWarnings("unchecked")
 public class RegistrationController {
 

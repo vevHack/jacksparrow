@@ -16,3 +16,5 @@ checkBinary npm
 
 mkdir -p var/run
 mkdir -p var/log
+
+bash scripts/download-jetty.sh

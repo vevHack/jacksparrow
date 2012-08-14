@@ -42,9 +42,20 @@ setup:
 	@bash scripts/setup-servers.sh
 	@bash scripts/create-static-resources.sh
 
+build:
+	@bash scripts/build.sh
+
+start:
+	@bash scripts/jetty.sh start 1
+	@bash scripts/jetty.sh start 2
+
+stop:
+	@bash scripts/jetty.sh stop 1
+	@bash scripts/jetty.sh stop 2
+
 .PHONY: test \
 	npm-restore-links \
 	db-backup-schema db-backup-test db-restore-schema db-restore-test \
 	lo-slow lo-reset \
-	setup
+	setup build start
 

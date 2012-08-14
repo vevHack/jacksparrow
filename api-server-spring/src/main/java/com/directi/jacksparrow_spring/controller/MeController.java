@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/api/me")
+@RequestMapping("/me")
 @SuppressWarnings("unchecked")
 public class MeController {
 

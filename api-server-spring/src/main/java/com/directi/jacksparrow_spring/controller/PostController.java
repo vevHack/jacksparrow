@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/api/post")
+@RequestMapping("/post")
 @SuppressWarnings("unchecked")
 public class PostController {
 

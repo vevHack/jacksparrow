@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/api/validate")
+@RequestMapping("/validate")
 @SuppressWarnings("unchecked")
 public class ValidationController {
 
