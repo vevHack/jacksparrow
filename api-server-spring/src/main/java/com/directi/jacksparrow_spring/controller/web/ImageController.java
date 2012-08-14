@@ -27,7 +27,11 @@ public class ImageController {
 
     private @Autowired JdbcTemplate jdbcTemplate;
 
-    ImageResizer imageResizer = new ImageResizer();
+    ImageResizer imageResizer;
+
+    public ImageController() {
+        imageResizer =  new ImageResizer();
+    }
 
     @RequestMapping("/display")
     @ResponseBody
@@ -39,10 +43,10 @@ public class ImageController {
     @ResponseBody
     protected Map onSubmit(
             @RequestParam final CommonsMultipartFile uploadedFile,
-            @RequestParam int user,@RequestParam double x,@RequestParam double y,
-            @RequestParam double width,@RequestParam double height,
-            @RequestParam double boundx,@RequestParam double boundy
-            ) {
+            @RequestParam int user, @RequestParam double x,
+            @RequestParam double y, @RequestParam double width,
+            @RequestParam double height, @RequestParam double boundx,
+            @RequestParam double boundy) {
 
 
         if(uploadedFile!=null){
@@ -52,57 +56,68 @@ public class ImageController {
 
                 double ratio = image.getHeight()/boundy;
 
-
                 BufferedImage resizedImage  =
-                        imageResizer.resizeImage(uploadedFile
-                                , (int)(x*ratio), (int)(y*ratio),
-                                (int)(width*ratio), (int)(height*ratio));
+                        imageResizer.getSubImage(uploadedFile
+                                , (int)x, (int)y, (int)width,
+                                (int)height, ratio);
+
                 byte[] imgBytes = imageResizer.getBytes(resizedImage);
 
-                jdbcTemplate.update("INSERT INTO profile_pics(" +
-                        "\"user\", original_image, shortened_image) VALUES(?, ?, ?)"
-                        ,user , uploadedFile.getBytes(), imgBytes);
+                BufferedImage square100 = imageResizer.resizeImage
+                        (100, 100, resizedImage);
+
+                System.out.print("Actual dimension of crop :"+
+                            resizedImage.getHeight());
+
+                System.out.print("After resizing dimensions :"+
+                imageResizer.resizeImage(100, 100, image).getHeight()+" "+
+                imageResizer.resizeImage(100, 100, image).getWidth());
+
+
+                jdbcTemplate.update("INSERT INTO profile_pics(\"user\"," +
+                        " original_image, shortened_image) VALUES(?, ?, ?)"
+                        , user, uploadedFile.getBytes(),
+                        imageResizer.getBytes(square100));
 
             } catch (Exception ex) {
                 System.out.println("Error :"+ex);
             }
         }
 
-        System.out.println("Length of uploaded file :"+ uploadedFile.getSize());
-
-       return new HashMap() {{
-           put ("status", "success");
+        return new HashMap() {{
+            put ("status", "success");
         }};
         }
 
     @RequestMapping("/getImage")
     @ResponseBody
+    public HttpEntity<byte[]> getImage(@RequestParam int user,
+                                       @RequestParam int size) {
 
-    public HttpEntity<byte[]> getImage(@RequestParam int user, @RequestParam int size) {
-
-        String typeOfImage = "";
-        typeOfImage = (size == 48) ? "shortened_image":"original_image";
-
-        final String finalTypeOfImage = typeOfImage;
+        final String typeOfImage = (size == 128) ?
+                "shortened_image":"original_image";
 
         Map result = (HashMap)jdbcTemplate.queryForObject(
-                "SELECT shortened_image FROM profile_pics" +
+                "SELECT "+ typeOfImage + " FROM profile_pics" +
                         " WHERE \"user\"=?", new RowMapper<Object>() {
             @Override
             public Object mapRow(final ResultSet resultSet, int i)
                     throws SQLException {
-                final HashMap map = new HashMap();
                 return new HashMap(){{
-                    put("original",resultSet.getBytes("shortened_image"));
+                    put("original",resultSet.getBytes(typeOfImage));
                 }};
             }
         }, user);
 
+        return new HttpEntity<byte[]>(
+                (byte[])result.get("original"), getImageHeaders(result));
+    }
+
+    private HttpHeaders getImageHeaders(Map result) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.valueOf("image/png"));
         headers.setContentLength(
                 ((byte[])result.get("original")).length);
-        return new HttpEntity<byte[]>(
-                (byte[])result.get("original"),headers);
+        return headers;
     }
 }
