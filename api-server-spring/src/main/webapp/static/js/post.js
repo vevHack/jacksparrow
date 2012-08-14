@@ -2,7 +2,8 @@ var jks = jks || {};
 jks.post = jks.post || (function() {
     "use strict";
 
-    var dependencies = ["fetchUser", "datacache", "dashboard", "formatter"];
+    var dependencies = ["fetchUser", "datacache", "dashboard", 
+        "formatter", "userPix"];
     var postId = document.URL.match(".*/([^/]*)$")[1];
     var me;
 
@@ -24,6 +25,7 @@ jks.post = jks.post || (function() {
     }
 
     function loadAfterAuthentication(template, data) {
+        jks.userPix.attachGlobalListener();
         var post = jks.formatter.formatPost(data.posts[0]);
         me = me && jks.formatter.formatUser(me);
 

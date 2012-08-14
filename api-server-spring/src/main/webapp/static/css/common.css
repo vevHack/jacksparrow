@@ -212,6 +212,11 @@ fieldset {
     display: none;
 }
 
+.invisible {
+    visibility: hidden;
+}
+
+
 
 /*
  * Forms
@@ -243,7 +248,9 @@ input.validated {
 .entity .content {
 }
 
-.entity .info {
+.entity .timestamp {
+    float: right;
+    background: blue;
     font-style: italic;
     font-size: 80%;
 }
@@ -253,4 +260,5 @@ input.validated {
 }
 
 .entity.current img {
+    visibility: hidden;
 }

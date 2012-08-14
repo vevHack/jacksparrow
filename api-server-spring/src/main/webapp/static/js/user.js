@@ -4,7 +4,7 @@ jks.user = jks.user || (function() {
 
     var dependencies = ["fetchUser", "postList", "userList", "formatter",
         "datacache", "dashboard", "rootPane", "detailView", "detailTrigger",
-        "follow", "contentTabManager"];
+        "follow", "contentTabManager", "userPix"];
     var username = document.URL.match(".*/([^/]*)$")[1];
     var me;
 
@@ -25,6 +25,7 @@ jks.user = jks.user || (function() {
     }
 
     function loadAfterAuthentication(template, data) {
+        jks.userPix.attachGlobalListener();
         var user = data.user;
         $("body").html(Mustache.render(template));
 

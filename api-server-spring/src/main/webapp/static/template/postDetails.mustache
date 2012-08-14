@@ -1,9 +1,7 @@
 <a href="#" id="close-detail-trigger" class="trigger" title="Hide" />
-<div class="postDetail">
-  Created on {{created_on_readable}} by
-</div>
-<div class="userDetail">
-  <div class="userDetail-Name">{{#user}}{{name}}{{/user}}</div>
+  <div>
+  Created on {{created_on_readable}} by {{#user}}{{name}}{{/user}}
+  </div>
   <a href="{{#user}}{{permalink}}{{/user}}">Go to 
     the full profile of {{#user}}{{username}}{{/user}}</a>
   <div class="info">

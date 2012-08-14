@@ -125,6 +125,7 @@ jks.common = jks.common || (function() {
         }
 
         $(window).scroll(notifyIfNearBottom);
+        $(window).resize(notifyIfNearBottom);
         setInterval(notifyIfNearBottom, 1000);
 
         return function(observer) {

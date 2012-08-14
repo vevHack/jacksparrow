@@ -1,9 +1,10 @@
 {{#feed}}
 <div class="entity" data-id="{{id}}">
-  <div class="content">{{content}}</div>
-  <div class="info">
-    <span class="user">{{#user}}{{name}}{{/user}}</span>
-    (<span class="timestamp" />)
-  </div>
+  {{#user}}
+  <img class="profile invisible" width="48" height="48" 
+    data-id="{{id}}" alt="{{name}}" title="{{name}}" />
+  {{/user}}
+  <span class="content">{{content}}</span>
+  <div class="timestamp" />
 </div>
 {{/feed}}

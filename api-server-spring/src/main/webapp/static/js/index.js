@@ -4,7 +4,7 @@ jks.index = jks.index || (function() {
 
     var dependencies = ["fetchUser", "postList", "userList", "formatter",
         "datacache", "dashboard", "rootPane", "detailView", "detailTrigger",
-        "follow", "contentTabManager"];
+        "follow", "contentTabManager", "userPix"];
     var me;
 
     function load() {
@@ -20,6 +20,7 @@ jks.index = jks.index || (function() {
     }
 
     function loadAfterAuthentication(template) {
+        jks.userPix.attachGlobalListener();
         $("body").html(Mustache.render(template));
 
         jks.datacache.setUser(me = jks.formatter.formatUser(me));
