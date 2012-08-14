@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -188,4 +189,20 @@ public class UserRepository {
                 "SELECT * FROM stats WHERE \"user\"=?",
                 statsMapper, user.getId());
     }
+
+    public User updateUser(
+            User user, String username, String email, String password) {
+        List<String> fields =
+                Arrays.asList(new String[]{"username", "email", "name"});
+
+        jdbcTemplate.update("UPDATE \"user\" SET username=?, email=?, name=? " +
+                "WHERE id=?", username, email, password, user.getId());
+        try {
+            return details(
+                    Arrays.asList(new Integer[]{user.getId()}), fields).get(0);
+        } catch (PreconditionViolatedException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
 }

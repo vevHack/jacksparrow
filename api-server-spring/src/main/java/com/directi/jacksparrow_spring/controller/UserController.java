@@ -3,12 +3,14 @@ package com.directi.jacksparrow_spring.controller;
 import com.directi.jacksparrow_spring.exception.EntityNotFoundException;
 import com.directi.jacksparrow_spring.exception.PreconditionViolatedException;
 import com.directi.jacksparrow_spring.exception.UserAuthorizationException;
+import com.directi.jacksparrow_spring.exception.ValidationException;
 import com.directi.jacksparrow_spring.model.Post;
 import com.directi.jacksparrow_spring.model.User;
 import com.directi.jacksparrow_spring.repository.BaseRepository;
 import com.directi.jacksparrow_spring.repository.PostRepository;
 import com.directi.jacksparrow_spring.repository.UserRepository;
 import com.directi.jacksparrow_spring.service.Authorizer;
+import com.directi.jacksparrow_spring.service.JacksparrowValidator;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -19,10 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/api/user/")
@@ -33,6 +32,7 @@ public class UserController {
     private @Autowired UserRepository userRepository;
     private @Autowired PostRepository postRepository;
     private @Autowired BaseRepository baseRepository;
+    private @Autowired JacksparrowValidator validator;
 
 
     @RequestMapping("/followers")
@@ -215,6 +215,51 @@ public class UserController {
         throws EntityNotFoundException {
         return new HashMap() {{
             put("stats", userRepository.stats(userRepository.findById(user)));
+        }};
+    }
+
+    private User fullUser(int id) {
+        List<Integer> ids = Arrays.asList(new Integer[]{id});
+        List<String> fields =
+                Arrays.asList(new String[]{"username", "email", "name"});
+        try {
+            return userRepository.details(ids, fields).get(0);
+        } catch (PreconditionViolatedException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    @RequestMapping(value = "editProfile", method= RequestMethod.POST)
+    @ResponseBody
+    public Map editProfile(@RequestParam final String username,
+                           @RequestParam final String email,
+                           @RequestParam final String name)
+            throws ValidationException, UserAuthorizationException {
+
+        final User user = fullUser(authorizer.getAuthorizedUser().getId());
+
+        validator.validateUsername(username);
+        validator.validateEmail(email);
+
+        if (!user.getUsername().equals(username)) {
+            try {
+                userRepository.findByUsername(username);
+                throw new ValidationException(
+                        "Username " + username + " already in use");
+            } catch (EntityNotFoundException ex) {}
+        }
+
+        if (!user.getEmail().equals(email)) {
+            try {
+                userRepository.findByEmail(email);
+                throw new ValidationException("Email " + email + " already in use");
+            } catch (EntityNotFoundException ex) {}
+        }
+
+        userRepository.updateUser(user, username, email, name);
+
+        return new HashMap() {{
+            put("user", fullUser(user.getId()));
         }};
     }
 
