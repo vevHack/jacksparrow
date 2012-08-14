@@ -1,0 +1,16 @@
+
+<div>
+  {{name}} <span class="username">@{{username}}</span>
+  <br />
+  <img class="profile invisible" width="128" height="128" 
+    data-id="{{id}}" alt="{{name}}" title="{{name}}" />
+</div>
+
+<ul>{{#stats}}
+  {{#showFeed}}
+  <li><a href="#" id="feed-trigger" class="trigger">Feed</a></li>
+  {{/showFeed}}
+  <li><a href="#" id="posts-trigger" class="trigger"><span id="stats-posts{{DISABLE}}">{{posts}}</span> Posts</a></li>
+  <li><a href="#" id="followers-trigger" class="trigger"><span id="stats-posts{{DISABLE}}">{{followers}}</span> Followers</a></li>
+  <li><a href="#" id="following-trigger" class="trigger">Following <span id="stats-following{{DISABLE}}">{{following}}</span></a></li>
+</ul>{{/stats}}

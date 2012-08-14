@@ -3,19 +3,20 @@
   Created on {{created_on_readable}} by {{#user}}{{name}}{{/user}}
   </div>
   <a href="{{#user}}{{permalink}}{{/user}}">Go to 
-    the full profile of {{#user}}{{username}}{{/user}}</a>
+    the full profile of
+    <span class="username">@{{#user}}{{username}}{{/user}}</span></a>
   <div class="info">
     (<span class="timestamp" />Online Now?!)
   </div>
-  <a href="{{permalink}}" id="zoom-trigger" class="trigger" title="Zoom" />
+  <a href="{{permalink}}" id="zoom-trigger" class="trigger trigger-icon" title="Zoom" />
 
   {{#user}}
     {{#doesNotFollow}}
-      <a href="#" id="follow-trigger" class="trigger" title="Follow" 
+      <a href="#" id="follow-trigger" class="trigger trigger-icon" title="Follow" 
         data-id="{{id}}" />
     {{/doesNotFollow}}
     {{#doesFollow}}
-      <a href="#" id="unfollow-trigger" class="trigger" title="Unfollow"
+      <a href="#" id="unfollow-trigger" class="trigger trigger-icon" title="Unfollow"
         data-id="{{id}}" />
     {{/doesFollow}}
   {{/user}}

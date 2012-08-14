@@ -41,7 +41,7 @@ jks.detailTrigger = jks.detailTrigger || (function() {
             trigger.detach();
         }
 
-        trigger = $('<a id="show-detail-trigger" class="trigger"/>');
+        trigger = $('<a id="show-detail-trigger" class="trigger trigger-icon"/>');
         trigger.click(expandDetail);
 
         root.on("mouseenter", ".entity", mouseenterPost);

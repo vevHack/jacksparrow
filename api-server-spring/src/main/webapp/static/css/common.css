@@ -94,16 +94,34 @@ fieldset {
 }
 
 /*
+ * 
+ */
+
+.current {
+    background-color: yellow;
+}
+
+.username {
+    font-style: italic;
+    font-size: 80%;
+}
+
+a > .username {
+    font-size: 100%;
+}
+
+/*
  * Triggers
  */
-.trigger {
+
+.trigger-icon {
     display: inline-block;
     width: 32px;
     height: 32px;
     background-position: 0px 0px;
 }
 
-.trigger:hover {
+.trigger-icon:hover {
     background-position: 0px -32px;
 }
 
@@ -128,22 +146,15 @@ fieldset {
     cursor: pointer;
 }
 
-/*
- *
- */
 .trigger.current {
-    color: black;
     /* XXX doesn't work in IE? */
     pointer-events: none;
     cursor: default;
 }
 
-/*XXX*/
-.centered {
-    display: block;
-    margin: auto;
-}
-
+/*
+ * Triggers
+ */
 #loader-tab-parent {
     position: relative;
 }
@@ -207,13 +218,17 @@ fieldset {
  *
  */
 
-/* XXX delete me */
-.hidden {
-    display: none;
-}
-
 .invisible {
     visibility: hidden;
+}
+
+/* XXX delete me */
+.centered {
+    display: block;
+    margin: auto;
+}
+.hidden {
+    display: none;
 }
 
 
@@ -256,7 +271,6 @@ input.validated {
 }
 
 .entity.current {
-    background-color: yellow;
 }
 
 .entity.current img {

@@ -63,7 +63,7 @@ jks.create = jks.create || (function() {
                 return onSubmit(form, submitTrigger, content, info)
                     .done(submitDone);
             }));
-            cancelTrigger.click(cancelDone);
+            cancelTrigger.click(jks.common.oneExecTrigger(cancelDone));
 
             dfd.resolve(render);
         });

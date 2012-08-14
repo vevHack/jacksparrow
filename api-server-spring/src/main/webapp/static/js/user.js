@@ -44,13 +44,10 @@ jks.user = jks.user || (function() {
             user = jks.datacache.getUser(user.id);
             var tabs = jks.contentTabManager($("#content"), 
                 ["posts", "followers", "following"], user.id);
-              
-            var rootPaneTemplate = ["rootPane",
-                (me && (user.id === me.id)) ? "Index" : "User"].join("");
 
             $.when(
                   jks.rootPane.load($("#root-pane"), user, 
-                      tabs, rootPaneTemplate, true)
+                      tabs, {statsNoUpdate: (!me || (user.id !== me.id))})
                 , followersDfd
                 , jks.detailView.load($("#detail"))
             ).done(function() {
