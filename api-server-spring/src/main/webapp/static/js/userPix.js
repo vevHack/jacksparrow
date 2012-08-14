@@ -17,15 +17,12 @@ jks.userPix = jks.userPix || (function() {
     }
 
     function attachGlobalListener() {
-    console.log("XXX");
-        window.addEventListener("DOMContentLoaded", function(element) {
-    console.log("foo");
-    /*
-            var element = $(element);
-            if (element.hasClass("profile")) {
-                setImage(element, element.data("id"));
-            }
-            */
+        window.addEventListener("DOMNodeInserted", function(event) {
+            $(event.target).find("*").andSelf().filter(".profile").each(
+                function(idx, img) {
+                    img = $(img);
+                    setImage(img, img.data("id"));
+                });
         }, false);
     }
 

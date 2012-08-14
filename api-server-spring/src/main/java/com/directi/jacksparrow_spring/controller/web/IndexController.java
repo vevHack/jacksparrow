@@ -15,7 +15,6 @@ public class IndexController {
             @CookieValue(value= AccessTokenCookieFactory.COOKIE_NAME,
                     required = false) final String accessToken) {
         return new ModelAndView("base") {{
-            addObject("title", "Jack Sparrow");
             addObject("loader",
                     (accessToken == null) ? "unknownUser" : "index");
         }};

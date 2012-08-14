@@ -60,9 +60,41 @@ jks.dashboard = jks.dashboard || (function() {
         });
     }
 
+    function authenticateFactory() {
+        var authDiv = $('<div id="authenticate" class="dropdown" />');
+        var action = firstTime;
+
+        function firstTime() {
+            var dfd = $.Deferred();
+            $("body").prepend(authDiv.hide());
+            $.fetch.js("authenticate").done(function() {
+                jks.authenticate.load(authDiv).done(function() {
+                    subsequently().done(function() {
+                        action = subsequently;
+                        dfd.resolve();
+                    });
+                });
+            });
+            return dfd;
+        }
+
+        function subsequently() {
+            var dfd = $.Deferred();
+            authDiv.slideToggle("slow", dfd.resolve);
+            return dfd;
+        }
+
+        return function() { 
+            return action();
+        };
+    }
+
+
     function loadVanilla(container) {
         return $.fetch.template("dashboardVanilla").done(function(template) {
             container.html(Mustache.render(template));
+            container.find("#authenticate-trigger").click(
+                jks.common.oneExecTrigger(authenticateFactory()));
         });
     }
 

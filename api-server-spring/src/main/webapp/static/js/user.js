@@ -9,6 +9,7 @@ jks.user = jks.user || (function() {
     var me;
 
     function load() {
+        document.title = ["@", username, " (", document.title, ")"].join("");
         $.getJSON("/api/me")
             .done(function(data) { me = data.user; })
             .always(function(data) {

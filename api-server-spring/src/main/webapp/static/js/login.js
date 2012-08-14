@@ -6,7 +6,7 @@ jks.login = jks.login || (function() {
         var spinner, info, button;
 
         button = form.find('input[type="submit"]');
-        info = $('<span class="info" />').insertAfter(button);
+        info = $('<span class="info unvalidated" />').insertAfter(button);
 
         function initLogin() {
             var email_or_username, findParams;

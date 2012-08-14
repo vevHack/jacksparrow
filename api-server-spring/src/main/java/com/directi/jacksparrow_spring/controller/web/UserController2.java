@@ -11,7 +11,6 @@ public class UserController2 {
     @RequestMapping("/{username}")
     public ModelAndView onUser(@PathVariable String username) {
         return new ModelAndView("base") {{
-            addObject("title", "username -- XXX show name instead");
             addObject("loader", "user");
         }};
     }
@@ -19,9 +18,7 @@ public class UserController2 {
     @RequestMapping("/{username}/{postId}")
     public ModelAndView onUserPost(@PathVariable String username,
                                    @PathVariable int postId) {
-        //XXX ERROR CHECKING
         return new ModelAndView("base") {{
-            addObject("title", "username -- XXX show name instead");
             addObject("loader", "post");
         }};
     }

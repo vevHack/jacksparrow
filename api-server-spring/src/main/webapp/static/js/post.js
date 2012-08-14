@@ -7,6 +7,10 @@ jks.post = jks.post || (function() {
     var postId = document.URL.match(".*/([^/]*)$")[1];
     var me;
 
+    function setTitle(user) {
+        document.title = ["@", user.username, " (", document.title, ")"].join("");
+    }
+
     function load() {
         $.getJSON("/api/me")
             .done(function(data) { me = data.user; })
@@ -31,6 +35,7 @@ jks.post = jks.post || (function() {
 
         jks.fetchUser(post.user.id).done(function() {
             post.user = jks.datacache.getUser(post.user.id);
+            setTitle(post.user);
             $("body").html(Mustache.render(template, post));
             jks.dashboard.load($("#dashboard"), me);
         });

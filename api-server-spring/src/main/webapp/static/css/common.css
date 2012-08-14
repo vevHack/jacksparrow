@@ -96,6 +96,10 @@ fieldset {
 /*
  * 
  */
+.unknownUser {
+    width: 70ex;
+    margin: auto;
+}
 
 .current {
     background-color: yellow;
@@ -169,11 +173,11 @@ a > .username {
 
 /*
  *
- * Create post
+ * Dropdowns - Create post, and Authenticate
  *
  */
 
-#create {
+.dropdown {
     position: fixed;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 1;
@@ -183,12 +187,7 @@ a > .username {
     height: 100%;
 }
 
-#create h2 {
-    color: white;
-    text-align: left;
-}
-
-#create .content {
+.dropdown .content {
     float: right;
     background-color: rgba(0, 0, 0, 0.8);
     width: 36ex; 
@@ -196,20 +195,35 @@ a > .username {
     padding: 3ex;
     padding-top: 0;
     margin: auto;
-    text-align: right;
+    color: white;
 }
 
-#create .info {
+.dropdown .info {
+    padding-left: 2ex;
     min-height: 1.5em;
     font-style: italic;
 }
 
-#create .info.validated {
+.dropdown .info.validated {
     color: #adffbb;
 }
 
-#create .info.unvalidated {
+.dropdown .info.unvalidated {
     color: #FAAAAA;
+}
+
+
+#create .content {
+    width: 36ex; 
+    text-align: right;
+}
+
+#create h2 {
+    text-align: left;
+}
+
+#authenticate .content {
+    width: 63ex; 
 }
 
 /*
@@ -223,10 +237,7 @@ a > .username {
 }
 
 /* XXX delete me */
-.centered {
-    display: block;
-    margin: auto;
-}
+
 .hidden {
     display: none;
 }
@@ -271,8 +282,4 @@ input.validated {
 }
 
 .entity.current {
-}
-
-.entity.current img {
-    visibility: hidden;
 }

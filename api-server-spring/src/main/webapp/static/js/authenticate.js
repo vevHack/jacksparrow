@@ -67,7 +67,7 @@ jks.authenticate = jks.authenticate || (function() {
                     $("#login").on("click", ".trigger", onShowRegister);
             });
 
-        $.when(
+        var dfd = $.when(
             authFetched,
             $.fetch.template("login"),
             $.fetch.js("login")
@@ -82,6 +82,8 @@ jks.authenticate = jks.authenticate || (function() {
         });
 
         preload();
+
+        return dfd;
     };
 
     return {
