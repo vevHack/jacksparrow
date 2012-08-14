@@ -17,7 +17,7 @@ public class IndexController {
         return new ModelAndView("base") {{
             addObject("title", "Jack Sparrow");
             addObject("loader",
-                    (accessToken == null) ? "authenticate" : "index");
+                    (accessToken == null) ? "unknownUser" : "index");
         }};
     }
 

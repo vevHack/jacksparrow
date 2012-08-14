@@ -59,13 +59,13 @@ jks.authenticate = jks.authenticate || (function() {
         event.preventDefault();
     }
 
-    function load() {
+    function load(container) {
         var authFetched = $.fetch.template("authenticate")
             .done(function(template) {
-                $("body").html($(Mustache.render(template))
+                container.html($(Mustache.render(template))
                     .filter("#register").hide().end());
                     $("#login").on("click", ".trigger", onShowRegister);
-            })
+            });
 
         $.when(
             authFetched,
@@ -88,8 +88,3 @@ jks.authenticate = jks.authenticate || (function() {
         load: load
     };
 }());
-
-$(function() {
-    jks.common.attachWarnToFetchFailure();
-    jks.authenticate.load();
-});
