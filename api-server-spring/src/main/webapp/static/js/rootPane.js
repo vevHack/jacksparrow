@@ -13,7 +13,8 @@ jks.rootPane = jks.rootPane || (function() {
                 if (options.statsNoUpdate) { 
                     user.stats.DISABLE = "anyString"; 
                 }
-                user.stats.showFeed = options.showFeed;
+                user.showFeed = options.showFeed;
+                user.editProfile = options.editProfile;
 
                 container.html($(Mustache.render(template, user)))
                     .on('click', '.trigger', triggerHandler);

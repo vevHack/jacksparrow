@@ -4,7 +4,7 @@ jks.index = jks.index || (function() {
 
     var dependencies = ["fetchUser", "postList", "userList", "formatter",
         "datacache", "dashboard", "rootPane", "detailView", "detailTrigger",
-        "follow", "contentTabManager", "userPix"];
+        "follow", "contentTabManager", "userPix", "editProfile"];
     var me;
 
     function load() {
@@ -25,11 +25,12 @@ jks.index = jks.index || (function() {
 
         jks.datacache.setUser(me = jks.formatter.formatUser(me));
         var tabs = jks.contentTabManager($("#content"), 
-            ["feed", "posts", "followers", "following"], me.id);
+            ["feed", "editProfile", "posts", "followers", "following"], me.id);
 
         $.when(
               jks.dashboard.load($("#dashboard"), me)
-            , jks.rootPane.load($("#root-pane"), me, tabs, {showFeed: true})
+            , jks.rootPane.load($("#root-pane"), me, tabs, 
+                {showFeed: true, editProfile: false})
             , jks.follow.load(me)
             , jks.detailView.load($("#detail"))
         ).done(function() {
