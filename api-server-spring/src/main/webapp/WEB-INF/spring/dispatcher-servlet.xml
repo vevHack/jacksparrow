@@ -10,7 +10,7 @@
     <import resource="mvc.xml" />
     <import resource="task.xml" />
     <import resource="view-resolver.xml" />
-
+    <import resource="file-config.xml" />
     <import resource="data-access.xml" />
 
 </beans>

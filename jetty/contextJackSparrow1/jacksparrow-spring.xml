@@ -1,0 +1,6 @@
+
+<Configure class="org.mortbay.jetty.webapp.WebAppContext">
+      <Set name="war"><SystemProperty name="jetty.home"/>/webapps/jacksparrow-spring</Set>
+      <Set name="contextPath">/</Set>
+       <Set name="extractWAR">true</Set>
+</Configure>
