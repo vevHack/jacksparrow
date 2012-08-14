@@ -1,402 +1,0 @@
-Script started on Thursday 09 August 2012 11:34:21 AM IST
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ exitsh open_intellij.sh exit[K[Kexitsh open_intellij.sh cd ~[Kexitls /varnginx -c /home/harsh/nginx_config/severConfig.conf[C[1PeverConfig.conf[1PverConfig.conf[1PerConfig.conf[1PrConfig.conf[1PConfig.conf[1Ponfig.conf[1Pnfig.conf[1Pfig.conf[1Pig.conf[1Pg.conf[1P.confl.confocalhost.conf.conf[1Pconf[1Ponf[1Pnf[1Pf[K[1@i[1@t[1@ [1P[1@-
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-nginx: the configuration file /home/harsh/nginx_config/localhost.conf syntax is ok
-2012/08/09 12:36:51 [emerg] 3887#0: open() "/var/log/nginx/access.log" failed (13: Permission denied)
-nginx: configuration file /home/harsh/nginx_config/localhost.conf test failed
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx -t -c /home/harsh/nginx_config/localhost.conff
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 12:39:14 [emerg] 3898#0: unknown directive "access_log" in /home/harsh/nginx_config/localhost.conf:6
-nginx: configuration file /home/harsh/nginx_config/localhost.conf test failed
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx -t -c /home/harsh/nginx_config/localhost.conff
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 12:39:32 [emerg] 3905#0: unknown directive "access_log" in /home/harsh/nginx_config/localhost.conf:3
-nginx: configuration file /home/harsh/nginx_config/localhost.conf test failed
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx -t -c /home/harsh/nginx_config/localhost.conff
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 12:42:17 [emerg] 3915#0: unknown directive "access_log" in /home/harsh/nginx_config/localhost.conf:3
-nginx: configuration file /home/harsh/nginx_config/localhost.conf test failed
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ clear
-[H[2J]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ clearnginx -t -c /home/harsh/nginx_config/localhost.conf
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 12:42:34 [emerg] 3918#0: unknown directive "access_log" in /home/harsh/nginx_config/localhost.conf:3
-nginx: configuration file /home/harsh/nginx_config/localhost.conf test failed
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx -t -c /home/harsh/nginx_config/localhost.conf
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-nginx: the configuration file /home/harsh/nginx_config/localhost.conf syntax is ok
-2012/08/09 12:43:10 [emerg] 3926#0: open() "/home/harsh/nginx_config" failed (21: Is a directory)
-nginx: configuration file /home/harsh/nginx_config/localhost.conf test failed
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx -t -c /home/harsh/nginx_config/localhost.conf
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-nginx: the configuration file /home/harsh/nginx_config/localhost.conf syntax is ok
-nginx: [emerg] bind() to 127.0.0.1:80 failed (13: Permission denied)
-nginx: configuration file /home/harsh/nginx_config/localhost.conf test failed
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx -t -c /home/harsh/nginx_config/localhost.conf[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cclear[Knginx -t -c /home/harsh/nginx_config/localhost.conf[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cclear[K
-[H[2J]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ clearnginx -t -c /home/harsh/nginx_config/localhost.conf
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-nginx: the configuration file /home/harsh/nginx_config/localhost.conf syntax is ok
-2012/08/09 12:43:51 [emerg] 3937#0: open() "/var/log/nginx/access.log" failed (13: Permission denied)
-nginx: configuration file /home/harsh/nginx_config/localhost.conf test failed
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ clear
-[H[2J]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ clearnginx -t -c /home/harsh/nginx_config/localhost.conf
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-nginx: the configuration file /home/harsh/nginx_config/localhost.conf syntax is ok
-nginx: configuration file /home/harsh/nginx_config/localhost.conf test is successful
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx -t -c /home/harsh/nginx_config/localhost.conf[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cclear[Knginx -t -c /home/harsh/nginx_config/localhost.conf[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Knginx -s reload -c localhost.conf
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 12:45:26 [emerg] 3959#0: open() "/etc/nginx/localhost.conf" failed (2: No such file or directory)
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx -s reload -c localhost.conf[Kman nginx
-[?1049h[?1h=nginx(1)                                                                                 nginx(1)[m
-[m
-[1mNAME[0m[m
-       nginx - small, powerful, scalable web/proxy server[m
-[m
-[1mSYNOPSIS[0m[m
-       [1mnginx[0m [[4moptions[24m] <[4mconfiguration[24m [4mfile[24m>[m
-[m
-[1mDESCRIPTION[0m[m
-       [1mNginx[0m  ("engine  X")  is  a  high-performance web and reverse proxy server created by Igor[m
-       Sysoev. It can be used both as a standalone web server and as a proxy to reduce  the  load[m
-       on back-end HTTP or mail servers.[m
-[m
-[1mOPTIONS[0m[m
-       A summary of options is included below:[m
-[m
-       [1m-?[0m,[1m-h[0m  Show this help.[m
-[m
-       [1m-v[0m     Show version and exit.[m
-[m
-       [1m-V[0m     Show version and configure options then exit.[m
-[7m Manual page nginx(1) line 1 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K[m
-[7m Manual page nginx(1) line 2 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       [1m-s[0m [4msignal[24m[m
-[7m Manual page nginx(1) line 5 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K              Send signal to a master process: stop, quit, reopen, reload.[m
-[7m Manual page nginx(1) line 6 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K[m
-[7m Manual page nginx(1) line 7 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       [1m-p[0m [4mprefix[24m[m
-[7m Manual page nginx(1) line 8 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K              Set prefix path.[m
-[7m Manual page nginx(1) line 9 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K[m
-[7m Manual page nginx(1) line 10 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       [1m-g[0m [4mdirectives[24m[m
-[7m Manual page nginx(1) line 11 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K              Set global directives out of configuration file.[m
-[7m Manual page nginx(1) line 12 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K[m
-[7m Manual page nginx(1) line 13 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       [1m-c[0m <[4mconfiguration[24m [4mfile[24m>[m
-[7m Manual page nginx(1) line 14 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K              Specifies a particular configuration file for nginx to load.[m
-[7m Manual page nginx(1) line 15 (press h for help or q to quit)[27m[K[K[?1l>[?1049l]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ man nginx[C[K[K[K[K[K[K[K[K[Knginx -p
-nginx: option "-p" requires directory name
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx -p /home.[K/harsh/nginx_config/
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 12:46:07 [warn] 3991#0: the "user" directive makes sense only if the master process runs with super-user privileges, ignored in /etc/nginx/nginx.conf:1
-2012/08/09 12:46:07 [emerg] 3991#0: open() "/var/log/nginx/access.log" failed (13: Permission denied)
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx -p /home/harsh/nginx_config/[K -s reload -c localhost.conf
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 12:46:30 [emerg] 3993#0: open() "/home/harsh/nginx_configlocalhost.conf" failed (2: No such file or directory)
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx -p /home/harsh/nginx_config -s reload -c localhost.conf[C[1@/
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 12:46:44 [notice] 3994#0: signal process started
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx -p /home/harsh/nginx_config/ -s reload -c localhost.conf[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[C[C[C[C[C[C[C[C[C[C[C[C[C[C/localhost.confhlocalhost.confolocalhost.confmlocalhost.confelocalhost.conf/localhost.confhlocalhost.confalocalhost.confrlocalhost.confslocalhost.confhlocalhost.conf/localhost.confnlocalhost.confglocalhost.confilocalhost.confnlocalhost.confxlocalhost.conf_localhost.confclocalhost.confolocalhost.confnlocalhost.confflocalhost.confilocalhost.confglocalhost.conf/localhost.conf
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 12:48:10 [notice] 4001#0: signal process started
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ cd /etc/clear
-bash: cd: /etc/clear: No such file or directory
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ cd /etc/clearnginx -s reload -c /home/harsh/nginx_config/localhost.conf[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccd /etc/clear[K[K[K[K[K[K[K[K[K[K[K[K[K[Kclear
-[H[2J]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ cleard /etc/clearnginx -s reload -c /home/harsh/nginx_config/localhost.conf
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 12:53:19 [emerg] 4336#0: unknown directive "cd" in /home/harsh/nginx_config/localhost.conf:42
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx -s reload -c /home/harsh/nginx_config/localhost.conf
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 12:54:41 [notice] 4348#0: signal process started
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx -s reload -c /home/harsh/nginx_config/localhost.conf
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 12:56:10 [notice] 4378#0: signal process started
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx -s reload -c /home/harsh/nginx_config/localhost.conf
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 12:58:27 [notice] 4400#0: signal process started
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx -s reload -c /home/harsh/nginx_config/localhost.conf
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 13:00:47 [notice] 4429#0: signal process started
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx -s reload -c /home/harsh/nginx_config/localhost.conf
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 13:01:32 [notice] 4438#0: signal process started
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ clear
-[H[2J]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ clearnginx -s reload -c /home/harsh/nginx_config/localhost.conf
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 13:06:08 [notice] 4463#0: signal process started
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ less[K[K[K[Knginx -s reload -c /home/harsh/nginx_config/localhost.conf[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cclear[Knginx -s reload -c /home/harsh/nginx_config/localhost.conf
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 13:11:38 [notice] 4637#0: signal process started
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx -s reload -c /home/harsh/nginx_config/localhost.conf
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 13:12:54 [notice] 4649#0: signal process started
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx -s reload -c /home/harsh/nginx_config/localhost.conf
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 13:13:20 [notice] 4656#0: signal process started
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ clear
-[H[2J]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ clearnginx -s reload -c /home/harsh/nginx_config/localhost.conf
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 13:15:55 [notice] 4683#0: signal process started
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx -s reload -c /home/harsh/nginx_config/localhost.conf
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 13:16:11 [emerg] 4689#0: unknown directive "proxy_codnnect_timeout" in /home/harsh/nginx_config/localhost.conf:103
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx -s reload -c /home/harsh/nginx_config/localhost.conf
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 13:16:26 [notice] 4692#0: signal process started
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx -s reload -c /home/harsh/nginx_config/localhost.conf[1P[1P[1P[1P[1P[1P[1P[1P[1P /home/harsh/nginx_config/localhost.conf[1P/home/harsh/nginx_config/localhost.conf[1Phome/harsh/nginx_config/localhost.conf[1Pome/harsh/nginx_config/localhost.conf[1Pme/harsh/nginx_config/localhost.conf[1Pe/harsh/nginx_config/localhost.conf[1P/harsh/nginx_config/localhost.conf[1Pharsh/nginx_config/localhost.conf[1Parsh/nginx_config/localhost.conf[1Prsh/nginx_config/localhost.conf[1Psh/nginx_config/localhost.conf[1Ph/nginx_config/localhost.conf[1P/nginx_config/localhost.conf[1Pnginx_config/localhost.conf[1Pginx_config/localhost.conf[1Pinx_config/localhost.conf[1Pnx_config/localhost.conf[1Px_config/localhost.conf[1P_config/localhost.conf[1Pconfig/localhost.conf[1Ponfig/localhost.conf[1Pnfig/localhost.conf[1Pfig/localhost.conf[1Pig/localhost.conf[1Pg/localhost.conf[1P/localhost.conf[1Plocalhost.conf[1Pocalhost.conf[1Pcalhost.conf[1Palhost.conf[1Plhost.conf[1Phost.conf[1Post.conf[1Pst.conf[1Pt.conf[1P.conf[1Pconf[1Ponf[1Pnf[1Pf[Kquit
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 13:16:34 [warn] 4697#0: the "user" directive makes sense only if the master process runs with super-user privileges, ignored in /etc/nginx/nginx.conf:1
-2012/08/09 13:16:34 [notice] 4697#0: signal process started
-2012/08/09 13:16:34 [alert] 4697#0: kill(1280, 3) failed (1: Operation not permitted)
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx -s quit[C[C[C[1@s[1@u[1@d[1@o[1@ 
-[sudo] password for harsh: 
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ clear
-[H[2J]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ ps aux | grep nginx
-harsh     3254  0.0  0.0  68200  1292 ?        Ss   11:25   0:00 [01;31m[Knginx[m[K: master process [01;31m[Knginx[m[K -c /home/harsh/[01;31m[Knginx[m[K_config/severConfig.conf
-harsh     3450  0.8  0.8 648540 33208 ?        Sl   11:34   0:49 gedit /home/harsh/[01;31m[Knginx[m[K_config/localhost.conf
-harsh     4693  0.0  0.0  68380  1340 ?        S    13:16   0:00 [01;31m[Knginx[m[K: worker process                             
-harsh     4703  0.0  0.0  13584   932 pts/4    S+   13:16   0:00 grep --color=auto [01;31m[Knginx[m[K
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ ps aux | grep nginx
-harsh     3254  0.0  0.0  68200  1292 ?        Ss   11:25   0:00 [01;31m[Knginx[m[K: master process [01;31m[Knginx[m[K -c /home/harsh/[01;31m[Knginx[m[K_config/severConfig.conf
-harsh     3450  0.8  0.8 648540 33208 ?        Sl   11:34   0:49 gedit /home/harsh/[01;31m[Knginx[m[K_config/localhost.conf
-harsh     4693  0.0  0.0  68380  1340 ?        S    13:16   0:00 [01;31m[Knginx[m[K: worker process                             
-harsh     4710  0.0  0.0  13584   932 pts/4    S+   13:17   0:00 grep --color=auto [01;31m[Knginx[m[K
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ [K]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ kill -HUP `cat /var/log/nginx.pid`[1Par/log/nginx.pid`[1Pr/log/nginx.pid`[1P/log/nginx.pid`h/log/nginx.pid`o/log/nginx.pid`m/log/nginx.pid`e/log/nginx.pid`[CClog/nginx.pid`Clog/nginx.pid`[1Plog/nginx.pid`[1Pog/nginx.pid`[1Pg/nginx.pid`/g/nginx.pid`hg/nginx.pid`og/nginx.pid`mg/nginx.pid`eg/nginx.pid`/g/nginx.pid`hg/nginx.pid`ag/nginx.pid`rg/nginx.pid`sg/nginx.pid`hg/nginx.pid`/g/nginx.pid`ng/nginx.pid`[Cg/nginx.pid`ig/nginx.pid`ng/nginx.pid`xg/nginx.pid`_g/nginx.pid`cg/nginx.pid`og/nginx.pid`ng/nginx.pid`fg/nginx.pid`ig/nginx.pid`[Cg/nginx.pid`/g/nginx.pid`[1P/nginx.pid`[1Pnginx.pid`[1Pginx.pid`[1Pinx.pid`[1Pnx.pid`[1Px.pid`[1P.pid`[1Ppid`[1Pid`[1Pd`nd`gd`id`nd`xd`.d`pd`id`[C[C[1Phome/C/home/harsh/nginx_config/nginx.pid`[1Pome/C/home/harsh/nginx_config/nginx.pid`[1Pme/C/home/harsh/nginx_config/nginx.pid`[1Pe/C/home/harsh/nginx_config/nginx.pid`[1P/C/home/harsh/nginx_config/nginx.pid`[1PC/home/harsh/nginx_config/nginx.pid`[1P/home/harsh/nginx_config/nginx.pid`[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ kill -HUP `cat /home/harsh/nginx_config/nginx.pid`[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[31Pps aux | grep nginx
-harsh     3254  0.0  0.0  68200  1292 ?        Ss   11:25   0:00 [01;31m[Knginx[m[K: master process [01;31m[Knginx[m[K -c /home/harsh/[01;31m[Knginx[m[K_config/severConfig.conf
-harsh     3450  0.7  0.8 648540 33208 ?        Sl   11:34   0:49 gedit /home/harsh/[01;31m[Knginx[m[K_config/localhost.conf
-harsh     4728  0.0  0.0  68372  1340 ?        S    13:19   0:00 [01;31m[Knginx[m[K: worker process                             
-harsh     4730  0.0  0.0  13584   932 pts/4    S+   13:19   0:00 grep --color=auto [01;31m[Knginx[m[K
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ ps aux | grep nginxkill -HUP `cat /home/harsh/nginx_config/nginx.pid`[C[C[C[C[C[C[C[C[C[31Pps aux | grep nginxkill -HUP `cat /home/harsh/nginx_config/nginx.pid`[1Pome/harsh/nginx_config/nginx.pid`[1Pme/harsh/nginx_config/nginx.pid`[1Pe/harsh/nginx_config/nginx.pid`[1P/harsh/nginx_config/nginx.pid`[1Pharsh/nginx_config/nginx.pid`[1Parsh/nginx_config/nginx.pid`[1Prsh/nginx_config/nginx.pid`[1Psh/nginx_config/nginx.pid`[1Ph/nginx_config/nginx.pid`[1P/nginx_config/nginx.pid`[1Pnginx_config/nginx.pid`[1Pginx_config/nginx.pid`[1Pinx_config/nginx.pid`[1Pnx_config/nginx.pid`[1Px_config/nginx.pid`[1P_config/nginx.pid`[1Pconfig/nginx.pid`[1Ponfig/nginx.pid`[1Pnfig/nginx.pid`[1Pfig/nginx.pid`[1Pig/nginx.pid`[1Pg/nginx.pid`[1P/nginx.pid`[1Pnginx.pid`[1Pginx.pid`[1Pinx.pid`[1Pnx.pid`[1Px.pid`[1P.pid`[1Ppid`[1Pid`[1Pd`[1P`v`a`r`/`l`o`g`/`n`g`i`n`x`.`p`i`d`[C
-cat: /var/log/nginx.pid: No such file or directory
-kill: usage: kill [-s sigspec | -n signum | -sigspec] pid | jobspec ... or kill -l [sigspec]
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ man kill
-[?1049h[?1h=KILL(1)                                                     Linux User's Manual                                                     KILL(1)[m
-[m
-[1mNAME[0m[m
-       kill - send a signal to a process[m
-[m
-[1mSYNOPSIS[0m[m
-       [1mkill[0m [ -[1msignal[0m | -s [1msignal[0m ] [1mpid[0m ...[m
-       [1mkill[0m [ -L | -V, --version ][m
-       [1mkill[0m -l  [ [1msignal[0m ][m
-[m
-[1mDESCRIPTION[0m[m
-       The  default  signal  for kill is TERM. Use -l or -L to list available signals.  Particularly useful signals include HUP, INT, KILL,[m
-       STOP, CONT, and 0.  Alternate signals may be specified in three ways: -9 -SIGKILL -KILL.  Negative PID values may be used to  choose[m
-       whole  process  groups; see the PGID column in ps command output. A PID of -1 is special; it indicates all processes except the kill[m
-       process itself and init.[m
-[m
-[1mSIGNALS[0m[m
-[7m Manual page kill(1) line 1 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       The signals listed below may be available for use with kill.  When known constant, numbers and default behavior are shown.[m
-[7m Manual page kill(1) line 2 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K[m
-[7m Manual page kill(1) line 5 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       [1mName[0m     [1mNum[0m   [1mAction[0m    [1mDescription[0m[m
-[7m Manual page kill(1) line 6 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       0          0   n/a       exit code indicates if a signal may be sent[m
-[7m Manual page kill(1) line 7 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       ALRM      14   exit[m
-[7m Manual page kill(1) line 9 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       HUP        1   exit[m
-[7m Manual page kill(1) line 10 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       INT        2   exit[m
-[7m Manual page kill(1) line 11 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       KILL       9   exit      cannot be blocked[m
-[7m Manual page kill(1) line 12 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       PIPE      13   exit[m
-[7m Manual page kill(1) line 13 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       POLL           exit[m
-[7m Manual page kill(1) line 15 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       PROF           exit[m
-[7m Manual page kill(1) line 16 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       TERM      15   exit[m
-[7m Manual page kill(1) line 17 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       USR1           exit[m
-[7m Manual page kill(1) line 18 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       USR2           exit[m
-[7m Manual page kill(1) line 19 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       VTALRM         exit[m
-[7m Manual page kill(1) line 20 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       STKFLT         exit      might not be implemented[m
-[7m Manual page kill(1) line 22 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       PWR            ignore    might exit on some systems[m
-[7m Manual page kill(1) line 23 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       WINCH          ignore[m
-[7m Manual page kill(1) line 24 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       CHLD           ignore[m
-[7m Manual page kill(1) line 26 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       URG            ignore[m
-[7m Manual page kill(1) line 27 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       [1mName[0m     [1mNum[0m   [1mAction[0m    [1mDescription[0m[m
-[18;1H[K[7m Manual page kill(1) line 26 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM[m
-[18;1H[K[7m Manual page kill(1) line 25 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       The signals listed below may be available for use with kill.  When known constant, numbers and default behavior are shown.[m
-[18;1H[K[7m Manual page kill(1) line 23 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM[1mSIGNALS[0m[m
-[18;1H[K[7m Manual page kill(1) line 22 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM[m
-[18;1H[K[7m Manual page kill(1) line 21 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       process itself and init.[m
-[18;1H[K[7m Manual page kill(1) line 19 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       VTALRM         exit[m
-[7m Manual page kill(1) line 21 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       STKFLT         exit      might not be implemented[m
-[7m Manual page kill(1) line 22 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       PWR            ignore    might exit on some systems[m
-[7m Manual page kill(1) line 23 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       WINCH          ignore[m
-[7m Manual page kill(1) line 25 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       CHLD           ignore[m
-[7m Manual page kill(1) line 26 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       URG            ignore[m
-[7m Manual page kill(1) line 27 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       TSTP           stop      might interact with the shell[m
-[7m Manual page kill(1) line 28 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       TTIN           stop      might interact with the shell[m
-[7m Manual page kill(1) line 29 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       TTOU           stop      might interact with the shell[m
-[7m Manual page kill(1) line 30 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       STOP           stop      cannot be blocked[m
-[7m Manual page kill(1) line 31 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       CONT           restart   continue if stopped, otherwise ignore[m
-[7m Manual page kill(1) line 32 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       ABRT       6   core[m
-[7m Manual page kill(1) line 33 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       FPE        8   core[m
-[7m Manual page kill(1) line 34 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       ILL        4   core[m
-[7m Manual page kill(1) line 35 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       QUIT       3   core[m
-[7m Manual page kill(1) line 36 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       SEGV      11   core[m
-[7m Manual page kill(1) line 37 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       TRAP       5   core[m
-[7m Manual page kill(1) line 38 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       SYS            core      might not be implemented[m
-[7m Manual page kill(1) line 39 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       EMT            core      might not be implemented[m
-[7m Manual page kill(1) line 40 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       BUS            core      core dump might fail[m
-[7m Manual page kill(1) line 41 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       XCPU           core      core dump might fail[m
-[7m Manual page kill(1) line 42 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       XFSZ           core      core dump might fail[m
-[7m Manual page kill(1) line 43 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K[m
-[7m Manual page kill(1) line 44 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K[1mNOTES[0m[m
-[7m Manual page kill(1) line 45 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       Your shell (command line interpreter) may have a built-in kill command.  You may need to run the command described here as /bin/kill[m
-[7m Manual page kill(1) line 46 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       to solve the conflict.[m
-[7m Manual page kill(1) line 47 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K[m
-[7m Manual page kill(1) line 48 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K[1mEXAMPLES[0m[m
-[7m Manual page kill(1) line 49 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       [1mkill[0m [1m-9[0m [1m-1[0m[m
-[7m Manual page kill(1) line 50 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K              Kill all processes you can kill.[m
-[7m Manual page kill(1) line 51 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K[m
-[7m Manual page kill(1) line 52 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       [1mkill[0m [1m-l[0m [1m11[0m[m
-[7m Manual page kill(1) line 53 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K              Translate number 11 into a signal name.[m
-[7m Manual page kill(1) line 54 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K[m
-[7m Manual page kill(1) line 55 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       [1mkill[0m [1m-L[0m[m
-[7m Manual page kill(1) line 56 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K              List the available signal choices in a nice table.[m
-[7m Manual page kill(1) line 57 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K[m
-[7m Manual page kill(1) line 58 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       [1mkill[0m [1m123[0m [1m543[0m [1m2341[0m [1m3453[0m[m
-[7m Manual page kill(1) line 59 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K              Send the default signal, SIGTERM, to all those processes.[m
-[7m Manual page kill(1) line 60 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K[m
-[7m Manual page kill(1) line 62 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K[1mSEE[0m [1mALSO[0m[m
-[7m Manual page kill(1) line 63 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       [1mpkill[0m(1), [1mskill[0m(1), [1mkill[0m(2), [1mrenice[0m(1), [1mnice[0m(1), [1msignal[0m(7), [1mkillall[0m(1).[m
-[7m Manual page kill(1) line 64 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K[m
-[7m Manual page kill(1) line 65 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K[1mSTANDARDS[0m[m
-[7m Manual page kill(1) line 67 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       This command meets appropriate standards. The -L flag is Linux-specific.[m
-[7m Manual page kill(1) line 68 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K[m
-[7m Manual page kill(1) line 69 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K[1mAUTHOR[0m[m
-[7m Manual page kill(1) line 70 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       Albert  Cahalan  <albert@users.sf.net> wrote kill in 1999 to replace a bsdutils one that was not standards compliant. The util-linux[m
-[7m Manual page kill(1) line 71 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       one might also work correctly.[m
-[7m Manual page kill(1) line 72 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K[m
-[7m Manual page kill(1) line 73 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K       Please send bug reports to <procps-feedback@lists.sf.net>[m
-[7m Manual page kill(1) line 74 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KBB[K[m
-[7m Manual page kill(1) line 75 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       [1mkill[0m [1m-L[0m[m
-[18;1H[K[7m Manual page kill(1) line 74 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM[m
-[18;1H[K[7m Manual page kill(1) line 73 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM              Translate number 11 into a signal name.[m
-[18;1H[K[7m Manual page kill(1) line 72 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       [1mkill[0m [1m-l[0m [1m11[0m[m
-[18;1H[K[7m Manual page kill(1) line 71 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM[m
-[18;1H[K[7m Manual page kill(1) line 70 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM              Kill all processes you can kill.[m
-[18;1H[K[7m Manual page kill(1) line 69 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       [1mkill[0m [1m-9[0m [1m-1[0m[m
-[18;1H[K[7m Manual page kill(1) line 68 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM[1mEXAMPLES[0m[m
-[18;1H[K[7m Manual page kill(1) line 67 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM[m
-[18;1H[K[7m Manual page kill(1) line 66 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       to solve the conflict.[m
-[18;1H[K[7m Manual page kill(1) line 64 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       Your shell (command line interpreter) may have a built-in kill command.  You may need to run the command described here as /bin/kill[m
-[18;1H[K[7m Manual page kill(1) line 63 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM[1mNOTES[0m[m
-[18;1H[K[7m Manual page kill(1) line 62 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM[m
-[18;1H[K[7m Manual page kill(1) line 61 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       XFSZ           core      core dump might fail[m
-[18;1H[K[7m Manual page kill(1) line 59 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       XCPU           core      core dump might fail[m
-[18;1H[K[7m Manual page kill(1) line 58 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       BUS            core      core dump might fail[m
-[18;1H[K[7m Manual page kill(1) line 57 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       EMT            core      might not be implemented[m
-[18;1H[K[7m Manual page kill(1) line 56 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       SYS            core      might not be implemented[m
-[18;1H[K[7m Manual page kill(1) line 55 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       TRAP       5   core[m
-[18;1H[K[7m Manual page kill(1) line 54 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       SEGV      11   core[m
-[18;1H[K[7m Manual page kill(1) line 53 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       QUIT       3   core[m
-[18;1H[K[7m Manual page kill(1) line 52 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       ILL        4   core[m
-[18;1H[K[7m Manual page kill(1) line 51 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       FPE        8   core[m
-[18;1H[K[7m Manual page kill(1) line 50 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       ABRT       6   core[m
-[18;1H[K[7m Manual page kill(1) line 49 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       CONT           restart   continue if stopped, otherwise ignore[m
-[18;1H[K[7m Manual page kill(1) line 48 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       STOP           stop      cannot be blocked[m
-[18;1H[K[7m Manual page kill(1) line 47 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       TTOU           stop      might interact with the shell[m
-[18;1H[K[7m Manual page kill(1) line 46 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       TTIN           stop      might interact with the shell[m
-[18;1H[K[7m Manual page kill(1) line 45 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       TSTP           stop      might interact with the shell[m
-[18;1H[K[7m Manual page kill(1) line 44 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       URG            ignore[m
-[18;1H[K[7m Manual page kill(1) line 43 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       CHLD           ignore[m
-[18;1H[K[7m Manual page kill(1) line 42 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       WINCH          ignore[m
-[18;1H[K[7m Manual page kill(1) line 41 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       PWR            ignore    might exit on some systems[m
-[18;1H[K[7m Manual page kill(1) line 40 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       STKFLT         exit      might not be implemented[m
-[18;1H[K[7m Manual page kill(1) line 39 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       VTALRM         exit[m
-[18;1H[K[7m Manual page kill(1) line 38 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       USR2           exit[m
-[18;1H[K[7m Manual page kill(1) line 37 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       USR1           exit[m
-[18;1H[K[7m Manual page kill(1) line 36 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       TERM      15   exit[m
-[18;1H[K[7m Manual page kill(1) line 35 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       PROF           exit[m
-[18;1H[K[7m Manual page kill(1) line 34 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       POLL           exit[m
-[18;1H[K[7m Manual page kill(1) line 33 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       PIPE      13   exit[m
-[18;1H[K[7m Manual page kill(1) line 32 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       KILL       9   exit      cannot be blocked[m
-[18;1H[K[7m Manual page kill(1) line 31 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       INT        2   exit[m
-[18;1H[K[7m Manual page kill(1) line 30 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       HUP        1   exit[m
-[18;1H[K[7m Manual page kill(1) line 29 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       ALRM      14   exit[m
-[18;1H[K[7m Manual page kill(1) line 28 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       0          0   n/a       exit code indicates if a signal may be sent[m
-[18;1H[K[7m Manual page kill(1) line 27 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       [1mName[0m     [1mNum[0m   [1mAction[0m    [1mDescription[0m[m
-[18;1H[K[7m Manual page kill(1) line 26 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM[m
-[18;1H[K[7m Manual page kill(1) line 25 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       The signals listed below may be available for use with kill.  When known constant, numbers and default behavior are shown.[m
-[18;1H[K[7m Manual page kill(1) line 23 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM[1mSIGNALS[0m[m
-[18;1H[K[7m Manual page kill(1) line 22 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM[m
-[18;1H[K[7m Manual page kill(1) line 21 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       process itself and init.[m
-[18;1H[K[7m Manual page kill(1) line 19 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       whole  process  groups; see the PGID column in ps command output. A PID of -1 is special; it indicates all processes except the kill[m
-[18;1H[K[7m Manual page kill(1) line 18 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       STOP, CONT, and 0.  Alternate signals may be specified in three ways: -9 -SIGKILL -KILL.  Negative PID values may be used to  choose[m
-[18;1H[K[7m Manual page kill(1) line 17 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       The  default  signal  for kill is TERM. Use -l or -L to list available signals.  Particularly useful signals include HUP, INT, KILL,[m
-[18;1H[K[7m Manual page kill(1) line 16 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM[1mDESCRIPTION[0m[m
-[18;1H[K[7m Manual page kill(1) line 15 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM[m
-[18;1H[K[7m Manual page kill(1) line 14 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       [1mkill[0m -l  [ [1msignal[0m ][m
-[18;1H[K[7m Manual page kill(1) line 12 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       [1mkill[0m [ -L | -V, --version ][m
-[18;1H[K[7m Manual page kill(1) line 11 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       [1mkill[0m [ -[1msignal[0m | -s [1msignal[0m ] [1mpid[0m ...[m
-[18;1H[K[7m Manual page kill(1) line 10 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM[1mSYNOPSIS[0m[m
-[18;1H[K[7m Manual page kill(1) line 9 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM[m
-[18;1H[K[7m Manual page kill(1) line 8 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM       kill - send a signal to a process[m
-[18;1H[K[7m Manual page kill(1) line 6 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM[1mNAME[0m[m
-[18;1H[K[7m Manual page kill(1) line 5 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HM[m
-[18;1H[K[7m Manual page kill(1) line 4 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[HMKILL(1)                                                     Linux User's Manual                                                     KILL(1)[m
-[18;1H[K[7m Manual page kill(1) line 1 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[K[7m Manual page kill(1) line 1 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[K[7m Manual page kill(1) line 1 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[K[7m Manual page kill(1) line 1 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[K[7m Manual page kill(1) line 1 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[K[7m Manual page kill(1) line 1 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[K[7m Manual page kill(1) line 1 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[K[7m Manual page kill(1) line 1 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[K[7m Manual page kill(1) line 1 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[K[7m Manual page kill(1) line 1 (press h for help or q to quit)[27m[K[K [KESCESC[KOO[KAA[K[K[7m Manual page kill(1) line 1 (press h for help or q to quit)[27m[K[K[?1l>[?1049l]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ kill 3254
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ kill 3254[1Pman killkill -HUP `cat /var/log/nginx.pid`
-cat: /var/log/nginx.pid: No such file or directory
-kill: usage: kill [-s sigspec | -n signum | -sigspec] pid | jobspec ... or kill -l [sigspec]
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ kill -HUP `cat /var/log/nginx.pid`3254[K[1Pman killkill -HUP `cat /var/log/nginx.pid`[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[15Pps aux | grep nginx
-harsh     3450  0.7  0.8 648540 33208 ?        Sl   11:34   0:49 gedit /home/harsh/[01;31m[Knginx[m[K_config/localhost.conf
-harsh     4767  0.0  0.0  13584   932 pts/4    S+   13:20   0:00 grep --color=auto [01;31m[Knginx[m[K
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ clear
-[H[2J]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ clearps aux | grep nginxkill -HUP `cat /var/log/nginx.pid`3254[K[1Pman killkill -HUP `cat /var/log/nginx.pid`[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[15Pps aux | grep nginxkill -HUP `cat /home/harsh/nginx_config/nginx.pid`[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[31Pps aux | grep nginxclear[Ksudo nginx -s quit[5P[C[C[C[C[C[C[C[C[C[C[C[C[Creload -c /home/harsh/nginx_config/localhost.conf
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 13:21:02 [notice] 4771#0: signal process started
-2012/08/09 13:21:02 [error] 4771#0: open() "/home/harsh/nginx_config/nginx.pid" failed (2: No such file or directory)
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx -s reload -c /home/harsh/nginx_config/localhost.conf
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 13:21:49 [notice] 4780#0: signal process started
-2012/08/09 13:21:49 [error] 4780#0: invalid PID number "" in "/home/harsh/nginx_config/nginx.pid"
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx -s reload -c /home/harsh/nginx_config/localhost.conf[1P[1P[1P[1P[1@o[1@p[1@e[1@n
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 13:22:05 [notice] 4782#0: signal process started
-2012/08/09 13:22:05 [error] 4782#0: invalid PID number "" in "/home/harsh/nginx_config/nginx.pid"
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx -s reopen -c /home/harsh/nginx_config/localhost.conf[Knginx -s reopen -c /home/harsh/nginx_config/localhost.conf[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cload[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cclear[Kps aux | grep nginx
-harsh     3450  0.7  0.8 648540 33172 ?        Sl   11:34   0:50 gedit /home/harsh/[01;31m[Knginx[m[K_config/localhost.conf
-harsh     4784  0.0  0.0  13584   932 pts/4    S+   13:22   0:00 grep --color=auto [01;31m[Knginx[m[K
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ ps aux | grep nginxnginx -s reopen -c /home/harsh/nginx_config/localhost.conf[1P[1P[1P[1P[1P[1P[1P[1P[1P
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-nginx: [emerg] bind() to 127.0.0.1:80 failed (13: Permission denied)
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx  -c /home/harsh/nginx_config/localhost.conf
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-nginx: [emerg] bind() to 127.0.0.1:80 failed (13: Permission denied)
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx  -c /home/harsh/nginx_config/localhost.conf
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx  -c /home/harsh/nginx_config/localhost.conf[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[30Pps aux | grep nginxnginx -s reopen -c /home/harsh/nginx_config/localhost.conf[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cload[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Copen[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cps aux | grep nginx[K
-harsh     3450  0.7  0.8 648540 33240 ?        Sl   11:34   0:51 gedit /home/harsh/[01;31m[Knginx[m[K_config/localhost.conf
-harsh     4802  0.0  0.0  70432  1376 ?        Ss   13:23   0:00 [01;31m[Knginx[m[K: master process [01;31m[Knginx[m[K -c /home/harsh/[01;31m[Knginx[m[K_config/localhost.conf
-harsh     4803  0.0  0.0  70748  1460 ?        S    13:23   0:00 [01;31m[Knginx[m[K: worker process                           
-harsh     4804  0.0  0.0  70748  1716 ?        S    13:23   0:00 [01;31m[Knginx[m[K: worker process                           
-harsh     4805  0.0  0.0  70748  1716 ?        S    13:23   0:00 [01;31m[Knginx[m[K: worker process                           
-harsh     4806  0.0  0.0  70748  1716 ?        S    13:23   0:00 [01;31m[Knginx[m[K: worker process                           
-harsh     4810  0.0  0.0  13584   932 pts/4    S+   13:23   0:00 grep --color=auto [01;31m[Knginx[m[K
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ ps aux | grep nginxnginx  -c /home/harsh/nginx_config/localhost.conf -s reload
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 13:23:41 [notice] 4812#0: signal process started
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx  -c /home/harsh/nginx_config/localhost.conf -s reload
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 13:24:26 [notice] 4830#0: signal process started
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ clear
-[H[2J]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ clearnginx  -c /home/harsh/nginx_config/localhost.conf -s reload
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 13:26:09 [notice] 4856#0: signal process started
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx  -c /home/harsh/nginx_config/localhost.conf -s reload
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 13:28:26 [notice] 4868#0: signal process started
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx  -c /home/harsh/nginx_config/localhost.conf -s reload[1P[1@p[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[C[C[C[C[C[C[C[C[C[C[C -c localhost.conf
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 13:36:46 [emerg] 5008#0: open() "/home/harsh/nginx_config/flocalhost.conf" failed (2: No such file or directory)
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx  -p /home/harsh/nginx_config/f -s reload -c localhost.conf[1P
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 13:36:54 [notice] 5010#0: signal process started
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx  -p /home/harsh/nginx_config/ -s reload -c localhost.conf
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 13:38:00 [notice] 5037#0: signal process started
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx  -p /home/harsh/nginx_config/ -s reload -c localhost.conf
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 13:42:11 [notice] 5222#0: signal process started
-2012/08/09 13:42:11 [error] 5222#0: open() "/home/harsh/nginx_config/var/log/nginx.pid" failed (2: No such file or directory)
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx  -p /home/harsh/nginx_config/ -s reload -c localhost.conf
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/09 13:42:34 [notice] 5232#0: signal process started
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ nginx  -p /home/harsh/nginx_config/ -s reload -c localhost.conf[1@f[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[5Pc /home/harsh/nginx_config/localhost.conf -s reload[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cp /home/harsh/nginx_config/f -s reload -c localhost.confexit
-nginx: [alert] could not open error log file: open() "/var/log/nginx/error.log" failed (13: Permission denied)
-2012/08/10 01:25:21 [emerg] 14407#0: open() "/home/harsh/nginx_config/flocalhost.confexit" failed (2: No such file or directory)
-]0;harsh@xtreme: ~/nginx_configharsh@xtreme:~/nginx_config$ exit
-exit
