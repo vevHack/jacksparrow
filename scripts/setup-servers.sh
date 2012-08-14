@@ -1,10 +1,18 @@
 #!/bin/sh -e
 
-if ! which nginx; 
-then 
-    echo "ERROR: nginx not found (hint: sudo apt-get install nginx)"
+function checkBinary {
+echo -n "checking for $1... "
+if ! which $1; 
+then
+    echo
+    echo "ERROR: $1 not found (hint: sudo apt-get install $1)"
     return
-fi
+fi 
+}
+
+checkBinary nginx
+checkBinary node
+checkBinary npm
 
 mkdir -p var/run
 mkdir -p var/log

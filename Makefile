@@ -38,9 +38,13 @@ lo-slow:
 lo-reset:
 	@tc qdisc del dev lo root
 
+setup:
+	@bash scripts/setup-servers.sh
+	@bash scripts/create-static-resources.sh
 
 .PHONY: test \
 	npm-restore-links \
 	db-backup-schema db-backup-test db-restore-schema db-restore-test \
-	lo-slow lo-reset
+	lo-slow lo-reset \
+	setup
 
