@@ -30,7 +30,7 @@ jks.index = jks.index || (function() {
         $.when(
               jks.dashboard.load($("#dashboard"), me)
             , jks.rootPane.load($("#root-pane"), me, tabs, 
-                {showFeed: true, editProfile: false})
+                {showFeed: true, editProfile: true})
             , jks.follow.load(me)
             , jks.detailView.load($("#detail"))
         ).done(function() {

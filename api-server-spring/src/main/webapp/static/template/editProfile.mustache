@@ -1,16 +1,18 @@
-<form>
+<div>
+  <form id="editProfile">
     <fieldset>
-        <label>Display Name:
-          <input type="text" name="name" value="{{name}}" />
-        </label>
-        <br />
-        <label>Email:
-          <input type="text" name="email" value="{{email}}"/>
-        </label>
-        <br />
-        <label>Username:
-          <input type="text" name="username" value="{{username}}" />
-        <br />
-        <input type="submit" value="Update" />
+      <label for="name">Display Name</label>
+      <input type="text" name="name" value="{{name}}" />
+      <br />
+      <label for="email">Email</label>
+      <input type="text" name="email" value="{{email}}"/>
+      <br />
+      <label for="username">Username</label>
+        <input type="text" name="username" value="{{username}}" />
+      <br />
+      <span class="info" />
+      <br />
+      <input type="submit" value="Update" />
     </fieldset>
-</form>
+  </form>
+</div>

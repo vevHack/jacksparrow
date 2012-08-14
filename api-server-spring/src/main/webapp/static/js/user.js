@@ -47,8 +47,9 @@ jks.user = jks.user || (function() {
                 ["posts", "followers", "following"], user.id);
 
             $.when(
-                  jks.rootPane.load($("#root-pane"), user, 
-                      tabs, {statsNoUpdate: (!me || (user.id !== me.id))})
+                  jks.rootPane.load($("#root-pane"), user, tabs, {
+                      statsNoUpdate: (!me || (user.id !== me.id)),
+                      showFollow: true})
                 , followersDfd
                 , jks.detailView.load($("#detail"))
             ).done(function() {

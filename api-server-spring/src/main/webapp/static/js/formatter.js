@@ -3,10 +3,9 @@ jks.formatter = jks.formatter || (function() {
     "use strict";
 
     function formatUser(user) {
-        return $.extend({ 
-              name : user.username
-            , permalink: ["", user.username].join("/")
-        }, user);
+        user = $.extend({ permalink: ["", user.username].join("/") }, user);
+        user.name = user.name || user.username;
+        return user;
     }
 
     function formatPost(post) {

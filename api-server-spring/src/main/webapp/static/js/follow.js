@@ -8,23 +8,26 @@ jks.follow = jks.follow || (function() {
         var API = {"follow-trigger": "follow", "unfollow-trigger": "unfollow"};
         var opposite = {
               "follow-trigger": {
-                id: "unfollow-trigger", title: "Unfollow", incr: 1
+                klass: "unfollow-trigger", title: "Unfollow", incr: 1
               }
             , "unfollow-trigger": {
-                id: "follow-trigger", title: "Follow", incr: -1
+                klass: "follow-trigger", title: "Follow", incr: -1
             }
         };
 
         return function() {
-            var id = this.id;
-            var userId = $(this).data("id");
-            var other = opposite[id];
             var that = $(this);
+            var userId = that.data("id");
+            var type = that.hasClass("follow-trigger") ? 
+                "follow-trigger" : "unfollow-trigger";
+            var other = opposite[type];
+            console.log(other);
 
-            $.post("/api/user/" + API[id], {user: userId}).done(function() {
+            $.post("/api/user/" + API[type], {user: userId}).done(function() {
                 that.replaceWith(
-                    $("<a />").attr("id", other.id).attr("title", other.title)
-                    .addClass("trigger").data("id", userId));
+                    $('<a class="trigger-icon" />')
+                        .addClass(other.klass).attr("title", other.title)
+                        .data("id", userId));
                 jks.common.incrementValue($("#stats-following"), other.incr);
             });
 
@@ -41,8 +44,8 @@ jks.follow = jks.follow || (function() {
                 });
                 jks.datacache.addSetUserListener(setUserListener);
                 $("body")
-                    .on("click", "#follow-trigger", handler)
-                    .on("click", "#unfollow-trigger", handler);
+                    .on("click", ".follow-trigger", handler)
+                    .on("click", ".unfollow-trigger", handler)
             });
     }
 

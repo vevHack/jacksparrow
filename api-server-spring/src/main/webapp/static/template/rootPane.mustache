@@ -10,6 +10,19 @@
     data-id="{{id}}" alt="{{name}}" title="{{name}}" />
 </div>
 
+{{#showFollow}}
+<div>
+  {{#doesNotFollow}}
+    <a href="#" class="trigger-icon follow-trigger" title="Follow" 
+      data-id="{{id}}" />
+  {{/doesNotFollow}}
+  {{#doesFollow}}
+    <a href="#" class="trigger-icon unfollow-trigger" title="Unfollow"
+      data-id="{{id}}" />
+  {{/doesFollow}}
+</div>
+{{/showFollow}}
+
 <ul>
   {{#showFeed}}
   <li><a href="#" id="feed-trigger" class="trigger">Feed</a></li>

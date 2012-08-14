@@ -3,12 +3,13 @@
   <a href="{{permalink}}">Go to 
     the full profile of 
     <span class="username">@{{username}}</span></a>
-  {{#doesNotFollow}}
-    <a href="#" id="follow-trigger" class="trigger trigger-icon" title="Follow" 
-      data-id="{{id}}" />
-  {{/doesNotFollow}}
-  {{#doesFollow}}
-    <a href="#" id="unfollow-trigger" class="trigger trigger-icon" title="Unfollow"
-      data-id="{{id}}" />
-  {{/doesFollow}}
+
+  <div>
+    {{#doesNotFollow}}
+      <a href="#" class="trigger-icon follow-trigger" title="Follow" data-id="{{id}}" />
+    {{/doesNotFollow}}
+    {{#doesFollow}}
+      <a href="#" class="trigger-icon unfollow-trigger" title="Unfollow" data-id="{{id}}" />
+    {{/doesFollow}}
+  </div>
 </div>

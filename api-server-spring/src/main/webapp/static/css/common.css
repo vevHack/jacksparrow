@@ -96,6 +96,15 @@ fieldset {
 /*
  * 
  */
+
+#preloader {
+    width: 23ex;
+    margin: auto;
+    margin-top: 20ex;
+    padding: 2ex;
+    background-color: grey;
+}
+
 .unknownUser {
     width: 70ex;
     margin: auto;
@@ -112,6 +121,14 @@ fieldset {
 
 a > .username {
     font-size: 100%;
+}
+
+.info.validated {
+    color: #adffbb;
+}
+
+.info.unvalidated {
+    color: #FAAAAA;
 }
 
 /*
@@ -133,8 +150,8 @@ a > .username {
 #create-cancel-trigger { background-image: url("/static/img/stop.png"); }
 #create-trigger { background-image: url("/static/img/notepencil.png"); }
 #zoom-trigger { background-image: url("/static/img/slide.png"); }
-#follow-trigger { background-image: url("/static/img/exchange.png"); }
-#unfollow-trigger { background-image: url("/static/img/block.png"); }
+.follow-trigger { background-image: url("/static/img/exchange.png"); }
+.unfollow-trigger { background-image: url("/static/img/block.png"); }
 
 #close-detail-trigger { 
     background-image: url("/static/img/cross.png"); 
@@ -159,6 +176,7 @@ a > .username {
 /*
  * Triggers
  */
+
 #loader-tab-parent {
     position: relative;
 }
@@ -202,14 +220,6 @@ a > .username {
     padding-left: 2ex;
     min-height: 1.5em;
     font-style: italic;
-}
-
-.dropdown .info.validated {
-    color: #adffbb;
-}
-
-.dropdown .info.unvalidated {
-    color: #FAAAAA;
 }
 
 
@@ -261,6 +271,27 @@ input.validated {
     background-color: #adffbb;
 }
 
+label {
+    /* width: 20ex;*/
+}
+
+input[type="text"],input[type="password"] {
+    width: 20ex;
+}
+
+/*
+ * Edit Profile
+ */
+
+#editProfile label {
+    display: block;
+}
+
+#editProfile input[type="text"], 
+#editProfile input[type="password"] {
+    margin-left: 4ex;
+    width: 30ex;
+}
 
 /*
  * Posts

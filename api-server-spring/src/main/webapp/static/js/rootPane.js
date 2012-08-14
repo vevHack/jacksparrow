@@ -15,6 +15,7 @@ jks.rootPane = jks.rootPane || (function() {
                 }
                 user.showFeed = options.showFeed;
                 user.editProfile = options.editProfile;
+                user.showFollow = options.showFollow;
 
                 container.html($(Mustache.render(template, user)))
                     .on('click', '.trigger', triggerHandler);
