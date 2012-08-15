@@ -23,6 +23,7 @@ done
 
 mkdir -p $out/img
 cp static/img/*.png $out/img
+cp static/img/*.gif $out/img
 bash scripts/create-sprites.sh
 
 mkdir -p $www/html
