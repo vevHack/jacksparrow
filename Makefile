@@ -40,9 +40,9 @@ lo-reset:
 
 setup:
 	@bash scripts/setup-servers.sh
-	@bash scripts/create-static-resources.sh
 
 build:
+	@bash scripts/create-static-resources.sh
 	@bash scripts/build.sh
 
 start:

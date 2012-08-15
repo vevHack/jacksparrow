@@ -84,9 +84,11 @@ jks.common = jks.common || (function() {
             document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         }
 
-        if (jqXHR.status === 401 && /API\-ACT/.test(document.cookie)) {
+        if (jqXHR.status === 401) {
             delete_cookie("API-ACT");
-            window.location.replace("/");
+            window.location.replace("/login");
+        } else {
+            jks.common.warn();
         }
     }
 
