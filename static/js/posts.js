@@ -7,6 +7,8 @@ jks.posts = jks.posts || (function() {
             return $.getJSON("/api/user/posts", $.extend({user:user}, params));
         }
 
-        return jks.postList("posts", fetchData);
+        var posts = jks.postList("posts", fetchData);
+        $("body").bind("jacksparrow.socket.posts", posts.update);
+        return posts;
     };
 }());

@@ -38,7 +38,7 @@ jks.index = jks.index || (function() {
             $("#feed-trigger").trigger("click");
         });
 
-        jks.webSocket.connect(jks.feed.update, jks.posts.update);
+        jks.webSocket.connect();
     }
 
     return {

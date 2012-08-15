@@ -6,10 +6,13 @@ jks.webSocket = jks.webSocket || (function() {
         return document.URL.match("(.*:\/\/[^/]+)\/")[1];
     }
 
-    function connect(feedListener, postListener) {
+    function connect() {
         var socket = io.connect(host());
-        feedListener && socket.on("feed", feedListener);
-        postListener && socket.on("post", postListener);
+        socket.on("feed", function() {
+            $("body").trigger("jacksparrow.socket.feed");
+        }, function() {
+            $("body").trigger("jacksparrow.socket.posts");
+        });
     }
 
     return {

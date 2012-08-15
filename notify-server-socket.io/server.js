@@ -57,12 +57,14 @@ io.sockets.on('connection', function (socket) {
     */
     console.log("DEBUG: connection");
     //console.log(socket);
-//    g_socket = socket;
+    g_socket = socket;
 
+/*
      socket.emit('feed', { hello: 'world' });
      socket.on('my other event', function (data) {
          console.log(data);
      });
+     */
 });
 
 io.sockets.on('42', function (socket) {
