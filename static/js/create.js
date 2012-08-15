@@ -34,7 +34,10 @@ jks.create = jks.create || (function() {
         resetInfo(info);
 
         return $.post("/api/post/create", {content: content.val().trim()})
-            .always(function() {spinner.remove()})
+            .always(function() {
+                content.attr("disabled", false);
+                spinner.remove();
+            })
             .done(function() {
                 form[0].reset();
             })
@@ -44,7 +47,6 @@ jks.create = jks.create || (function() {
                     jks.common.warn();
                 }
                 info.text(error.message);
-                content.attr("disabled", false);
             });
     }
 
