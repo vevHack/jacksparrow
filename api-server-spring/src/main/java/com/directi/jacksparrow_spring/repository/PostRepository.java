@@ -3,6 +3,7 @@ package com.directi.jacksparrow_spring.repository;
 import com.directi.jacksparrow_spring.exception.EntityNotFoundException;
 import com.directi.jacksparrow_spring.model.Post;
 import com.directi.jacksparrow_spring.model.User;
+import com.directi.jacksparrow_spring.service.SocketIONotifier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -220,6 +221,7 @@ public class PostRepository {
     public static class FeedUpdater {
 
         private @Autowired JdbcTemplate jdbcTemplate;
+        private @Autowired SocketIONotifier socketIONotifier;
 
         @Async
         public void add(User user, Post post) {
@@ -228,13 +230,19 @@ public class PostRepository {
                 "WHERE following=? AND end_on IS NULL",
                 post.getId(), user.getId());
 
-            /* XXX NOTIFY the NOTIFY SERVER */
-/*
-        List<Integer> followersIds = jdbcTemplate.queryForList(
-                "SELECT follower FROM follows WHERE following=? " +
-                        "AND end_on IS NULL",
-                Integer.class, user.getId());
-                */
+            socketIONotifier.notifyClients("feed",
+                    jdbcTemplate.queryForList(
+                            "SELECT access_token FROM session,follows " +
+                                    "WHERE \"user\"=follower " +
+                                    "AND following=? " +
+                                    "AND active=1 AND end_on IS NULL",
+                            String.class, user.getId()));
+
+            socketIONotifier.notifyClients("post",
+                    jdbcTemplate.queryForList(
+                            "SELECT access_token FROM session WHERE " +
+                                    "\"user\"=? AND ACTIVE=1",
+                            String.class, user.getId()));
         }
 
     };

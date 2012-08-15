@@ -8,6 +8,7 @@ jks.feed = jks.feed || (function() {
 
     return function() {
         var feed = jks.postList("feed", fetchData);
+        $("body").bind("jacksparrow.socket.posts", feed.update);
         $("body").bind("jacksparrow.socket.feed", feed.update);
         return feed;
     };

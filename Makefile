@@ -52,8 +52,10 @@ start:
 	@bash scripts/jetty.sh start 1
 	@bash scripts/jetty.sh start 2
 	@bash scripts/nginx.sh start
+	@bash scripts/notify.sh start
 
 stop:
+	@bash scripts/notify.sh stop
 	@bash scripts/nginx.sh stop
 	@bash scripts/jetty.sh stop 2
 	@bash scripts/jetty.sh stop 1

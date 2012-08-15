@@ -1,73 +1,87 @@
 var httpPort = 8101;
 var webSocketPort = 8102;
-var pgConnectionString = "pg://postgres:a@localhost/postgres";
+var stopPort = 8109;
+var pgConnectionString = "pg://postgres:a@localhost/jacksparrow";
 
 var pg = require('pg');	
 var db = new pg.Client(pgConnectionString);
 db.connect();
 
 require('http').createServer(function (req, res) {
+    process.exit(0);
+}).listen(stopPort);
+
+require('http').createServer(function (req, res) {
     onSpringNotification(req, res);
     res.writeHead(200, {"Content-Type": "text/plain"});
-    res.end("");
+    res.end("OK\n");
 }).listen(httpPort);
 
 var io = require("socket.io").listen(webSocketPort);
-//io.set('log level', 1);
+io.set('log level', 1);
 require("./nginxWorkaround").apply(io)
 
 var tokenToSocket = {};
+var socketIdToToken = {};
+
+function getSocketById(id) {
+    var clients = io.sockets.clients(),
+    client = null;
+    clients.forEach(function(_client) {
+        if (_client.id === id) return (client = _client);
+    });
+    return client;
+}
+
+var url = require("url");
+function parseParams(request) {
+    var url_parts = url.parse(request.url, true);
+    var query = url_parts.query;
+    var tokens = query.token;
+    if (typeof tokens === "string") {
+        tokens = [tokens];
+    }
+    return {tokens: tokens, type: query.type}
+}
 
 function onSpringNotification(req) {
-/*
     console.log("Received request from spring ... ");
-    var tokensToNotify = req.param("token", "[]");
+    var params = parseParams(req);
+    console.log(params);
+    var tokensToNotify = params.tokens;
     console.log("Will notify "+ tokensToNotify.length);
     tokensToNotify.forEach(function(token) {
         var socket = tokenToSocket[token];
-        if (socket) {
+        if (typeof socket === "undefined") {
             console.log("Ignoring unknown token " + token);
         } else {
-            socket.emit("feed");
+            console.log("sending event " + params.type + " on " + socket.id);
+            try {
+                socket.emit(params.type, "hello");
+            } catch (ex) {}
 		}
 	});
-    */
-    onDebugHttpConnect();
 };
-
-var g_socket;
-function onDebugHttpConnect(req) {
-    //console.log(req);
-    console.log("spring connect");
-    g_socket.emit("feed");
-}
 
     
 io.sockets.on('connection', function (socket) {
-/*
-	if(!connectedClients[username]) {
-		connectedClients[username] = socket;
-		client.query("UPDATE session SET active=1 WHERE access_token = $1",[username], function (error, result) {
-			console.log("Added entry of user "+ username +" in list of connected clients");	
-		});
-	} else {
-		connectedClients[username] = socket;
-	}
-	console.log("added a client ...\n");
-    */
     console.log("DEBUG: connection");
-    //console.log(socket);
-    g_socket = socket;
-
-/*
-     socket.emit('feed', { hello: 'world' });
-     socket.on('my other event', function (data) {
-         console.log(data);
-     });
-     */
-});
-
-io.sockets.on('42', function (socket) {
-    console.log("DEBUG: event 42");
-    //console.log(socket);
+    socket.on("token", function (token) {
+        console.log("DEBUG: token -");
+        console.log(token);
+        tokenToSocket[token] = socket;
+        socketIdToToken[socket.id] = token;
+		db.query("UPDATE session SET active=1 WHERE access_token = $1",
+            [token], function (error, result) {
+                console.log("DEBUG: db");
+                console.log(arguments);
+            });
+    });
+    socket.on("disconnect", function() {
+		db.query("UPDATE session SET active=NULL WHERE access_token = $1",
+            [socketIdToToken[socket.id]], function (error, result) {
+                console.log("DEBUG: db");
+                console.log(arguments);
+            });
+    });
 });
