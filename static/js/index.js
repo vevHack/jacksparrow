@@ -20,6 +20,11 @@ jks.index = jks.index || (function() {
             });
     }
 
+    function loadCss(css) {
+        $("head").append(
+            $('<link rel="stylesheet" type="text/css" />').attr("href", css));
+    }
+
     function loadAfterAuthentication(template) {
         jks.userPix.attachGlobalListener();
         $("body").html(Mustache.render(template));
@@ -36,6 +41,19 @@ jks.index = jks.index || (function() {
             , jks.detailView.load($("#detail"))
         ).done(function() {
             $("#feed-trigger").trigger("click");
+        });
+
+        loadCss("/static/css/lib/jquery.Jcrop.css");
+        $.when(
+              $.fetch.js("lib/jquery.Jcrop")
+            , $.fetch.js("editUserPix")
+        ).done(function() {
+            var alt = "Change your profile image";
+            $("#editUserPix-trigger")
+                .children("img").attr("alt", alt).attr("title", alt).end()
+                .click(function() {
+                    jks.editUserPix.load($("body"), me.id);
+                });
         });
 
         jks.webSocket.connect();

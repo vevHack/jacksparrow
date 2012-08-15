@@ -37,18 +37,18 @@ public class ImageController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     protected void set(
-            @RequestParam final CommonsMultipartFile uploadedFile,
+            @RequestParam final CommonsMultipartFile file,
             @RequestParam int user,
             @RequestParam double x, @RequestParam double y,
             @RequestParam double width, @RequestParam double height,
             @RequestParam double boundx, @RequestParam double boundy)
             throws EntityNotFoundException {
 
-        BufferedImage image = imageManipulator.getImageFromFile(uploadedFile);
+        BufferedImage image = imageManipulator.getImageFromFile(file);
 
         double ratio = image.getHeight()/boundy;
         BufferedImage resizedImage  = imageManipulator.getSubImage(
-                uploadedFile, (int)x, (int)y, (int)width, (int)height, ratio);
+                file, (int)x, (int)y, (int)width, (int)height, ratio);
 
         BufferedImage i128 =
                 imageManipulator.resizeImage(128, 128, resizedImage);

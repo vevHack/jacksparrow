@@ -6,8 +6,13 @@
 {{/editProfile}}
 
 <div>
-  <img class="profile invisible" width="128" height="128" 
-    data-id="{{id}}" alt="{{name}}" title="{{name}}" />
+  {{#editProfile}}
+  <a href="#" id="editUserPix-trigger">
+  {{/editProfile}}
+  <img class="profile invisible" width="128" height="128" data-id="{{id}}" />
+  {{#editProfile}}
+    </a>
+  {{/editProfile}}
 </div>
 
 {{#showFollow}}

@@ -1,0 +1,29 @@
+<div id="editUserPix" class="dropdown">
+  <div class="content">
+    <form>
+
+      <div>
+        Select file: <input type="file" name="file" id="file" />
+      </div>
+
+      <div id="parentTarget" style="border:1px solid black;width:400px;height:400px;overflow:hidden">
+        <img id="target-img" alt="Original" />
+      </div>
+
+      <div style="border:1px solid black;width:100px;height:100px;overflow:hidden;">
+        <img id="preview-img" alt="Preview" />
+      </div>
+
+      <input type="hidden" id="user" name="user" value="{{user}}" />
+      <input type="hidden" name="x" />
+      <input type="hidden" name="y" />
+      <input type="hidden" name="width" />
+      <input type="hidden" name="height" />
+      <input type="hidden" name="boundx" />
+      <input type="hidden" name="boundy" />
+
+      <input type="submit" value="Change Profile Image" />
+
+    </form>
+  </div>
+</div>
