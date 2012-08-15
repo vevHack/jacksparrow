@@ -18,8 +18,8 @@ public class SessionRepository {
 
     public Session createNewSessionForUser(final User user) {
         final String uuid = UUID();
-        jdbcTemplate.update("UPDATE \"user\" SET access_token=? WHERE id=?",
-                uuid, user.getId());
+        jdbcTemplate.update("INSERT INTO session (\"user\", access_token) " +
+                "VALUES (?, ?)", user.getId(), uuid);
         return new Session() {{
             setAccessToken(uuid);
             setUser(user);
@@ -28,8 +28,8 @@ public class SessionRepository {
 
 
     public void invalidateAccessToken(final String accessToken) {
-        jdbcTemplate.update("UPDATE \"user\" SET access_token=NULL WHERE " +
-                "access_token=?", accessToken);
+        jdbcTemplate.update("DELETE FROM session WHERE access_token=?",
+                accessToken);
     }
 
     public User getUserFromAccessToken(final String accessToken)
@@ -37,7 +37,7 @@ public class SessionRepository {
         try {
             return new User() {{
                 setId(jdbcTemplate.queryForInt(
-                        "SELECT id FROM \"user\" WHERE access_token = ?",
+                        "SELECT \"user\" FROM session WHERE access_token = ?",
                         accessToken));
             }};
         } catch (DataAccessException ex) {

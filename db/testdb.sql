@@ -22,7 +22,7 @@ SELECT pg_catalog.setval('unique_sequence', 8, true);
 --
 
 COPY feed ("user", post, added_on) FROM stdin;
-5	8	2012-08-04 17:28:20.73+00
+5	8	2012-08-04 22:58:20.73+00
 \.
 
 
@@ -31,7 +31,7 @@ COPY feed ("user", post, added_on) FROM stdin;
 --
 
 COPY follows (follower, following, start_on, end_on) FROM stdin;
-5	6	2012-07-26 19:07:18.938+00	\N
+5	6	2012-07-27 00:37:18.938+00	\N
 \.
 
 
@@ -40,17 +40,15 @@ COPY follows (follower, following, start_on, end_on) FROM stdin;
 --
 
 COPY post (id, "user", created_on, content) FROM stdin;
-8	5	2012-08-04 17:26:44.472+00	pirates do tweet
+8	5	2012-08-04 22:56:44.472+00	pirates do tweet
 \.
 
 
 --
--- Data for Name: user; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: session; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY "user" (id, email, username, password, name, access_token, created_on) FROM stdin;
-6	foo2@bar.com	foo2	test	\N	6	2012-07-26 19:06:18.938+00
-5	foo@bar.com	foo	test	\N	4b524fb1-a326-4240-bed4-6a1169ee2a63	2012-07-25 14:54:30.119+00
+COPY session ("user", access_token, active) FROM stdin;
 \.
 
 
@@ -61,6 +59,16 @@ COPY "user" (id, email, username, password, name, access_token, created_on) FROM
 COPY stats ("user", posts, followers, following) FROM stdin;
 5	1	0	0
 6	0	0	0
+\.
+
+
+--
+-- Data for Name: user; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY "user" (id, email, username, password, name, created_on) FROM stdin;
+6	foo2@bar.com	foo2	test	\N	2012-07-27 00:36:18.938+00
+5	foo@bar.com	foo	test	\N	2012-07-25 20:24:30.119+00
 \.
 
 

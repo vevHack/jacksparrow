@@ -101,6 +101,19 @@ CREATE TABLE post (
 ALTER TABLE public.post OWNER TO postgres;
 
 --
+-- Name: session; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE session (
+    "user" integer NOT NULL,
+    access_token character(140) NOT NULL,
+    active integer
+);
+
+
+ALTER TABLE public.session OWNER TO postgres;
+
+--
 -- Name: stats; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -124,12 +137,19 @@ CREATE TABLE "user" (
     username character varying(100) NOT NULL,
     password text,
     name text,
-    access_token character varying(40),
     created_on timestamp with time zone DEFAULT timezone('UTC'::text, ('now'::text)::timestamp(3) with time zone)
 );
 
 
 ALTER TABLE public."user" OWNER TO postgres;
+
+--
+-- Name: session_access_token_key; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY session
+    ADD CONSTRAINT session_access_token_key UNIQUE (access_token);
+
 
 --
 -- Name: stats_user_key; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
@@ -195,13 +215,6 @@ CREATE INDEX post_created_on_idx ON post USING btree (created_on);
 --
 
 CREATE INDEX stats_user_idx ON stats USING btree ("user");
-
-
---
--- Name: user_access_token_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
---
-
-CREATE UNIQUE INDEX user_access_token_idx ON "user" USING btree (access_token);
 
 
 --
