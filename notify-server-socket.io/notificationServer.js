@@ -28,16 +28,6 @@ server.listen(8081);
 console.log("Notification server using port 8081");
 console.log("All the connections will be notified to others");
 
-// routing .... mapping URLs to request handlers
-app.get('/page', function (req, res) {
-	if (req != null) {
-		//obtain sockets username	
-		username=req.query.id || 'unknown';
-		console.log("Request came from user "+username);
-		res.sendfile(__dirname + '/notificationClient.html');
-	}
-});
-
 app.post('/notify', function(req, res) {
 	if(req!=null) {	
 		console.log("Received request from spring ... ");
@@ -59,7 +49,7 @@ io.sockets.on('connection', function (socket) {
 	//store the mapping
 	if(!connectedClients[username]) {
 		connectedClients[username] = socket;
-		client.query("INSERT INTO pg_test VALUES($1, 1)",[username], function (error, result) {
+		client.query("INSERT INTO active_session VALUES($1, 1)",[username], function (error, result) {
 			console.log("Added entry of user "+ username +" in list of connected clients");	
 		});
 	} else {
