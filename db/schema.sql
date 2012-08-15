@@ -105,8 +105,8 @@ ALTER TABLE public.post OWNER TO postgres;
 --
 
 CREATE TABLE session (
-    "user" integer NOT NULL,
     access_token character(140) NOT NULL,
+    "user" integer NOT NULL,
     active integer
 );
 
@@ -144,11 +144,11 @@ CREATE TABLE "user" (
 ALTER TABLE public."user" OWNER TO postgres;
 
 --
--- Name: session_access_token_key; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+-- Name: session_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY session
-    ADD CONSTRAINT session_access_token_key UNIQUE (access_token);
+    ADD CONSTRAINT session_pkey PRIMARY KEY (access_token);
 
 
 --
