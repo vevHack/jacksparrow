@@ -71,6 +71,14 @@ COPY "user" (id, email, username, password, name, created_on) FROM stdin;
 5	foo@bar.com	foo	test	\N	2012-07-25 20:24:30.119+00
 \.
 
+--
+-- Data for Name: user; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY userpix ("user", i128, i48) FROM stdin;
+5	\N	\N
+6	\N	\N
+\.
 
 --
 -- PostgreSQL database dump complete

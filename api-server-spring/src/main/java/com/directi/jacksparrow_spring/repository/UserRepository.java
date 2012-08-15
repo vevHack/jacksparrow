@@ -157,8 +157,10 @@ public class UserRepository {
     public User addUser(String username, String email, String password) {
         jdbcTemplate.update("INSERT INTO \"user\" (username, email, password) " +
                 "VALUES (?, ?, ?)", username, email, password);
+        final int id = jdbcTemplate.queryForInt("SELECT LASTVAL()");
+        jdbcTemplate.update("INSERT INTO userpix (\"user\") VALUES (?)", id);
         return new User() {{
-            setId(jdbcTemplate.queryForInt("SELECT LASTVAL()"));
+            setId(id);
         }};
     }
 

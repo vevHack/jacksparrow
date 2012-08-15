@@ -1,0 +1,47 @@
+<html>
+
+<head>
+
+  <script defer src="js/lib/jquery-1.7.2.js"></script>
+	<script defer src = "js/lib/jquery.Jcrop.js"></script>
+	<script defer src = "js/crop.js"></script>
+
+  <link rel="stylesheet" href="css/lib/jquery.Jcrop.css" type="text/css" />
+
+</head>
+
+
+
+<body>
+  <form id="imgUploadForm" method="POST" enctype="multipart/form-data" 
+    action="http://localhost:8080/userpix">
+
+		<p>
+			Please specify file to upload:<br>
+			<input type="file" name="uploadedFile"
+				id="uploadedFile" size="40">
+		</p>
+
+    user <input type="text" id="user" name="user"/>
+
+    <div id="parentTarget" style = "border:1px solid black;width:400px;height:400px;overflow:hidden">
+      <img src=""  id="target" alt="Flowers" />
+    </div>
+
+    <div style="border:1px solid black;width:100px;height:100px;overflow:hidden;">
+      <img src="" id="preview" alt="Preview" />
+    </div>
+
+    <input type="hidden" id="x" name="x" />
+    <input type="hidden" id="y" name="y" />
+    <input type="hidden" id="width" name="width" />
+    <input type="hidden" id="height" name="height" />
+    <input type="hidden" id="boundx" name="boundx" />
+    <input type="hidden" id="boundy" name="boundy" />
+
+    <input type="submit" value="Send">
+
+	</form>
+</body>
+
+</html>

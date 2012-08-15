@@ -144,6 +144,19 @@ CREATE TABLE "user" (
 ALTER TABLE public."user" OWNER TO postgres;
 
 --
+-- Name: userpix; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE userpix (
+    "user" integer NOT NULL,
+    i128 bytea,
+    i48 bytea
+);
+
+
+ALTER TABLE public.userpix OWNER TO postgres;
+
+--
 -- Name: session_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -173,6 +186,14 @@ ALTER TABLE ONLY "user"
 
 ALTER TABLE ONLY "user"
     ADD CONSTRAINT user_username_key UNIQUE (username);
+
+
+--
+-- Name: userpix_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY userpix
+    ADD CONSTRAINT userpix_pkey PRIMARY KEY ("user");
 
 
 --
