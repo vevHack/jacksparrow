@@ -40,6 +40,7 @@ lo-reset:
 
 setup:
 	@bash scripts/setup-servers.sh
+	@bash scripts/generate-certs.sh
 
 build:
 	@bash scripts/create-static-resources.sh
