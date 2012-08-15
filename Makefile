@@ -46,14 +46,14 @@ build:
 	@bash scripts/build.sh
 
 start:
+	@bash scripts/jetty.sh start 1
+	@bash scripts/jetty.sh start 2
 	@bash scripts/nginx.sh start
-	#@bash scripts/jetty.sh start 1
-	#@bash scripts/jetty.sh start 2
 
 stop:
-	#@bash scripts/jetty.sh stop 2
-	#@bash scripts/jetty.sh stop 1
 	@bash scripts/nginx.sh stop
+	@bash scripts/jetty.sh stop 2
+	@bash scripts/jetty.sh stop 1
 
 .PHONY: test \
 	npm-restore-links \
