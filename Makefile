@@ -7,6 +7,8 @@ test:
 # After a git pull, the symlinks to the mocha binary are not mainitained
 # This is a command to manually restore them
 npm-restore-links:
+	@ln -f -s -t node_modules/.bin/ \
+		`readlink --canonicalize node_modules/uglify-js/bin/uglifyjs`
 	@for f in mocha _mocha ; \
 	do \
 		ln -f -s -t node_modules/.bin/ \
@@ -60,5 +62,5 @@ stop:
 	npm-restore-links \
 	db-backup-schema db-backup-test db-restore-schema db-restore-test \
 	lo-slow lo-reset \
-	setup build start
+	setup build start stop
 

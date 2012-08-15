@@ -13,8 +13,9 @@ fi
 checkBinary nginx
 checkBinary node
 checkBinary npm
+checkBinary mvn
 
 mkdir -p var/run
 mkdir -p var/log
 
-bash scripts/download-jetty.sh
+bash scripts/jetty.sh download 

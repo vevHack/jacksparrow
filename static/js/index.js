@@ -4,7 +4,8 @@ jks.index = jks.index || (function() {
 
     var dependencies = ["fetchUser", "postList", "userList", "formatter",
         "datacache", "dashboard", "rootPane", "detailView", "detailTrigger",
-        "follow", "contentTabManager", "userPix", "editProfile"];
+        "follow", "contentTabManager", "userPix", "editProfile", 
+        "webSocket"];
     var me;
 
     function load() {
@@ -36,6 +37,8 @@ jks.index = jks.index || (function() {
         ).done(function() {
             $("#feed-trigger").trigger("click");
         });
+
+        jks.webSocket.connect(jks.feed.update, jks.posts.update);
     }
 
     return {
