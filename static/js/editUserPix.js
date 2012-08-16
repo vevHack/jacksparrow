@@ -59,10 +59,10 @@ jks.editUserPix = jks.editUserPix || (function() {
     }
 
     function attach() {
-        target = render.find("#target-img");
-        preview = render.find("#preview-img");
+        target = render.find("#target");
+        preview = render.find("#preview");
         form = render.find("form");
-        fileInput = form.find("#file");
+        fileInput = form.find("#uploadedFile");
 
         attachJcrop();
 
@@ -121,8 +121,9 @@ jks.editUserPix = jks.editUserPix || (function() {
         $.fetch.template("editUserPix").done(function(template) {
             render = $(Mustache.render(template, {user: userId}));
             attach();
-            container.prepend(render.hide());
-            show();
+            $("body").html(render);
+            //container.prepend(render.hide());
+            //show();
         });
     }
 
