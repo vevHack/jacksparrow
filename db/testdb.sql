@@ -57,7 +57,7 @@ COPY session ("user", access_token, active) FROM stdin;
 --
 
 COPY stats ("user", posts, followers, following) FROM stdin;
-5	1	0	0
+5	1	0	1
 6	0	0	0
 \.
 

@@ -74,6 +74,7 @@ fieldset {
 
 #root-pane img {
     padding-bottom: 3ex;
+    word-wrap: break-word;
 }
 
 #full-content-pane {
