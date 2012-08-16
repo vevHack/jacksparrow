@@ -1,0 +1,65 @@
+<html>
+
+<head>
+
+  <script src="/static/js/lib/jquery-1.7.2.js"></script>
+	<script src="/static/js/lib/jquery.Jcrop.js"></script>
+	<script src="/static/js/crop.js"></script>
+  <!--
+	<script src = "editUserPix.js"></script>
+  <script>
+    $(function() {
+      console.log(jks);
+      jks.editUserPix.load($("body"));
+    });
+  </script>
+  -->
+
+  <link rel="stylesheet" href="/static/css/common.css" type="text/css" />
+  <link rel="stylesheet" href="/static/css/lib/jquery.Jcrop.css" type="text/css" />
+
+</head>
+
+
+
+<body>
+  <form id="imgUploadForm" method="POST" enctype="multipart/form-data" 
+    action="http://localhost:8081/userpix">
+
+    <div style="float:left; width:410px">
+    <div id="parentTarget" style = "border:1px solid black;width:400px;height:400px;overflow:hidden">
+      <img src=""  id="target" alt="Original" />
+    </div>
+  </div>
+
+    <div style="border:1px solid black;width:100px;height:100px;overflow:hidden;">
+      <img src="" id="preview" alt="Preview" />
+    </div>
+
+		<p>
+			Please specify file to upload:<br>
+			<input type="file" name="file"
+				id="uploadedFile" size="40">
+		</p>
+
+    <input type="hidden" id="user" name="user"/>
+    <script>
+      $('input[name="user"]').val(document.URL.match(".*user=(\d+)")[1]);
+    </script>
+
+
+
+    <input type="hidden" id="x" name="x" />
+    <input type="hidden" id="y" name="y" />
+    <input type="hidden" id="width" name="width" />
+    <input type="hidden" id="height" name="height" />
+    <input type="hidden" id="boundx" name="boundx" />
+    <input type="hidden" id="boundy" name="boundy" />
+
+    <input type="submit" value="Update">
+
+	</form>
+
+</body>
+
+</html>

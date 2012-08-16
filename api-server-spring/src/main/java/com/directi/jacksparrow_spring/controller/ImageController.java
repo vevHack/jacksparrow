@@ -35,8 +35,7 @@ public class ImageController {
     private @Autowired UserRepository userRepository;
 
     @RequestMapping(method = RequestMethod.POST)
-    @ResponseBody
-    protected void set(
+    protected String set(
             @RequestParam final CommonsMultipartFile file,
             @RequestParam int user,
             @RequestParam double x, @RequestParam double y,
@@ -64,6 +63,8 @@ public class ImageController {
                 imageManipulator.getBytes(i128),
                 imageManipulator.getBytes(i48),
                 userRepository.findById(user).getId());
+
+        return "redirect:https://localhost:8080/";
     }
 
     private HttpHeaders getImageHeaders(Map result) {

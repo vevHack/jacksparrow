@@ -4,6 +4,10 @@ jks.userPix = jks.userPix || (function() {
 
     function setImage(element, userId) {
         function show() { element.removeClass("invisible") }
+        var size = element.width();
+        if (size <= 48) {
+            size = 48;
+        }
         element
             .on("error", function() {
                 element
@@ -12,8 +16,8 @@ jks.userPix = jks.userPix || (function() {
                     .attr("src", "/static/img/anon.png");
             })
             .on("load", show)
-            .attr("src", ["/api/user/pix", 
-                $.param({user: userId, size:element.width()})].join("?"));
+            .attr("src", ["/api/userpix", 
+                $.param({user: userId, size: size})].join("?"));
     }
 
     function attachGlobalListener() {

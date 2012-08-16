@@ -10,7 +10,7 @@ fi
 
 mkdir -p $out
 
-cp -r static/favicon.ico $www
+cp static/* $www
 cp -r static/css $out
 cp -r static/template $out
 

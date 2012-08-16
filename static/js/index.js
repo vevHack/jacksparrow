@@ -25,6 +25,32 @@ jks.index = jks.index || (function() {
             $('<link rel="stylesheet" type="text/css" />').attr("href", css));
     }
 
+    function onEditImage() {
+        var alt = "Change your profile image";
+        $("#editUserPix-trigger")
+            .children("img").attr("alt", alt).attr("title", alt).end()
+            .click(function() {
+                console.log("test");
+                window.location.replace("/static/image.html?user=" + me.id);
+                return false;
+        });
+        /*
+        loadCss("/static/css/lib/jquery.Jcrop.css");
+        $.when(
+        $.fetch.js("lib/jquery.Jcrop")
+        , $.fetch.js("editUserPix")
+        ).done(function() {
+        var alt = "Change your profile image";
+        $("#editUserPix-trigger")
+        .children("img").attr("alt", alt).attr("title", alt).end()
+        .click(function() {
+        window.location.replace("/static/image.html");
+        //jks.editUserPix.load($("body"), me.id);
+        });
+        });
+        */
+    }
+
     function loadAfterAuthentication(template) {
         jks.userPix.attachGlobalListener();
         $("body").html(Mustache.render(template));
@@ -41,19 +67,7 @@ jks.index = jks.index || (function() {
             , jks.detailView.load($("#detail"))
         ).done(function() {
             $("#feed-trigger").trigger("click");
-        });
-
-        loadCss("/static/css/lib/jquery.Jcrop.css");
-        $.when(
-              $.fetch.js("lib/jquery.Jcrop")
-            , $.fetch.js("editUserPix")
-        ).done(function() {
-            var alt = "Change your profile image";
-            $("#editUserPix-trigger")
-                .children("img").attr("alt", alt).attr("title", alt).end()
-                .click(function() {
-                    jks.editUserPix.load($("body"), me.id);
-                });
+            onEditImage();
         });
 
         jks.webSocket.connect();
