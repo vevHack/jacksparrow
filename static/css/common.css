@@ -191,7 +191,7 @@ a > .username {
 
 /*
  *
- * Dropdowns - Create post, and Authenticate
+ * Dropdowns - Create post, Edit Image and Authenticate
  *
  */
 
@@ -235,6 +235,40 @@ a > .username {
 #authenticate .content {
     width: 63ex; 
 }
+/*
+#editUserPix .content {
+    position: relative;
+    width: 800px;
+    float: left;
+}
+
+#editUserPix #parentTarget {
+    background: white;
+    float: left;
+}
+
+#editUserPix #parentPreview {
+    background: white;
+    float: left;
+    clear: right;
+}
+
+#editUserPix #form-controls {
+    background-color: white;
+    float: left;
+    text-align: right;
+}
+
+#editUserPix input[type="submit"] {
+    float: right;
+}
+
+#editUserPix #close-detail-trigger {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}
+*/
 
 /*
  *
