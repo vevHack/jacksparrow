@@ -159,6 +159,7 @@ public class UserRepository {
                 "VALUES (?, ?, ?)", username, email, password);
         final int id = jdbcTemplate.queryForInt("SELECT LASTVAL()");
         jdbcTemplate.update("INSERT INTO userpix (\"user\") VALUES (?)", id);
+        jdbcTemplate.update("INSERT INTO stats (\"user\") VALUES (?)", id);
         return new User() {{
             setId(id);
         }};

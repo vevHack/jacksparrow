@@ -1,7 +1,9 @@
 <div id="dashboard" />
 
 <div id="full-content-pane">
-  <h1>{{content}}</h1>
-  Posted on {{created_on_readable}} by 
-  <a href="{{#user}}{{permalink}}{{/user}}">{{#user}}{{username}}{{/user}}</a>
+  <div id="single-post">
+    <h1>{{content}}</h1>
+    Posted on {{created_on_readable}} by 
+    <a href="{{#user}}{{permalink}}{{/user}}">{{#user}}{{username}}{{/user}}</a>
+  </div>
 </div>

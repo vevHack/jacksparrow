@@ -104,6 +104,10 @@ fieldset {
     margin: 2ex;
 }
 
+#detail ikons {
+    margin-left: 0ex;
+}
+
 
 /*
  * Dashboard
@@ -118,7 +122,9 @@ fieldset {
 
 #dashboard .controls {
     float: right;
+    padding-right: 1ex;
 }
+
 #dashboard .controls a {
     font-size: 80%;
 }
@@ -132,6 +138,18 @@ fieldset {
     margin: auto;
     margin-top: 20ex;
     padding: 2ex;
+}
+
+#single-post {
+    margin-left: 1ex;
+}
+
+#welcome-banner {
+    font-size: 150%;
+}
+
+#authme {
+    margin-left: 1ex;
 }
 
 .unknownUser {
@@ -153,10 +171,12 @@ a > .username {
 }
 
 .info.validated {
+    font-weight: bold;
     color: #adffbb;
 }
 
 .info.unvalidated {
+    font-weight: bold;
     color: #FAAAAA;
 }
 
@@ -251,7 +271,7 @@ a > .username {
 
 
 #create .content {
-    width: 36ex; 
+    width: 23ex; 
     text-align: right;
 }
 
@@ -260,7 +280,7 @@ a > .username {
 }
 
 #authenticate .content {
-    width: 63ex; 
+    width: 80%; 
 }
 /*
 #editUserPix .content {
@@ -326,6 +346,7 @@ form .info {
 
 input.unvalidated {
     background-color: #FAAAAA;
+    font-weight: bold;
 }
 
 input.validated {
@@ -352,6 +373,14 @@ input[type="text"],input[type="password"] {
 #editProfile input[type="password"] {
     margin-left: 4ex;
     width: 30ex;
+}
+
+#editProfile .info.unvalidated {
+    color: green;
+}
+
+#editProfile .info.validated {
+    color: green;
 }
 
 /*

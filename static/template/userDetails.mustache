@@ -1,15 +1,15 @@
 <a href="#" id="close-detail-trigger" class="trigger trigger-icon" title="Hide" />
-<div class="userDetail">
+<div>
   <a href="{{permalink}}">Go to 
     the full profile of 
     <span class="username">@{{username}}</span></a>
+</div>
 
-  <div>
+<div>
     {{#doesNotFollow}}
       <a href="#" class="trigger-icon follow-trigger" title="Follow" data-id="{{id}}" />
     {{/doesNotFollow}}
     {{#doesFollow}}
       <a href="#" class="trigger-icon unfollow-trigger" title="Unfollow" data-id="{{id}}" />
     {{/doesFollow}}
-  </div>
 </div>
